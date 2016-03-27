@@ -33,5 +33,4 @@ public class MAssetTypeAPIHelper extends MBaseAPIHelper {
 		String singleAssetTypeEndpoint = getOrDeleteSingleAssetTypeEndpointAbstract.replace("{assetTypeId}", assetTypeId);
 		return singleAssetTypeEndpoint;
 	}
-
 }
