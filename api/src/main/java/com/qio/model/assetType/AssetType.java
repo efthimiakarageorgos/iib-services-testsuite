@@ -17,8 +17,12 @@ public class AssetType {
 	@JsonProperty("attributes")
 	private List<AssetTypeAttribute> attributes;
 	
+	@JsonProperty("_links")
+	private Links _links;
+	
 	public AssetType() {}
 
+	@SuppressWarnings("serial")
 	public AssetType(String timeStamp) {
 		this.abbreviation = "AT" + timeStamp;
 		this.name = "AT" + timeStamp + "Name";
@@ -68,23 +72,10 @@ public class AssetType {
 	public void setAttributes(List<AssetTypeAttribute> attributes) {
 		this.attributes = attributes;
 	}
-	
-//	public Links get_links() {
-//		return _links;
-//	}
-//
-//	public class Links{
-//		String href;
-//		public String getHref() {
-//			return href;
-//		}
-//		public class Self extends Links{
-//			
-//		}
-//		public class AssetTypeInner extends Links{
-//			
-//		}
-//		
-//	}
-
+	public Links get_links() {
+		return _links;
+	}
+	public void set_links(Links _links) {
+		this._links = _links;
+	}
 }

@@ -3,8 +3,6 @@ package com.qio.assetManagement.manageAssettypes;
 import static org.junit.Assert.assertEquals;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;
@@ -16,8 +14,6 @@ import com.qio.lib.common.BaseHelper;
 import com.qio.lib.connection.ConnectionResponse;
 import com.qio.lib.exception.ServerResponse;
 import com.qio.model.assetType.AssetType;
-import com.qio.model.assetType.AssetTypeAttribute;
-import com.qio.model.assetType.AssetTypeAttributeDatatype;
 
 
 public class ManageAssetTypes {

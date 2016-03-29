@@ -14,7 +14,6 @@ import com.qio.lib.common.BaseHelper;
 import com.qio.lib.connection.ConnectionResponse;
 import com.qio.model.assetType.AssetType;
 import com.qio.model.assetType.AssetTypeAttribute;
-import com.qio.model.assetType.AssetTypeAttributeDatatype;
 
 public class AssetTypeTestPrototype {
 	
@@ -30,24 +29,8 @@ public class AssetTypeTestPrototype {
 
 	APIHeaders apiRequestHeaders = new APIHeaders(userName, password);
 	
-	// Creating datatypes
-	List<AssetTypeAttributeDatatype> assetTypeAttrDatatype1 = new ArrayList<AssetTypeAttributeDatatype>();
-	assetTypeAttrDatatype1.add(new AssetTypeAttributeDatatype("Int"));
-	assetTypeAttrDatatype1.add(new AssetTypeAttributeDatatype("Float"));
-	
-	List<AssetTypeAttributeDatatype> assetTypeAttrDatatype2 = new ArrayList<AssetTypeAttributeDatatype>();
-	assetTypeAttrDatatype2.add(new AssetTypeAttributeDatatype("IntFictitious"));
-	assetTypeAttrDatatype2.add(new AssetTypeAttributeDatatype("FloatFictitious"));
-	
-	List<AssetTypeAttributeDatatype> assetTypeAttrDatatype3 = new ArrayList<AssetTypeAttributeDatatype>();
-	assetTypeAttrDatatype3.add(new AssetTypeAttributeDatatype("TestAPI1Fictitious"));
-	assetTypeAttrDatatype3.add(new AssetTypeAttributeDatatype("TestAPI2Fictitious"));
-
 	// Creating Asset Type Attributes
 	List<AssetTypeAttribute> assetTypeAttr = new ArrayList<AssetTypeAttribute>();
-	assetTypeAttr.add(new AssetTypeAttribute("ABBRSubTypeAPIAuto1", "NameSubTypeAPIAuto1", "DESCSubTypeAuto1", "A", assetTypeAttrDatatype1));
-	assetTypeAttr.add(new AssetTypeAttribute("ABBRSubTypeAPIAuto2", "NameSubTypeAPIAuto2", "DESCSubTypeAuto2", "B", assetTypeAttrDatatype2));
-	assetTypeAttr.add(new AssetTypeAttribute("ABBRSubTypeAPIAuto3", "NameSubTypeAPIAuto3", "DESCSubTypeAuto3", "C", assetTypeAttrDatatype3));
 	
 	// Creating an Asset Type
 	AssetType newAsset = new AssetType("ABBRAPIAutomation", "NAMEAPIAutomation", "DESCAPIAutomation", assetTypeAttr);

@@ -1,8 +1,5 @@
 package com.qio.model.assetType;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.codehaus.jackson.annotate.JsonProperty;
 
 public class AssetTypeAttribute {
@@ -11,21 +8,21 @@ public class AssetTypeAttribute {
 	private String name;
 	private String description;
 	private String unit;
-	@JsonProperty("datatype")
-	private List<AssetTypeAttributeDatatype> datatype;
+	private String datatype;
+	
+	@JsonProperty("_links")
+	private Links _links;
 	
 	public AssetTypeAttribute() {
 		this.abbreviation = "ABBRString";
 		this.name = "ABBRString Name";
 		this.description = "ABBRString Desc";
-		this.datatype = new ArrayList<AssetTypeAttributeDatatype>(){{
-			add(new AssetTypeAttributeDatatype());
-		}};
+		this.datatype = "String";
 		this.unit = "";
 	}
 	
 	public AssetTypeAttribute(String abbreviation, String name, String description, String unit,
-			List<AssetTypeAttributeDatatype> datatype) {
+			String datatype) {
 		this.abbreviation = abbreviation;
 		this.name = name;
 		this.description = description;
@@ -57,15 +54,19 @@ public class AssetTypeAttribute {
 	public void setUnit(String unit) {
 		this.unit = unit;
 	}
-	public List<AssetTypeAttributeDatatype> getDatatype() {
+	public String getDatatype() {
 		return datatype;
 	}
-	public void setDatatype(List<AssetTypeAttributeDatatype> datatype) {
+	public void setDatatype(String datatype) {
 		this.datatype = datatype;
 	}
-
 	public String getAttributeId() {
 		return attributeId;
 	}
-	
+	public Links get_links() {
+		return _links;
+	}
+	public void set_links(Links _links) {
+		this._links = _links;
+	}
 }
