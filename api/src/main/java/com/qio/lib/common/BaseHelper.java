@@ -35,6 +35,9 @@ public class BaseHelper {
 	public <T> T getServerResponseForInputRequest(Object requestObject, String microservice, String environment,
 			APIHeaders apiRequestHeaders, MAssetTypeAPIHelper assetAPIHelper, Class<T> classType) throws JsonGenerationException, JsonMappingException, IOException{
 		String payload = toJSONString(requestObject);
+		
+		System.out.println("From the BaseHelper " + payload);
+		
 		ConnectionResponse conRespPost = assetAPIHelper.create(microservice, environment, payload, apiRequestHeaders);
 		return (T) toClassObject(conRespPost.getRespBody(), classType);
 	}

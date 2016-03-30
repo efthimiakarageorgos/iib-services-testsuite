@@ -6,27 +6,45 @@ import java.io.IOException;
 
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;
+import org.junit.Before;
 import org.junit.Test;
 
 import com.qio.lib.apiHelpers.APIHeaders;
 import com.qio.lib.apiHelpers.MAssetTypeAPIHelper;
+import com.qio.lib.assertions.CustomAssertions;
 import com.qio.lib.common.BaseHelper;
-import com.qio.lib.connection.ConnectionResponse;
+//import com.qio.lib.connection.ConnectionResponse;
 import com.qio.lib.exception.ServerResponse;
 import com.qio.model.assetType.AssetType;
+import com.qio.model.assetType.helper.AssetTypeHelper;
+import com.qio.model.assetType.helper.AttributeDataType;
+import com.qio.model.assetType.helper.ParameterDataType;
 
 
 public class ManageAssetTypes {
 
-	BaseHelper baseHelper = new BaseHelper();
-	MAssetTypeAPIHelper assetTypeAPI = new MAssetTypeAPIHelper();
-	String userName = "technician";
-	String password = "user@123";
-	String microservice = "asset-types";
-	String environment = ".qiotec.internal";
-	APIHeaders apiRequestHeaders = new APIHeaders(userName, password);
+	private BaseHelper baseHelper = new BaseHelper();
+	private  MAssetTypeAPIHelper assetTypeAPI = new MAssetTypeAPIHelper();
+	private String userName = "technician";
+	private String password = "user@123";
+	private String microservice = "asset-types";
+	private String environment = ".qiotec.internal";
+	private APIHeaders apiRequestHeaders = new APIHeaders(userName, password);
+	private AssetTypeHelper assetTypeHelper;
+	private AssetType requestAssetType;
+	private AssetType responseAssetType;
+
 
 	private final int DEFAULT_ELEMENT = 0;
+	
+	@Before
+	public void initTest(){
+		// Initializing a new set of objects before each test case.
+		assetTypeHelper = new AssetTypeHelper();
+		requestAssetType = new AssetType();
+		responseAssetType = new AssetType();
+	}
+	
 	/*
 	 * NEGATIVE TESTS START
 	 */
@@ -34,27 +52,15 @@ public class ManageAssetTypes {
 	// RREHM-435 (AssetType abbreviation contains spaces)
 		@Test
 		public void shouldNotCreateAssetTypeWhenAbbrContainsSpaces() throws JsonGenerationException, JsonMappingException, IOException{
-			//Call a class that
-			//a. Make a call to form the appropriate for the test case asset type message
-			//b. Submit the request 
-			//c. returns the response of the request + request body
+			requestAssetType = assetTypeHelper.getAssetTypeWithNoAttributesAndParameters();
+			//requestAssetType = assetTypeHelper.getAssetTypeWithDefaultParameter();
+			//requestAssetType = assetTypeHelper.getAssetTypeWithOneParameter(ParameterDataType.String);
 			
+			// Setting AssetType abbreviation to contain spaces
+			String abbr=requestAssetType.getAbbreviation();
+			requestAssetType.setAbbreviation("Abrr has a space"+abbr);
 			
-			// Creating Asset-types
-			java.util.Date date= new java.util.Date();
-			String timestamp = Long.toString(date.getTime());
-			// AssetType with default values
-			AssetType requestAssetType = new AssetType(timestamp);
-			// Setting AssetType abbreviation to contain spaces.
-			String abbr = "Abrr has a space"+timestamp;
-			//Note: this was replacing the abbreviation at the attribute level - added the right one
-			//requestAssetType.getAttributes().get(DEFAULT_ELEMENT).setAbbreviation(abbr);
-			requestAssetType.setAbbreviation(abbr);
-			
-			
-			String payload = baseHelper.toJSONString(requestAssetType);
-			ConnectionResponse conRespPost = assetTypeAPI.create(microservice, environment, payload, apiRequestHeaders);
-			ServerResponse serverResp = baseHelper.toClassObject(conRespPost.getRespBody(), ServerResponse.class);
+			ServerResponse serverResp = baseHelper.getServerResponseForInputRequest(requestAssetType, microservice, environment, apiRequestHeaders, assetTypeAPI, ServerResponse.class);
 			
 			//Call another class for custom validations; pass the response + request from the previous class call
 			//It will grab the asset type abbr from the prev request and query assets types based on abbr - response
@@ -66,10 +72,10 @@ public class ManageAssetTypes {
 			String expectedExceptionMsg = "com.qiotec.application.exceptions.InvalidInputException";
 			String expectedMsg = "Asset Type Abbreviation must not contain Spaces";
 			
-			//Ignore comment -- Uncomment after the abbr goes back to containing spaces
-			assertEquals("Unexpected response code", expectedRespCode, serverResp.getStatus());
-			assertEquals("Unexpected exception message", expectedExceptionMsg, serverResp.getException());
-			assertEquals("Unexpected error message", expectedMsg, serverResp.getMessage());
+			CustomAssertions.assertServerError(expectedRespCode,
+					expectedExceptionMsg,
+					expectedMsg,
+					serverResp);
 		}
 	/*
 	 * NEGATIVE TESTS END

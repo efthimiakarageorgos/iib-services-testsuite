@@ -14,6 +14,7 @@ import com.qio.lib.common.BaseHelper;
 import com.qio.lib.connection.ConnectionResponse;
 import com.qio.model.assetType.AssetType;
 import com.qio.model.assetType.AssetTypeAttribute;
+import com.qio.model.assetType.AssetTypeParameter;
 
 public class AssetTypeTestPrototype {
 	
@@ -32,8 +33,11 @@ public class AssetTypeTestPrototype {
 	// Creating Asset Type Attributes
 	List<AssetTypeAttribute> assetTypeAttr = new ArrayList<AssetTypeAttribute>();
 	
+	// Creating Asset Type Parameters
+		List<AssetTypeParameter> assetTypePar = new ArrayList<AssetTypeParameter>();
+	
 	// Creating an Asset Type
-	AssetType newAsset = new AssetType("ABBRAPIAutomation", "NAMEAPIAutomation", "DESCAPIAutomation", assetTypeAttr);
+	AssetType newAsset = new AssetType("ABBRAPIAutomation", "NAMEAPIAutomation", "DESCAPIAutomation", assetTypeAttr, assetTypePar);
 	String payload = baseHelper.toJSONString(newAsset);
 	ConnectionResponse conRespPost = assetTypeAPI.create(microservice, environment, payload, apiRequestHeaders);
 	AssetType assetTypeCreated = baseHelper.toClassObject(conRespPost.getRespBody(), AssetType.class);

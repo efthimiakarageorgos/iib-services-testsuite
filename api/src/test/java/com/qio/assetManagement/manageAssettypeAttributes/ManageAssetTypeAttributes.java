@@ -49,9 +49,9 @@ public class ManageAssetTypeAttributes {
 	@Test
 	public void shouldNotCreateAssetTypeWhenAttrAbbrIsBlank() throws JsonGenerationException, JsonMappingException, IOException{
 		requestAssetType = assetTypeHelper.getAssetTypeWithAllAttributes();
-		// Setting AssetType abbreviation to blank
+		// Setting AssetType Attribute abbreviation to blank
 		requestAssetType.getAttributes().get(FIRST_ELEMENT).setAbbreviation("");
-		
+	
 		ServerResponse serverResp = baseHelper.getServerResponseForInputRequest(requestAssetType, microservice, environment, apiRequestHeaders, assetTypeAPI, ServerResponse.class);
 
 		CustomAssertions.assertServerError(500,
@@ -63,8 +63,9 @@ public class ManageAssetTypeAttributes {
 	// RREHM-481 (AssetType Attribute abbreviation is removed from the request)
 	@Test
 	public void shouldNotCreateAssetTypeWhenAttrAbbrIsNull() throws JsonGenerationException, JsonMappingException, IOException{
-		requestAssetType = assetTypeHelper.getAssetTypeWithAllAttributes();
-		// Setting AssetType abbreviation to null, so that it is not sent in the request.
+		requestAssetType = assetTypeHelper.getAssetTypeWithOneAttribute(AttributeDataType.String);
+		//requestAssetType = assetTypeHelper.getAssetTypeWithAllAttributes();
+		// Setting AssetType Attribute abbreviation to null, so that it is not sent in the request.
 		requestAssetType.getAttributes().get(FIRST_ELEMENT).setAbbreviation(null);
 		
 		ServerResponse serverResp = baseHelper.getServerResponseForInputRequest(requestAssetType, microservice, environment, apiRequestHeaders, assetTypeAPI, ServerResponse.class);
@@ -79,7 +80,7 @@ public class ManageAssetTypeAttributes {
 	@Test
 	public void shouldNotCreateAssetTypeWhenAttrAbbrIsLongerThan50Chars() throws JsonGenerationException, JsonMappingException, IOException{
 		requestAssetType = assetTypeHelper.getAssetTypeWithAllAttributes();
-		// Setting AssetType abbreviation to be longer than 50 chars.
+		// Setting AssetType Attribute abbreviation to be longer than 50 chars.
 		String abbrLongerThan50Chars = "51charlong51charlong51charlong51charlong51charSlong";
 		requestAssetType.getAttributes().get(FIRST_ELEMENT).setAbbreviation(abbrLongerThan50Chars);
 		

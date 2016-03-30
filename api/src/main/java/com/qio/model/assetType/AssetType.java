@@ -17,6 +17,9 @@ public class AssetType {
 	@JsonProperty("attributes")
 	private List<AssetTypeAttribute> attributes;
 	
+	@JsonProperty("parameters")
+	private List<AssetTypeParameter> parameters;
+	
 	@JsonProperty("_links")
 	private Links _links;
 	
@@ -30,14 +33,18 @@ public class AssetType {
 		this.attributes = new ArrayList<AssetTypeAttribute>(){{
 			add(new AssetTypeAttribute());
 		}};
+		this.parameters = new ArrayList<AssetTypeParameter>(){{
+			add(new AssetTypeParameter());
+		}};
 	}
 	
 	public AssetType(String abbreviation, String name, String description,
-			List<AssetTypeAttribute> attributes) {
+			List<AssetTypeAttribute> attributes, List<AssetTypeParameter> parameters) {
 		this.abbreviation = abbreviation;
 		this.name = name;
 		this.description = description;
 		this.attributes = attributes;
+		this.parameters = parameters;
 	}
 	
 	public String getAssetTypeId() {
@@ -71,6 +78,12 @@ public class AssetType {
 	}
 	public void setAttributes(List<AssetTypeAttribute> attributes) {
 		this.attributes = attributes;
+	}
+	public List<AssetTypeParameter> getParameters() {
+		return parameters;
+	}
+	public void setParameters(List<AssetTypeParameter> parameters) {
+		this.parameters = parameters;
 	}
 	public Links get_links() {
 		return _links;
