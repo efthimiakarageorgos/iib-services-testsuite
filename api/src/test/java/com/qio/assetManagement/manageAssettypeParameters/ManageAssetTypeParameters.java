@@ -45,7 +45,7 @@ public class ManageAssetTypeParameters {
 	 * NEGATIVE TESTS START
 	 */
 
-	// RREHM-??? (AssetType Parameter abbreviation is set to blank, i.e. abbreviation = "")
+	// RREHM-1626 (AssetType Parameter abbreviation is set to blank, i.e. abbreviation = "")
 	@Test
 	public void shouldNotCreateAssetTypeWhenParAbbrIsBlank() throws JsonGenerationException, JsonMappingException, IOException{
 		requestAssetType = assetTypeHelper.getAssetTypeWithOneParameter(ParameterDataType.String);
@@ -60,7 +60,7 @@ public class ManageAssetTypeParameters {
 				serverResp);
 	}
 	
-	// RREHM-??? (AssetType Parameter abbreviation is removed from the request)
+	// RREHM-1626 (AssetType Parameter abbreviation is removed from the request)
 	@Test
 	public void shouldNotCreateAssetTypeWhenParAbbrIsNull() throws JsonGenerationException, JsonMappingException, IOException{
 		requestAssetType = assetTypeHelper.getAssetTypeWithOneParameter(ParameterDataType.String);
@@ -75,7 +75,7 @@ public class ManageAssetTypeParameters {
 				serverResp);
 	}
 	
-	// RREHM-1112 (AssetType Parameter abbreviation is longer than 255 Chars) WIP
+	// RREHM-1112 (AssetType Parameter abbreviation is longer than 255 Chars)
 	@Test
 	public void shouldNotCreateAssetTypeWhenParAbbrIsLongerThan255Chars() throws JsonGenerationException, JsonMappingException, IOException{
 		requestAssetType = assetTypeHelper.getAssetTypeWithAllParameters();
@@ -88,6 +88,21 @@ public class ManageAssetTypeParameters {
 		CustomAssertions.assertServerError(500,
 				"com.qiotec.application.exceptions.InvalidInputException",
 				"Parameter Abbreviation Should Less Than 255 Character",
+				serverResp);
+	}
+	
+	// RREHM-1078 (AssetType Parameter abbreviation has spaces)
+	@Test
+	public void shouldNotCreateAssetTypeWhenParAbbrHasSpaces() throws JsonGenerationException, JsonMappingException, IOException{
+		requestAssetType = assetTypeHelper.getAssetTypeWithAllParameters();
+		// Setting AssetType Parameter abbreviation to have spaces.
+		requestAssetType.getParameters().get(FIRST_ELEMENT).setAbbreviation("Abrr has a space");
+			
+		ServerResponse serverResp = baseHelper.getServerResponseForInputRequest(requestAssetType, microservice, environment, apiRequestHeaders, assetTypeAPI, ServerResponse.class);
+			
+		CustomAssertions.assertServerError(500,
+				"com.qiotec.application.exceptions.InvalidInputException",
+				"Parameter Abbreviation must not contain Spaces",
 				serverResp);
 	}
 	/*
