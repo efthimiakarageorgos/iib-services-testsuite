@@ -16,15 +16,13 @@ public class AssetTypeHelper {
 		String timestamp = Long.toString(date.getTime());
 		assetType = new AssetType(timestamp);
 	}
+	
+	/*
+	 * AssetType objects with Attributes only 
+	 */
 
 	public AssetType getAssetTypeWithNoAttributes(){
 		assetType.setAttributes(null);
-		return assetType;
-	}
-	
-	public AssetType getAssetTypeWithNoAttributesAndParameters(){
-		assetType.setAttributes(null);
-		assetType.setParameters(null);
 		return assetType;
 	}
 
@@ -57,6 +55,15 @@ public class AssetTypeHelper {
 		return assetType;
 	}
 	
+	/*
+	 * AssetType objects with Parameters only 
+	 */
+	
+	public AssetType getAssetTypeWithNoParameters(){
+		assetType.setParameters(null);
+		return assetType;
+	}
+	
 	public AssetType getAssetTypeWithOneParameter(ParameterDataType parameterDataType){
 		String parameterDataTypePrefix = "ABBR" + parameterDataType.toString();
 		List<AssetTypeParameter> assetTypeParameterSingle = new ArrayList<AssetTypeParameter>();
@@ -82,6 +89,24 @@ public class AssetTypeHelper {
 	
 	public AssetType getAssetTypeWithDefaultParameter(){
 		assetType.setAttributes(null);
+		return assetType;
+	}
+	
+	/*
+	 * AssetType objects with Attributes and Parameters 
+	 */
+	
+	public AssetType getAssetTypeWithNoAttributesAndParameters(){
+		assetType.setAttributes(null);
+		assetType.setParameters(null);
+		return assetType;
+	}
+
+	public AssetType getAssetTypeWithAllAttributesAndParameters(){
+		AssetType assetTypeAttrTemp = getAssetTypeWithAllAttributes();
+		AssetType assetTypeParamTemp = getAssetTypeWithAllParameters();
+		assetType.setAttributes(assetTypeAttrTemp.getAttributes());
+		assetType.setParameters(assetTypeParamTemp.getParameters());
 		return assetType;
 	}
 }

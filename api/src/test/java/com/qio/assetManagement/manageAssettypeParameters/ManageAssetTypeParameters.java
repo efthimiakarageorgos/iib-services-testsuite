@@ -7,6 +7,7 @@ import org.codehaus.jackson.map.JsonMappingException;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.qio.assetManagement.helper.AssetTypeTestHelper;
 import com.qio.lib.apiHelpers.APIHeaders;
 import com.qio.lib.apiHelpers.MAssetTypeAPIHelper;
 import com.qio.lib.assertions.CustomAssertions;
@@ -28,8 +29,7 @@ public class ManageAssetTypeParameters {
 	private APIHeaders apiRequestHeaders = new APIHeaders(userName, password);
 	private AssetTypeHelper assetTypeHelper;
 	private AssetType requestAssetType;
-	private AssetType responseAssetType;
-	
+	private ServerResponse serverResp;
 
 	private final int FIRST_ELEMENT = 0;
 	
@@ -38,7 +38,7 @@ public class ManageAssetTypeParameters {
 		// Initializing a new set of objects before each test case.
 		assetTypeHelper = new AssetTypeHelper();
 		requestAssetType = new AssetType();
-		responseAssetType = new AssetType();
+		serverResp = new ServerResponse();
 	}
 	
 	/*
@@ -52,8 +52,8 @@ public class ManageAssetTypeParameters {
 		// Setting AssetType Parameter abbreviation to blank
 		requestAssetType.getParameters().get(FIRST_ELEMENT).setAbbreviation("");
 	
-		ServerResponse serverResp = baseHelper.getServerResponseForInputRequest(requestAssetType, microservice, environment, apiRequestHeaders, assetTypeAPI, ServerResponse.class);
-
+		serverResp = AssetTypeTestHelper.getAssetTypeCreateResponseObj(baseHelper, requestAssetType, microservice, environment, apiRequestHeaders, assetTypeAPI, ServerResponse.class);
+		
 		CustomAssertions.assertServerError(500,
 				"com.qiotec.application.exceptions.InvalidInputException",
 				"Parameter Abbreviation Should not be Empty or Null",
@@ -67,7 +67,7 @@ public class ManageAssetTypeParameters {
 		// Setting AssetType Parameter abbreviation to null, so that it is not sent in the request.
 		requestAssetType.getParameters().get(FIRST_ELEMENT).setAbbreviation(null);
 		
-		ServerResponse serverResp = baseHelper.getServerResponseForInputRequest(requestAssetType, microservice, environment, apiRequestHeaders, assetTypeAPI, ServerResponse.class);
+		serverResp = AssetTypeTestHelper.getAssetTypeCreateResponseObj(baseHelper, requestAssetType, microservice, environment, apiRequestHeaders, assetTypeAPI, ServerResponse.class);
 		
 		CustomAssertions.assertServerError(500,
 				"java.lang.NullPointerException",
@@ -83,7 +83,7 @@ public class ManageAssetTypeParameters {
 		String abbrLongerThan255Chars = "256charactelong256charactelong256charactelong256charactelong256charactelong256charactelong256charactelong256charactelong256charactelong256charactelong256charactelong256charactelong256charactelong256charactelong256charactelong256charactelong256characteRlong";
 		requestAssetType.getParameters().get(FIRST_ELEMENT).setAbbreviation(abbrLongerThan255Chars);
 		
-		ServerResponse serverResp = baseHelper.getServerResponseForInputRequest(requestAssetType, microservice, environment, apiRequestHeaders, assetTypeAPI, ServerResponse.class);
+		serverResp = AssetTypeTestHelper.getAssetTypeCreateResponseObj(baseHelper, requestAssetType, microservice, environment, apiRequestHeaders, assetTypeAPI, ServerResponse.class);
 		
 		CustomAssertions.assertServerError(500,
 				"com.qiotec.application.exceptions.InvalidInputException",
@@ -98,8 +98,8 @@ public class ManageAssetTypeParameters {
 		// Setting AssetType Parameter abbreviation to have spaces.
 		requestAssetType.getParameters().get(FIRST_ELEMENT).setAbbreviation("Abrr has a space");
 			
-		ServerResponse serverResp = baseHelper.getServerResponseForInputRequest(requestAssetType, microservice, environment, apiRequestHeaders, assetTypeAPI, ServerResponse.class);
-			
+		serverResp = AssetTypeTestHelper.getAssetTypeCreateResponseObj(baseHelper, requestAssetType, microservice, environment, apiRequestHeaders, assetTypeAPI, ServerResponse.class);
+		
 		CustomAssertions.assertServerError(500,
 				"com.qiotec.application.exceptions.InvalidInputException",
 				"Parameter Abbreviation must not contain Spaces",
@@ -108,23 +108,4 @@ public class ManageAssetTypeParameters {
 	/*
 	 * NEGATIVE TESTS END
 	 */
-	
-	/*
-	 * POSITIVE TESTS START
-	 */
-	// RREHM-543 (AssetType with one Attribute of float data type)
-//	@Test
-//	public void shouldCreateAssetTypeWithUniqueAbbrWithOneAttrOfFloatDataType() throws JsonGenerationException, JsonMappingException, IOException{
-//		requestAssetType = assetTypeHelper.getAssetTypeWithOneAttribute(AttributeDataType.Float);
-//
-//		int expectedRespCode = 201;
-//		
-//		responseAssetType = baseHelper.getServerResponseForInputRequest(requestAssetType, microservice, environment, apiRequestHeaders, assetTypeAPI, AssetType.class);
-//		
-//		System.out.println(responseAssetType.get_links().getSelf().getHref());
-//		System.out.println(responseAssetType.getAttributes().get(0).get_links().getSelf().getHref());
-//		
-		//Uncomment after figuring out why they are different
-		//assertEquals("Unexpected response code", requestAssetType, responseAssetType);
-//	}
 }

@@ -7,6 +7,7 @@ import org.codehaus.jackson.map.JsonMappingException;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.qio.assetManagement.helper.AssetTypeTestHelper;
 import com.qio.lib.apiHelpers.APIHeaders;
 import com.qio.lib.apiHelpers.MAssetTypeAPIHelper;
 import com.qio.lib.assertions.CustomAssertions;
@@ -20,7 +21,7 @@ import com.qio.model.assetType.helper.AttributeDataType;
 public class ManageAssetTypeAttributes {
 
 	private BaseHelper baseHelper = new BaseHelper();
-	private  MAssetTypeAPIHelper assetTypeAPI = new MAssetTypeAPIHelper();
+	private MAssetTypeAPIHelper assetTypeAPI = new MAssetTypeAPIHelper();
 	private String userName = "technician";
 	private String password = "user@123";
 	private String microservice = "asset-types";
@@ -29,14 +30,9 @@ public class ManageAssetTypeAttributes {
 	private AssetTypeHelper assetTypeHelper;
 	private AssetType requestAssetType;
 	private AssetType responseAssetType;
-	
+	private ServerResponse serverResp;
 
 	private final int FIRST_ELEMENT = 0;
-	private final int SECOND_ELEMENT = 1;
-	
-	//JEET:
-	//Could this be pulled out so it can be reused and if we need to change it, we change in one place?
-	private String specialChars="~^%{&@}$#*()+=!~";
 	
 	@Before
 	public void initTest(){
@@ -44,6 +40,7 @@ public class ManageAssetTypeAttributes {
 		assetTypeHelper = new AssetTypeHelper();
 		requestAssetType = new AssetType();
 		responseAssetType = new AssetType();
+		serverResp = new ServerResponse();
 	}
 	
 	/*
@@ -56,10 +53,10 @@ public class ManageAssetTypeAttributes {
 		requestAssetType = assetTypeHelper.getAssetTypeWithAllAttributes();
 		
 		// Setting AssetType Attribute abbreviation of first attribute to the value of abbr of second attribute
-		String abbrForSecondAttribute=requestAssetType.getAttributes().get(SECOND_ELEMENT).getAbbreviation();
+		String abbrForSecondAttribute=requestAssetType.getAttributes().get(FIRST_ELEMENT + 1).getAbbreviation();
 		requestAssetType.getAttributes().get(FIRST_ELEMENT).setAbbreviation(abbrForSecondAttribute);
 	
-		ServerResponse serverResp = baseHelper.getServerResponseForInputRequest(requestAssetType, microservice, environment, apiRequestHeaders, assetTypeAPI, ServerResponse.class);
+		serverResp = AssetTypeTestHelper.getAssetTypeCreateResponseObj(baseHelper, requestAssetType, microservice, environment, apiRequestHeaders, assetTypeAPI, ServerResponse.class);
 
 		CustomAssertions.assertServerError(500,
 				"com.qiotec.application.exceptions.InvalidInputException",
@@ -74,16 +71,17 @@ public class ManageAssetTypeAttributes {
 		requestAssetType = assetTypeHelper.getAssetTypeWithAllAttributes();
 		
 		String defaultAbbr=requestAssetType.getAttributes().get(FIRST_ELEMENT).getAbbreviation();
-		int count=specialChars.length();
+		int count=AssetTypeTestHelper.SPECIAL_CHARS.length();
 		
 		for (int i=0; i < count; i++) {
-			requestAssetType.getAttributes().get(FIRST_ELEMENT).setAbbreviation(specialChars.charAt(i)+defaultAbbr);
+			requestAssetType.getAttributes().get(FIRST_ELEMENT).setAbbreviation(AssetTypeTestHelper.SPECIAL_CHARS.charAt(i)+defaultAbbr);
 					
-			ServerResponse serverResp = baseHelper.getServerResponseForInputRequest(requestAssetType, microservice, environment, apiRequestHeaders, assetTypeAPI, ServerResponse.class);
+			serverResp = AssetTypeTestHelper.getAssetTypeCreateResponseObj(baseHelper, requestAssetType, microservice, environment, apiRequestHeaders, assetTypeAPI, ServerResponse.class);
 
 			CustomAssertions.assertServerError(500,
 				"com.qiotec.application.exceptions.InvalidInputException",
-				"Asset Type Attribute Abbreviation must not contain illegal characters", serverResp);
+				"Asset Type Attribute Abbreviation must not contain illegal characters",
+				serverResp);
 		}
 	}
 	
@@ -93,11 +91,12 @@ public class ManageAssetTypeAttributes {
 		requestAssetType = assetTypeHelper.getAssetTypeWithAllAttributes();
 		requestAssetType.getAttributes().get(FIRST_ELEMENT).setAbbreviation("This Abbreviation contains spaces");
 			
-		ServerResponse serverResp = baseHelper.getServerResponseForInputRequest(requestAssetType, microservice, environment, apiRequestHeaders, assetTypeAPI, ServerResponse.class);
+		serverResp = AssetTypeTestHelper.getAssetTypeCreateResponseObj(baseHelper, requestAssetType, microservice, environment, apiRequestHeaders, assetTypeAPI, ServerResponse.class);
 
 		CustomAssertions.assertServerError(500,
 				"com.qiotec.application.exceptions.InvalidInputException",
-				"Attribute Abbreviation must not contain Spaces", serverResp);
+				"Attribute Abbreviation must not contain Spaces",
+				serverResp);
 	}
 		
 	// RREHM-450 (AssetType Attribute abbreviation is set to blank, i.e. abbreviation = "")
@@ -106,7 +105,7 @@ public class ManageAssetTypeAttributes {
 		requestAssetType = assetTypeHelper.getAssetTypeWithAllAttributes();
 		requestAssetType.getAttributes().get(FIRST_ELEMENT).setAbbreviation("");
 		
-		ServerResponse serverResp = baseHelper.getServerResponseForInputRequest(requestAssetType, microservice, environment, apiRequestHeaders, assetTypeAPI, ServerResponse.class);
+		serverResp = AssetTypeTestHelper.getAssetTypeCreateResponseObj(baseHelper, requestAssetType, microservice, environment, apiRequestHeaders, assetTypeAPI, ServerResponse.class);
 
 		CustomAssertions.assertServerError(500,
 				"com.qiotec.application.exceptions.InvalidInputException",
@@ -124,7 +123,7 @@ public class ManageAssetTypeAttributes {
 		// Setting AssetType Attribute abbreviation to null, so that it is not sent in the request.
 		requestAssetType.getAttributes().get(FIRST_ELEMENT).setAbbreviation(null);
 		
-		ServerResponse serverResp = baseHelper.getServerResponseForInputRequest(requestAssetType, microservice, environment, apiRequestHeaders, assetTypeAPI, ServerResponse.class);
+		serverResp = AssetTypeTestHelper.getAssetTypeCreateResponseObj(baseHelper, requestAssetType, microservice, environment, apiRequestHeaders, assetTypeAPI, ServerResponse.class);
 		
 		CustomAssertions.assertServerError(500,
 				"java.lang.NullPointerException",
@@ -138,7 +137,7 @@ public class ManageAssetTypeAttributes {
 		requestAssetType = assetTypeHelper.getAssetTypeWithAllAttributes();
 		requestAssetType.getAttributes().get(FIRST_ELEMENT).setAbbreviation("51charlong51charlong51charlong51charlong51charSlong");
 		
-		ServerResponse serverResp = baseHelper.getServerResponseForInputRequest(requestAssetType, microservice, environment, apiRequestHeaders, assetTypeAPI, ServerResponse.class);
+		serverResp = AssetTypeTestHelper.getAssetTypeCreateResponseObj(baseHelper, requestAssetType, microservice, environment, apiRequestHeaders, assetTypeAPI, ServerResponse.class);
 		
 		CustomAssertions.assertServerError(500,
 				"com.qiotec.application.exceptions.InvalidInputException",
@@ -152,7 +151,7 @@ public class ManageAssetTypeAttributes {
 		requestAssetType = assetTypeHelper.getAssetTypeWithAllAttributes();
 		requestAssetType.getAttributes().get(FIRST_ELEMENT).setName("");
 		
-		ServerResponse serverResp = baseHelper.getServerResponseForInputRequest(requestAssetType, microservice, environment, apiRequestHeaders, assetTypeAPI, ServerResponse.class);
+		serverResp = AssetTypeTestHelper.getAssetTypeCreateResponseObj(baseHelper, requestAssetType, microservice, environment, apiRequestHeaders, assetTypeAPI, ServerResponse.class);
 
 		CustomAssertions.assertServerError(500,
 				"com.qiotec.application.exceptions.InvalidInputException",
@@ -168,10 +167,12 @@ public class ManageAssetTypeAttributes {
 		// Setting AssetType Attribute name to null, so that it is not sent in the request.
 		requestAssetType.getAttributes().get(FIRST_ELEMENT).setName(null);
 			
-		ServerResponse serverResp = baseHelper.getServerResponseForInputRequest(requestAssetType, microservice, environment, apiRequestHeaders, assetTypeAPI, ServerResponse.class);
+		serverResp = AssetTypeTestHelper.getAssetTypeCreateResponseObj(baseHelper, requestAssetType, microservice, environment, apiRequestHeaders, assetTypeAPI, ServerResponse.class);
 			
-		CustomAssertions.assertServerError(500, "java.lang.NullPointerException",
-					"No message available", serverResp);
+		CustomAssertions.assertServerError(500,
+				"java.lang.NullPointerException",
+				"No message available",
+				serverResp);
 	}
 	
 	// RREHM-452 (AssetType Attribute name is longer than 255 Chars)
@@ -180,10 +181,12 @@ public class ManageAssetTypeAttributes {
 		requestAssetType = assetTypeHelper.getAssetTypeWithAllAttributes();
 		requestAssetType.getAttributes().get(FIRST_ELEMENT).setName("256charactelong256charactelong256charactelong256charactelong256charactelong256charactelong256charactelong256charactelong256charactelong256charactelong256charactelong256charactelong256charactelong256charactelong256charactelong256charactelong256characteRlong");
 			
-		ServerResponse serverResp = baseHelper.getServerResponseForInputRequest(requestAssetType, microservice, environment, apiRequestHeaders, assetTypeAPI, ServerResponse.class);
+		serverResp = AssetTypeTestHelper.getAssetTypeCreateResponseObj(baseHelper, requestAssetType, microservice, environment, apiRequestHeaders, assetTypeAPI, ServerResponse.class);
 			
-		CustomAssertions.assertServerError(500, "com.qiotec.application.exceptions.InvalidInputException",
-					"Attribute Name should be less than 255 characters", serverResp);
+		CustomAssertions.assertServerError(500,
+				"com.qiotec.application.exceptions.InvalidInputException",
+				"Attribute Name should be less than 255 characters",
+				serverResp);
 	}
 	/*
 	 * NEGATIVE TESTS END
@@ -200,7 +203,7 @@ public class ManageAssetTypeAttributes {
 
 		int expectedRespCode = 201;
 		
-		responseAssetType = baseHelper.getServerResponseForInputRequest(requestAssetType, microservice, environment, apiRequestHeaders, assetTypeAPI, AssetType.class);
+		responseAssetType = AssetTypeTestHelper.getAssetTypeCreateResponseObj(baseHelper, requestAssetType, microservice, environment, apiRequestHeaders, assetTypeAPI, AssetType.class);
 		
 		System.out.println(responseAssetType.get_links().getSelf().getHref());
 		System.out.println(responseAssetType.getAttributes().get(0).get_links().getSelf().getHref());

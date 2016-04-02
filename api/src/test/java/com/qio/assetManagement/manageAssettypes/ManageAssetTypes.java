@@ -1,24 +1,21 @@
 package com.qio.assetManagement.manageAssettypes;
 
-import static org.junit.Assert.assertEquals;
-
 import java.io.IOException;
 
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
+import com.qio.assetManagement.helper.AssetTypeTestHelper;
 import com.qio.lib.apiHelpers.APIHeaders;
 import com.qio.lib.apiHelpers.MAssetTypeAPIHelper;
 import com.qio.lib.assertions.CustomAssertions;
 import com.qio.lib.common.BaseHelper;
-//import com.qio.lib.connection.ConnectionResponse;
 import com.qio.lib.exception.ServerResponse;
 import com.qio.model.assetType.AssetType;
 import com.qio.model.assetType.helper.AssetTypeHelper;
-import com.qio.model.assetType.helper.AttributeDataType;
-import com.qio.model.assetType.helper.ParameterDataType;
 
 
 public class ManageAssetTypes {
@@ -33,11 +30,9 @@ public class ManageAssetTypes {
 	private AssetTypeHelper assetTypeHelper;
 	private AssetType requestAssetType;
 	private AssetType responseAssetType;
+	private ServerResponse serverResp;
 
-	private final int DEFAULT_ELEMENT = 0;
-	//JEET:
-	//Could this be pulled out so it can be reused and if we need to change it, we change in one place?
-	private String specialChars="~^%{&@}$#*()+=!~";
+	private final int FIRST_ELEMENT = 0;
 	
 	@Before
 	public void initTest(){
@@ -45,6 +40,7 @@ public class ManageAssetTypes {
 		assetTypeHelper = new AssetTypeHelper();
 		requestAssetType = new AssetType();
 		responseAssetType = new AssetType();
+		serverResp = new ServerResponse();
 	}
 	
 	/*
@@ -61,21 +57,11 @@ public class ManageAssetTypes {
 		String abbr=requestAssetType.getAbbreviation();
 		requestAssetType.setAbbreviation("Abrr has a space"+abbr);
 			
-		ServerResponse serverResp = baseHelper.getServerResponseForInputRequest(requestAssetType, microservice, environment, apiRequestHeaders, assetTypeAPI, ServerResponse.class);
-			
-		//Call another class for custom validations; pass the response + request from the previous class call
-		//It will grab the asset type abbr from the prev request and query assets types based on abbr - response
-		//should be nothing in this specific test 
-		//compare response of query with nothing
-		//also compare the stuff you have below
-			
-		int expectedRespCode = 500;
-		String expectedExceptionMsg = "com.qiotec.application.exceptions.InvalidInputException";
-		String expectedMsg = "Asset Type Abbreviation must not contain Spaces";
-			
-		CustomAssertions.assertServerError(expectedRespCode,
-				expectedExceptionMsg,
-				expectedMsg,
+		serverResp = AssetTypeTestHelper.getAssetTypeCreateResponseObj(baseHelper, requestAssetType, microservice, environment, apiRequestHeaders, assetTypeAPI, ServerResponse.class);
+		
+		CustomAssertions.assertServerError(500,
+				"com.qiotec.application.exceptions.InvalidInputException",
+				"Asset Type Abbreviation must not contain Spaces",
 				serverResp);
 	}
 	
@@ -87,13 +73,12 @@ public class ManageAssetTypes {
 		// Setting AssetType abbreviation to be longer than 50 chars
 		requestAssetType.setAbbreviation("51charlong51charlong51charlong51charlong51charSlong");
 						
-		ServerResponse serverResp = baseHelper.getServerResponseForInputRequest(requestAssetType, microservice, environment, apiRequestHeaders, assetTypeAPI, ServerResponse.class);
-						
-		int expectedRespCode = 500;
-		String expectedExceptionMsg = "com.qiotec.application.exceptions.InvalidInputException";
-		String expectedMsg = "Asset Type Abbreviation Should Less Than 50 Character";
-						
-		CustomAssertions.assertServerError(expectedRespCode, expectedExceptionMsg, expectedMsg, serverResp);
+		serverResp = AssetTypeTestHelper.getAssetTypeCreateResponseObj(baseHelper, requestAssetType, microservice, environment, apiRequestHeaders, assetTypeAPI, ServerResponse.class);
+		
+		CustomAssertions.assertServerError(500,
+				"com.qiotec.application.exceptions.InvalidInputException",
+				"Asset Type Abbreviation Should Less Than 50 Character",
+				serverResp);
 	}
 	
 	// RREHM-468 (AssetType abbreviation is blank)
@@ -104,13 +89,12 @@ public class ManageAssetTypes {
 		// Setting AssetType abbreviation to null
 		requestAssetType.setAbbreviation("");
 							
-		ServerResponse serverResp = baseHelper.getServerResponseForInputRequest(requestAssetType, microservice, environment, apiRequestHeaders, assetTypeAPI, ServerResponse.class);
-							
-		int expectedRespCode = 500;
-		String expectedExceptionMsg = "com.qiotec.application.exceptions.InvalidInputException";
-		String expectedMsg = "Asset Type Abbreviation Should not be Empty or Null";
-							
-		CustomAssertions.assertServerError(expectedRespCode, expectedExceptionMsg, expectedMsg, serverResp);
+		serverResp = AssetTypeTestHelper.getAssetTypeCreateResponseObj(baseHelper, requestAssetType, microservice, environment, apiRequestHeaders, assetTypeAPI, ServerResponse.class);
+		
+		CustomAssertions.assertServerError(500,
+				"com.qiotec.application.exceptions.InvalidInputException",
+				"Asset Type Abbreviation Should not be Empty or Null",
+				serverResp);
 	}
 		
 	// RREHM-385 (AssetType abbreviation is null - missing)
@@ -121,13 +105,12 @@ public class ManageAssetTypes {
 		// Setting AssetType abbreviation to null
 		requestAssetType.setAbbreviation(null);
 								
-		ServerResponse serverResp = baseHelper.getServerResponseForInputRequest(requestAssetType, microservice, environment, apiRequestHeaders, assetTypeAPI, ServerResponse.class);
-								
-		int expectedRespCode = 500;
-		String expectedExceptionMsg = "java.lang.NullPointerException";
-		String expectedMsg = "No message available";
-								
-		CustomAssertions.assertServerError(expectedRespCode, expectedExceptionMsg, expectedMsg, serverResp);
+		serverResp = AssetTypeTestHelper.getAssetTypeCreateResponseObj(baseHelper, requestAssetType, microservice, environment, apiRequestHeaders, assetTypeAPI, ServerResponse.class);
+		
+		CustomAssertions.assertServerError(500,
+				"java.lang.NullPointerException",
+				"No message available",
+				serverResp);
 	}
 	
 	// RREHM-433 (AssetType abbreviation contains special chars)
@@ -136,19 +119,18 @@ public class ManageAssetTypes {
 		requestAssetType = assetTypeHelper.getAssetTypeWithNoAttributesAndParameters();
 			
 		String defaultAbbr=requestAssetType.getAbbreviation();
-		int count=specialChars.length();
+		int count = AssetTypeTestHelper.SPECIAL_CHARS.length();
 			
 		for (int i=0; i < count; i++) {
-			requestAssetType.setAbbreviation(specialChars.charAt(i)+defaultAbbr);
+			requestAssetType.setAbbreviation(AssetTypeTestHelper.SPECIAL_CHARS.charAt(i)+defaultAbbr);
 						
-			ServerResponse serverResp = baseHelper.getServerResponseForInputRequest(requestAssetType, microservice, environment, apiRequestHeaders, assetTypeAPI, ServerResponse.class);
-
+			serverResp = AssetTypeTestHelper.getAssetTypeCreateResponseObj(baseHelper, requestAssetType, microservice, environment, apiRequestHeaders, assetTypeAPI, ServerResponse.class);
+			
 			CustomAssertions.assertServerError(500,
 				"com.qiotec.application.exceptions.InvalidInputException",
 				"Asset Type Abbreviation must not contain illegal characters", serverResp);
 		}
 	}
-		
 		
 	// RREHM-384 (AssetType name is blank)
 	@Test
@@ -158,13 +140,12 @@ public class ManageAssetTypes {
 		// Setting AssetType abbreviation to null
 		requestAssetType.setName("");
 								
-		ServerResponse serverResp = baseHelper.getServerResponseForInputRequest(requestAssetType, microservice, environment, apiRequestHeaders, assetTypeAPI, ServerResponse.class);
-								
-		int expectedRespCode = 500;
-		String expectedExceptionMsg = "com.qiotec.application.exceptions.InvalidInputException";
-		String expectedMsg = "Asset Type Name Should not Empty or Null";
-								
-		CustomAssertions.assertServerError(expectedRespCode, expectedExceptionMsg, expectedMsg, serverResp);
+		serverResp = AssetTypeTestHelper.getAssetTypeCreateResponseObj(baseHelper, requestAssetType, microservice, environment, apiRequestHeaders, assetTypeAPI, ServerResponse.class);
+		
+		CustomAssertions.assertServerError(500,
+				"com.qiotec.application.exceptions.InvalidInputException",
+				"Asset Type Name Should not Empty or Null",
+				serverResp);
 	}
 		
 	// RREHM-384 (AssetType Name is null - missing)
@@ -175,32 +156,30 @@ public class ManageAssetTypes {
 		// Setting AssetType abbreviation to null
 		requestAssetType.setName(null);
 						
-		ServerResponse serverResp = baseHelper.getServerResponseForInputRequest(requestAssetType, microservice, environment, apiRequestHeaders, assetTypeAPI, ServerResponse.class);
-						
-		int expectedRespCode = 500;
-		String expectedExceptionMsg = "java.lang.NullPointerException";
-		String expectedMsg = "No message available";
-						
-		CustomAssertions.assertServerError(expectedRespCode, expectedExceptionMsg, expectedMsg, serverResp);
+		serverResp = AssetTypeTestHelper.getAssetTypeCreateResponseObj(baseHelper, requestAssetType, microservice, environment, apiRequestHeaders, assetTypeAPI, ServerResponse.class);
+		
+		CustomAssertions.assertServerError(500,
+				"java.lang.NullPointerException",
+				"No message available",
+				serverResp);
 	}
 	
 		
 	// RREHM-437 (AssetType name is longer than 50 chars)
 	// RREHM-1627 BUG - Uncomment after bug is fixed
-//	@Test
+	@Ignore
 	public void shouldNotCreateAssetTypeWhenNameIsLongerThan50Chars() throws JsonGenerationException, JsonMappingException, IOException{
 		requestAssetType = assetTypeHelper.getAssetTypeWithNoAttributesAndParameters();
 				
 		// Setting AssetType name to be longer than 50 chars
 		requestAssetType.setName("51charlong51charlong51charlong51charlong51charSlong");
 				
-		ServerResponse serverResp = baseHelper.getServerResponseForInputRequest(requestAssetType, microservice, environment, apiRequestHeaders, assetTypeAPI, ServerResponse.class);
-				
-		int expectedRespCode = 500;
-		String expectedExceptionMsg = "com.qiotec.application.exceptions.InvalidInputException";
-		String expectedMsg = "Asset Type Name Should Less Than 50 Character";
-				
-		CustomAssertions.assertServerError(expectedRespCode, expectedExceptionMsg, expectedMsg, serverResp);
+		serverResp = AssetTypeTestHelper.getAssetTypeCreateResponseObj(baseHelper, requestAssetType, microservice, environment, apiRequestHeaders, assetTypeAPI, ServerResponse.class);
+		
+		CustomAssertions.assertServerError(500,
+				"com.qiotec.application.exceptions.InvalidInputException",
+				"Asset Type Name Should Less Than 50 Character",
+				serverResp);
 	}
 	
 	
@@ -212,13 +191,12 @@ public class ManageAssetTypes {
 		// Setting AssetType description to be longer than 255 chars
 		requestAssetType.setDescription("256charactelong256charactelong256charactelong256charactelong256charactelong256charactelong256charactelong256charactelong256charactelong256charactelong256charactelong256charactelong256charactelong256charactelong256charactelong256charactelong256characteRlong");
 					
-		ServerResponse serverResp = baseHelper.getServerResponseForInputRequest(requestAssetType, microservice, environment, apiRequestHeaders, assetTypeAPI, ServerResponse.class);
-					
-		int expectedRespCode = 500;
-		String expectedExceptionMsg = "com.qiotec.application.exceptions.InvalidInputException";
-		String expectedMsg = "Asset Type Description should be less than 255 characters";
-					
-		CustomAssertions.assertServerError(expectedRespCode, expectedExceptionMsg, expectedMsg, serverResp);
+		serverResp = AssetTypeTestHelper.getAssetTypeCreateResponseObj(baseHelper, requestAssetType, microservice, environment, apiRequestHeaders, assetTypeAPI, ServerResponse.class);
+		
+		CustomAssertions.assertServerError(500,
+				"com.qiotec.application.exceptions.InvalidInputException",
+				"Asset Type Description should be less than 255 characters",
+				serverResp);
 	}
 	/*
 	 * NEGATIVE TESTS END
