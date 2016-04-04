@@ -17,4 +17,9 @@ public class ConnectionResponse {
 	public void setRespBody(String respBody) {
 		this.respBody = respBody;
 	}
+	
+	@Override
+	public String toString(){
+		return respCode + ", " + respBody;
+	}
 }

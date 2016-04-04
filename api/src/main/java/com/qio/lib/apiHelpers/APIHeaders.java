@@ -6,16 +6,6 @@ public class APIHeaders {
 	private String userName;
 	private String password;
 	
-	/**
-	 * Constructs the API Header object with default values. Commonly the case in many test cases.
-	 */
-	public APIHeaders(){
-		this.userName = "technician";
-		this.password = "user@123";
-		this.contentType = "application/json";
-		this.acceptType = "application/json";
-	}
-	
 	public APIHeaders(String acceptType, String contentType, String userName, String password){
 		this.acceptType = acceptType;
 		this.contentType = contentType;

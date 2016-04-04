@@ -7,11 +7,14 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import org.apache.log4j.Logger;
+
 import com.qio.lib.apiHelpers.APIHeaders;
 
 public class ConnectionManager {
 	
 	private static ConnectionManager conManager = null;
+	final static Logger logger = Logger.getLogger(ConnectionManager.class);
 	
 	// ensures that only one instance of this class exists at all time during the entire run of the tests.
 	public static ConnectionManager getInstance() {
@@ -36,8 +39,7 @@ public class ConnectionManager {
 			con.setRequestProperty("X-Auth-Password", apiHeaders.getPassword());
 	
 			int responseCode = con.getResponseCode();
-			System.out.println("\nSending 'GET' request to URL : " + URI);
-			System.out.println("Response Code : " + responseCode);
+			logger.debug("Sending 'GET' request to URL : " + URI);
 	
 			BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
 			String inputLine;
@@ -52,34 +54,11 @@ public class ConnectionManager {
 			conResp.setRespBody(response.toString());
 			
 			//print result
-			System.out.println(response.toString());
+			logger.debug("Response Code and Body: " + conResp.toString());
 			
-	//		JsonObject jsonObj = new JsonParser().parse(response.toString()).getAsJsonObject();
-	//		System.out.println(jsonObj.getAsJsonObject("_embedded").getAsJsonArray("assettypes").get(0));
-	//		JsonElement assetTypeOne = jsonObj.getAsJsonObject("_embedded").getAsJsonArray("assettypes").get(0);
-	//		
-	//		AssetType assetType1 = mapper.readValue(assetTypeOne.toString(), AssetType.class);
-	
-	//		AssetType assetType = mapper.readValue("{\"abbreviation\": \"ABBRJeet\","+
-	//"\"name\":\"A name\","+
-	//"\"description\":\"A Desc\","+
-	//"\"attributes\": ["+
-	// "{"+
-	//"  \"abbreviation\": \"ABBRJeetDogra\","+
-	//"  \"name\": \"A Simple Name\","+
-	//"  \"description\": \"A Simple Desc\","+
-	//"  \"unit\": \"A\","+
-	//"  \"datatype\": ["+
-	//        "{        \"type\": \"FicticiousDataType\""+
-	//        "}"+
-	//      "]"+
-	//  "}"+
-	//  "]"+
-	//"}", AssetType.class);
-
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error(e.getMessage());
 		}
 		return conResp;
 	}
@@ -105,13 +84,11 @@ public class ConnectionManager {
 			wr.flush();
 			wr.close();
 
-			System.out.println("\nSending 'POST' request to URL : " + URI);
-			System.out.println("Request payload : " + payload);
+			logger.debug("Sending 'POST' request to URL : " + URI);
+			logger.debug("Request payload : " + payload);
 
 			int responseCode = con.getResponseCode();
 			conResp.setRespCode(responseCode);
-			
-			System.out.println("Response Code : " + responseCode);
 			
 			BufferedReader in;
 			if(responseCode != 201)
@@ -130,11 +107,11 @@ public class ConnectionManager {
 			conResp.setRespBody(response.toString());
 			
 			//print result
-			System.out.println("Response Body : " + response.toString());
+			logger.debug("Response Code and Body: " + conResp.toString());
 
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error(e.getMessage());
 		}
 		return conResp;
 	}
@@ -161,14 +138,14 @@ public class ConnectionManager {
 			con.setDoOutput(true);
 			int responseCode = con.getResponseCode();
 			
-			System.out.println("\nSending 'DELETE' request to URL : " + URI);
-			System.out.println("Response Code : " + responseCode);
+			logger.debug("Sending 'DELETE' request to URL : " + URI);
+			logger.debug("Response Code and Body: " + conResp.toString());
 	
 			conResp.setRespCode(responseCode);
 
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error(e.getMessage());
 		}
 	}
 
