@@ -5,6 +5,7 @@ import java.io.IOException;
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.qio.assetManagement.helper.AssetTypeTestHelper;
@@ -12,29 +13,44 @@ import com.qio.lib.apiHelpers.APIHeaders;
 import com.qio.lib.apiHelpers.MAssetTypeAPIHelper;
 import com.qio.lib.assertions.CustomAssertions;
 import com.qio.lib.common.BaseHelper;
+import com.qio.lib.common.Microservice;
 import com.qio.lib.exception.ServerResponse;
 import com.qio.model.assetType.AssetType;
 import com.qio.model.assetType.helper.AssetTypeHelper;
 import com.qio.model.assetType.helper.ParameterDataType;
+import com.typesafe.config.Config;
+import com.typesafe.config.ConfigFactory;
 
 
 public class ManageAssetTypeParameters {
 
 	private BaseHelper baseHelper = new BaseHelper();
 	private  MAssetTypeAPIHelper assetTypeAPI = new MAssetTypeAPIHelper();
-	private String userName = "technician";
-	private String password = "user@123";
-	private String microservice = "asset-types";
-	private String environment = ".qiotec.internal";
-	private APIHeaders apiRequestHeaders = new APIHeaders(userName, password);
+	private static String userName;
+	private static String password;
+	private static String microservice;
+	private static String environment;
+	private static APIHeaders apiRequestHeaders;
 	private AssetTypeHelper assetTypeHelper;
 	private AssetType requestAssetType;
 	private ServerResponse serverResp;
 
 	private final int FIRST_ELEMENT = 0;
 	
+	@BeforeClass
+	public static void initSetupBeforeAllTests(){
+		Config userConfig = ConfigFactory.load("user_creds.conf");
+		Config envConfig = ConfigFactory.load("environments.conf");
+		
+		userName = userConfig.getString("user.username");
+		password = userConfig.getString("user.password");
+		environment = envConfig.getString("env.name");
+		microservice = Microservice.ASSET_TYPE.toString();
+		apiRequestHeaders = new APIHeaders(userName, password);
+	}
+	
 	@Before
-	public void initTest(){
+	public void initSetupBeforeEveryTest(){
 		// Initializing a new set of objects before each test case.
 		assetTypeHelper = new AssetTypeHelper();
 		requestAssetType = new AssetType();

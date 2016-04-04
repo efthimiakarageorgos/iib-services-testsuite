@@ -2,9 +2,12 @@ package com.qio.assetManagement.manageAssettypeAttributes;
 
 import java.io.IOException;
 
+import org.apache.log4j.Logger;
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import com.qio.assetManagement.helper.AssetTypeTestHelper;
@@ -12,30 +15,46 @@ import com.qio.lib.apiHelpers.APIHeaders;
 import com.qio.lib.apiHelpers.MAssetTypeAPIHelper;
 import com.qio.lib.assertions.CustomAssertions;
 import com.qio.lib.common.BaseHelper;
+import com.qio.lib.common.Microservice;
 import com.qio.lib.exception.ServerResponse;
 import com.qio.model.assetType.AssetType;
 import com.qio.model.assetType.helper.AssetTypeHelper;
 import com.qio.model.assetType.helper.AttributeDataType;
+import com.typesafe.config.Config;
+import com.typesafe.config.ConfigFactory;
 
 
 public class ManageAssetTypeAttributes {
 
 	private BaseHelper baseHelper = new BaseHelper();
 	private MAssetTypeAPIHelper assetTypeAPI = new MAssetTypeAPIHelper();
-	private String userName = "technician";
-	private String password = "user@123";
-	private String microservice = "asset-types";
-	private String environment = ".qiotec.internal";
-	private APIHeaders apiRequestHeaders = new APIHeaders(userName, password);
+	private static String userName;;
+	private static String password;;
+	private static String microservice;
+	private static String environment;
+	private static APIHeaders apiRequestHeaders;
 	private AssetTypeHelper assetTypeHelper;
 	private AssetType requestAssetType;
 	private AssetType responseAssetType;
 	private ServerResponse serverResp;
+	final static Logger logger = Logger.getLogger(ManageAssetTypeAttributes.class);
 
 	private final int FIRST_ELEMENT = 0;
 	
+	@BeforeClass
+	public static void initSetupBeforeAllTests(){
+		Config userConfig = ConfigFactory.load("user_creds.conf");
+		Config envConfig = ConfigFactory.load("environments.conf");
+		
+		userName = userConfig.getString("user.username");
+		password = userConfig.getString("user.password");
+		environment = envConfig.getString("env.name");
+		microservice = Microservice.ASSET_TYPE.toString();
+		apiRequestHeaders = new APIHeaders(userName, password);
+	}
+	
 	@Before
-	public void initTest(){
+	public void initSetupBeforeEveryTest(){
 		// Initializing a new set of objects before each test case.
 		assetTypeHelper = new AssetTypeHelper();
 		requestAssetType = new AssetType();
@@ -196,7 +215,7 @@ public class ManageAssetTypeAttributes {
 	 * POSITIVE TESTS START
 	 */
 	// RREHM-543 (AssetType with one Attribute of float data type)
-	//@Test
+	@Ignore
 	// Uncomment when ready with assertions
 	public void shouldCreateAssetTypeWithUniqueAbbrWithOneAttrOfFloatDataType() throws JsonGenerationException, JsonMappingException, IOException{
 		requestAssetType = assetTypeHelper.getAssetTypeWithOneAttribute(AttributeDataType.Float);
@@ -205,8 +224,8 @@ public class ManageAssetTypeAttributes {
 		
 		responseAssetType = AssetTypeTestHelper.getAssetTypeCreateResponseObj(baseHelper, requestAssetType, microservice, environment, apiRequestHeaders, assetTypeAPI, AssetType.class);
 		
-		System.out.println(responseAssetType.get_links().getSelf().getHref());
-		System.out.println(responseAssetType.getAttributes().get(0).get_links().getSelf().getHref());
+		logger.info(responseAssetType.get_links().getSelf().getHref());
+		logger.info(responseAssetType.getAttributes().get(0).get_links().getSelf().getHref());
 		
 		//Uncomment after figuring out why they are different
 		//assertEquals("Unexpected response code", requestAssetType, responseAssetType);
