@@ -182,8 +182,7 @@ public class ManageAssetTypes {
 	
 		
 	// RREHM-437 (AssetType name is longer than 50 chars)
-	// RREHM-1627 BUG - Uncomment after bug is fixed
-	@Ignore
+	@Test
 	public void shouldNotCreateAssetTypeWhenNameIsLongerThan50Chars() throws JsonGenerationException, JsonMappingException, IOException{
 		requestAssetType = assetTypeHelper.getAssetTypeWithNoAttributesAndParameters();
 				
@@ -194,7 +193,7 @@ public class ManageAssetTypes {
 		
 		CustomAssertions.assertServerError(500,
 				"com.qiotec.application.exceptions.InvalidInputException",
-				"Asset Type Name Should Less Than 50 Character",
+				"Asset Type Name should be less than 50 characters",
 				serverResp);
 	}
 	
