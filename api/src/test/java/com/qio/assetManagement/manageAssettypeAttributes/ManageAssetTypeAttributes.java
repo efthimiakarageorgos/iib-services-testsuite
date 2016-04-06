@@ -216,7 +216,6 @@ public class ManageAssetTypeAttributes {
 	 */
 	// RREHM-543 (AssetType with one Attribute of float data type)
 	@Ignore
-	// Uncomment when ready with assertions
 	public void shouldCreateAssetTypeWithUniqueAbbrWithOneAttrOfFloatDataType() throws JsonGenerationException, JsonMappingException, IOException{
 		requestAssetType = assetTypeHelper.getAssetTypeWithOneAttribute(AttributeDataType.Float);
 
@@ -227,7 +226,6 @@ public class ManageAssetTypeAttributes {
 		logger.info(responseAssetType.get_links().getSelf().getHref());
 		logger.info(responseAssetType.getAttributes().get(0).get_links().getSelf().getHref());
 		
-		//Uncomment after figuring out why they are different
 		//assertEquals("Unexpected response code", requestAssetType, responseAssetType);
 	}
 }
