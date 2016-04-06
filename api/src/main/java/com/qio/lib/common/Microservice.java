@@ -5,7 +5,10 @@ package com.qio.lib.common;
  * at one place only, in the event its changed.
  */
 public enum Microservice {
-	ASSET_TYPE("asset-types");
+	ASSET_TYPE("asset-types"),
+	//ASSET_TYPE("assets"),
+	ASSET("asset-microservice"),
+	TENANT("tenant-management");
 
 	/*
 	 * The following section of code does not require any change, if more microservice enum constants are added above.
