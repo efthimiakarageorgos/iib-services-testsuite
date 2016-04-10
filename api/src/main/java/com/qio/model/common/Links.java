@@ -1,4 +1,4 @@
-package com.qio.model.assetType;
+package com.qio.model.common;
 
 import org.codehaus.jackson.annotate.JsonProperty;
 

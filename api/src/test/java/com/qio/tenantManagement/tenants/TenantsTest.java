@@ -1,6 +1,7 @@
-package com.qio.tenantManagement.manageTenants;
+package com.qio.tenantManagement.tenants;
 
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;
@@ -9,7 +10,6 @@ import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import com.qio.tenantManagement.helper.TenantTestHelper;
 import com.qio.lib.apiHelpers.APIHeaders;
 import com.qio.lib.apiHelpers.MTenantAPIHelper;
 import com.qio.lib.assertions.CustomAssertions;
@@ -18,11 +18,12 @@ import com.qio.lib.common.Microservice;
 import com.qio.lib.exception.ServerResponse;
 import com.qio.model.tenant.Tenant;
 import com.qio.model.tenant.helper.TenantHelper;
+import com.qio.testHelper.TestHelper;
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
 
 
-public class ManageTenants {
+public class TenantsTest {
 
 	private BaseHelper baseHelper = new BaseHelper();
 	private  MTenantAPIHelper tenantAPI = new MTenantAPIHelper();
@@ -65,9 +66,9 @@ public class ManageTenants {
 	
 	// RREHM-338 (Tenant Name is null - missing)
 	@Ignore
-	public void shouldNotCreateTenantWhenAbbreviationIsNotUnique() throws JsonGenerationException, JsonMappingException, IOException{
+	public void shouldNotCreateTenantWhenAbbreviationIsNotUnique() throws JsonGenerationException, JsonMappingException, IOException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException{
 		requestTenant2 = tenantHelper.getTenant();
-		serverResp = TenantTestHelper.getTenantCreateResponseObj(baseHelper, requestTenant2, microservice, environment, apiRequestHeaders, tenantAPI, ServerResponse.class);
+		serverResp = TestHelper.getResponseObjForCreate(baseHelper, requestTenant2, microservice, environment, apiRequestHeaders, tenantAPI, ServerResponse.class);
 		
 		requestTenant = tenantHelper.getTenant();
 		
@@ -76,7 +77,7 @@ public class ManageTenants {
 		// Setting Tenant abbreviation to be the same as the name of tenant2
 		requestTenant.setAbbreviation(tenantAbbr2);
 									
-		serverResp = TenantTestHelper.getTenantCreateResponseObj(baseHelper, requestTenant, microservice, environment, apiRequestHeaders, tenantAPI, ServerResponse.class);
+		serverResp = TestHelper.getResponseObjForCreate(baseHelper, requestTenant, microservice, environment, apiRequestHeaders, tenantAPI, ServerResponse.class);
 			
 		CustomAssertions.assertServerError(409,
 				null,
@@ -88,14 +89,14 @@ public class ManageTenants {
 		
 	// RREHM-352 (Tenant abbreviation contains spaces)
 	@Test
-	public void shouldNotCreateTenantWhenAbbrContainsSpaces() throws JsonGenerationException, JsonMappingException, IOException{
+	public void shouldNotCreateTenantWhenAbbrContainsSpaces() throws JsonGenerationException, JsonMappingException, IOException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException{
 		requestTenant = tenantHelper.getTenant();
 			
 		// Setting Tenant abbreviation to contain spaces
 		String defaultAbbr=requestTenant.getAbbreviation();
 		requestTenant.setAbbreviation("Abrr has a space"+defaultAbbr);
 			
-		serverResp = TenantTestHelper.getTenantCreateResponseObj(baseHelper, requestTenant, microservice, environment, apiRequestHeaders, tenantAPI, ServerResponse.class);
+		serverResp = TestHelper.getResponseObjForCreate(baseHelper, requestTenant, microservice, environment, apiRequestHeaders, tenantAPI, ServerResponse.class);
 		
 		CustomAssertions.assertServerError(400,
 				null,
@@ -108,7 +109,7 @@ public class ManageTenants {
 		
 	// RREHM-334 (Tenant abbreviation is null - missing)
 	@Test
-	public void shouldNotCreateTenantWhenAbbreviationIsNull() throws JsonGenerationException, JsonMappingException, IOException{
+	public void shouldNotCreateTenantWhenAbbreviationIsNull() throws JsonGenerationException, JsonMappingException, IOException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException{
 		requestTenant = tenantHelper.getTenant();
 		String defaultAbbr=requestTenant.getAbbreviation();
 		
@@ -116,7 +117,7 @@ public class ManageTenants {
 		requestTenant.setAbbreviation(null);
 		requestTenant.setName("ThisTenantShouldNotGetCreated"+defaultAbbr);
 								
-		serverResp = TenantTestHelper.getTenantCreateResponseObj(baseHelper, requestTenant, microservice, environment, apiRequestHeaders, tenantAPI, ServerResponse.class);
+		serverResp = TestHelper.getResponseObjForCreate(baseHelper, requestTenant, microservice, environment, apiRequestHeaders, tenantAPI, ServerResponse.class);
 		
 		CustomAssertions.assertServerError(400,
 				null,
@@ -128,7 +129,7 @@ public class ManageTenants {
 	
 	// RREHM-334 (Tenant abbreviation is empty)
 	@Test
-	public void shouldNotCreateTenantWhenAbbreviationIsEmpty() throws JsonGenerationException, JsonMappingException, IOException{
+	public void shouldNotCreateTenantWhenAbbreviationIsEmpty() throws JsonGenerationException, JsonMappingException, IOException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException{
 		requestTenant = tenantHelper.getTenant();
 		String defaultAbbr=requestTenant.getAbbreviation();
 		
@@ -136,7 +137,7 @@ public class ManageTenants {
 		requestTenant.setAbbreviation("");
 		requestTenant.setName("ThisTenantShouldNotGetCreated"+defaultAbbr);
 									
-		serverResp = TenantTestHelper.getTenantCreateResponseObj(baseHelper, requestTenant, microservice, environment, apiRequestHeaders, tenantAPI, ServerResponse.class);
+		serverResp = TestHelper.getResponseObjForCreate(baseHelper, requestTenant, microservice, environment, apiRequestHeaders, tenantAPI, ServerResponse.class);
 			
 		CustomAssertions.assertServerError(400,
 				null,
@@ -148,13 +149,13 @@ public class ManageTenants {
 	
 	// RREHM-984 (Tenant abbreviation is longer than 50 chars)
 	@Test
-	public void shouldNotCreateTenantWhenAbbrIsLongerThan50Chars() throws JsonGenerationException, JsonMappingException, IOException{
+	public void shouldNotCreateTenantWhenAbbrIsLongerThan50Chars() throws JsonGenerationException, JsonMappingException, IOException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException{
 		requestTenant = tenantHelper.getTenant();
 				
 		// Setting tenant abbr to be longer than 50 chars
 		requestTenant.setAbbreviation("51charlong51charlong51charlong51charlong51charSlong");
 				
-		serverResp = TenantTestHelper.getTenantCreateResponseObj(baseHelper, requestTenant, microservice, environment, apiRequestHeaders, tenantAPI, ServerResponse.class);
+		serverResp = TestHelper.getResponseObjForCreate(baseHelper, requestTenant, microservice, environment, apiRequestHeaders, tenantAPI, ServerResponse.class);
 		
 		CustomAssertions.assertServerError(400,
 				null,
@@ -167,13 +168,13 @@ public class ManageTenants {
 	
 	// RREHM-833 (Tenant name is blank)
 	@Test
-	public void shouldNotCreateTenantWhenNameIsBlank() throws JsonGenerationException, JsonMappingException, IOException{
+	public void shouldNotCreateTenantWhenNameIsBlank() throws JsonGenerationException, JsonMappingException, IOException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException{
 		requestTenant = tenantHelper.getTenant();
 								
 		// Setting tenant name to empty
 		requestTenant.setName("");
 								
-		serverResp = TenantTestHelper.getTenantCreateResponseObj(baseHelper, requestTenant, microservice, environment, apiRequestHeaders, tenantAPI, ServerResponse.class);
+		serverResp = TestHelper.getResponseObjForCreate(baseHelper, requestTenant, microservice, environment, apiRequestHeaders, tenantAPI, ServerResponse.class);
 		
 		CustomAssertions.assertServerError(400,
 				null,
@@ -184,13 +185,13 @@ public class ManageTenants {
 		
 	// RREHM-833 (Tenant Name is null - missing)
 	@Test
-	public void shouldNotCreateTenantWhenNameIsNull() throws JsonGenerationException, JsonMappingException, IOException{
+	public void shouldNotCreateTenantWhenNameIsNull() throws JsonGenerationException, JsonMappingException, IOException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException{
 		requestTenant = tenantHelper.getTenant();
 								
 		// Setting Tenant name to null
 		requestTenant.setName("");
 								
-		serverResp = TenantTestHelper.getTenantCreateResponseObj(baseHelper, requestTenant, microservice, environment, apiRequestHeaders, tenantAPI, ServerResponse.class);
+		serverResp = TestHelper.getResponseObjForCreate(baseHelper, requestTenant, microservice, environment, apiRequestHeaders, tenantAPI, ServerResponse.class);
 		
 		CustomAssertions.assertServerError(400,
 				null,
@@ -202,13 +203,13 @@ public class ManageTenants {
 	
 	// RREHM-985 (Tenant name is longer than 255 chars)
 	@Test
-	public void shouldNotCreateTenantWhenNameIsLongerThan255Chars() throws JsonGenerationException, JsonMappingException, IOException{
+	public void shouldNotCreateTenantWhenNameIsLongerThan255Chars() throws JsonGenerationException, JsonMappingException, IOException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException{
 		requestTenant = tenantHelper.getTenant();
 					
 		// Setting tenant name to be longer than 255 chars
 		requestTenant.setName("256charactelong256charactelong256charactelong256charactelong256charactelong256charactelong256charactelong256charactelong256charactelong256charactelong256charactelong256charactelong256charactelong256charactelong256charactelong256charactelong256characteRlong");
 					
-		serverResp = TenantTestHelper.getTenantCreateResponseObj(baseHelper, requestTenant, microservice, environment, apiRequestHeaders, tenantAPI, ServerResponse.class);
+		serverResp = TestHelper.getResponseObjForCreate(baseHelper, requestTenant, microservice, environment, apiRequestHeaders, tenantAPI, ServerResponse.class);
 		
 		CustomAssertions.assertServerError(400,
 				null,
