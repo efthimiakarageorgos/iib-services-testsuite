@@ -2,6 +2,8 @@ package com.qio.model.tenant;
 
 import org.codehaus.jackson.annotate.JsonProperty;
 
+import com.qio.model.common.Links;
+
 public class Tenant {
 	private String abbreviation;
 	private String name;

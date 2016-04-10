@@ -2,6 +2,8 @@ package com.qio.model.assetType;
 
 import org.codehaus.jackson.annotate.JsonProperty;
 
+import com.qio.model.common.Links;
+
 public class AssetTypeAttribute {
 	private String attributeId;
 	private String abbreviation;

@@ -5,6 +5,8 @@ import java.util.List;
 
 import org.codehaus.jackson.annotate.JsonProperty;
 
+import com.qio.model.common.Links;
+
 public class AssetType {
 	private String abbreviation;
 	private String name;
