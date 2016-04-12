@@ -1,6 +1,7 @@
 package com.qio.lib.assertions;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import com.qio.lib.exception.ServerResponse;
 /*
@@ -12,5 +13,11 @@ public class CustomAssertions {
 		assertEquals(expectedRespCode, serverResp.getStatus());
 		assertEquals(expectedExceptionMsg, serverResp.getException());
 		assertEquals(expectedMsg, serverResp.getMessage());
+	}
+	
+	public static void assertRequestAndResponseObj(int expectedRespCode, int actualRespCode, Object requestObj,
+			Object responseObj) {
+		assertEquals(expectedRespCode, actualRespCode);
+		assertTrue(requestObj.equals(responseObj));
 	}
 }
