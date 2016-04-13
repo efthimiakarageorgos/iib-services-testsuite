@@ -14,10 +14,11 @@ import com.qio.lib.connection.ConnectionResponse;
 public class TestHelper {
 	
 	public static String SPECIAL_CHARS = "~^%{&@}$#*()+=!~";
+	public static int actualResponseCode;
 
 	public static <T> T getResponseObjForCreate(BaseHelper baseHelper, Object requestObject, String microservice,
-			String environment, APIHeaders apiRequestHeaders, Object apiHelperObj,
-			Class<T> classType) throws JsonGenerationException, JsonMappingException, IOException,
+			String environment, APIHeaders apiRequestHeaders, Object apiHelperObj, Class<T> classType)
+					throws JsonGenerationException, JsonMappingException, IOException,
 										IllegalAccessException, IllegalArgumentException, InvocationTargetException,
 										NoSuchMethodException, SecurityException{
 
@@ -27,7 +28,9 @@ public class TestHelper {
 		Method createMethod = apiHelperObj.getClass().getMethod("create", methodArgs);
 		
 		String payload = baseHelper.toJSONString(requestObject);
-		ConnectionResponse conRespPost = (ConnectionResponse) createMethod.invoke(apiHelperObj, microservice, environment, payload, apiRequestHeaders);
+		ConnectionResponse conRespPost = (ConnectionResponse) createMethod.invoke(apiHelperObj, microservice,
+				environment, payload, apiRequestHeaders);
+		actualResponseCode = conRespPost.getRespCode();
 		return (T) baseHelper.toClassObject(conRespPost.getRespBody(), classType);
 	}
 }

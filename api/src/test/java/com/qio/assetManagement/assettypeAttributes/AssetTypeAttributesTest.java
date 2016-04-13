@@ -8,7 +8,6 @@ import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.junit.Before;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import com.qio.lib.apiHelpers.APIHeaders;
@@ -19,7 +18,6 @@ import com.qio.lib.common.Microservice;
 import com.qio.lib.exception.ServerResponse;
 import com.qio.model.assetType.AssetType;
 import com.qio.model.assetType.helper.AssetTypeHelper;
-import com.qio.model.assetType.helper.AttributeDataType;
 import com.qio.testHelper.TestHelper;
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
@@ -208,25 +206,8 @@ public class AssetTypeAttributesTest {
 				"Attribute Name should be less than 255 characters",
 				serverResp);
 	}
+	
 	/*
 	 * NEGATIVE TESTS END
 	 */
-	
-	/*
-	 * POSITIVE TESTS START
-	 */
-	// RREHM-543 (AssetType with one Attribute of float data type)
-	@Ignore
-	public void shouldCreateAssetTypeWithUniqueAbbrWithOneAttrOfFloatDataType() throws JsonGenerationException, JsonMappingException, IOException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException{
-		requestAssetType = assetTypeHelper.getAssetTypeWithOneAttribute(AttributeDataType.Float);
-
-		int expectedRespCode = 201;
-		
-		responseAssetType = TestHelper.getResponseObjForCreate(baseHelper, requestAssetType, microservice, environment, apiRequestHeaders, assetTypeAPI, AssetType.class);
-		
-		logger.info(responseAssetType.get_links().getSelf().getHref());
-		logger.info(responseAssetType.getAttributes().get(0).get_links().getSelf().getHref());
-		
-		//assertEquals("Unexpected response code", requestAssetType, responseAssetType);
-	}
 }

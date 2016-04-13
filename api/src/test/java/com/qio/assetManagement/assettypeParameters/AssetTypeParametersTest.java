@@ -3,6 +3,7 @@ package com.qio.assetManagement.assettypeParameters;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 
+import org.apache.log4j.Logger;
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.junit.Before;
@@ -34,6 +35,7 @@ public class AssetTypeParametersTest {
 	private static APIHeaders apiRequestHeaders;
 	private AssetTypeHelper assetTypeHelper;
 	private AssetType requestAssetType;
+	private AssetType responseAssetType;
 	private ServerResponse serverResp;
 
 	private final int FIRST_ELEMENT = 0;
@@ -55,6 +57,7 @@ public class AssetTypeParametersTest {
 		// Initializing a new set of objects before each test case.
 		assetTypeHelper = new AssetTypeHelper();
 		requestAssetType = new AssetType();
+		responseAssetType = new AssetType();
 		serverResp = new ServerResponse();
 	}
 	
@@ -125,4 +128,41 @@ public class AssetTypeParametersTest {
 	/*
 	 * NEGATIVE TESTS END
 	 */
+	
+	/*
+	 * POSITIVE TESTS START
+	 */
+	// RREHM-543 (AssetType with one Attribute of float data type)
+	@Test
+	public void shouldCreateAssetTypeWithUniqueAbbrWithOneParameterOfFloatDataType() throws JsonGenerationException,
+			JsonMappingException, IOException, IllegalAccessException, IllegalArgumentException,
+			InvocationTargetException, NoSuchMethodException, SecurityException {
+
+		requestAssetType = assetTypeHelper.getAssetTypeWithOneParameter(ParameterDataType.Float);
+
+		responseAssetType = TestHelper.getResponseObjForCreate(baseHelper, requestAssetType, microservice, environment,
+				apiRequestHeaders, assetTypeAPI, AssetType.class);
+		final Logger logger = Logger.getRootLogger();
+		logger.info(responseAssetType.get_links().getSelf().getHref());
+		
+		String[] assetTypeHrefLinkSplitArray = (responseAssetType.get_links().getSelf().getHref()).split("/");
+		String assetTypeId = assetTypeHrefLinkSplitArray[assetTypeHrefLinkSplitArray.length - 1];
+		
+		AssetType responseAssetTypeFromGetRequestOnID = baseHelper.toClassObject((assetTypeAPI.retrieve(microservice,
+				environment, apiRequestHeaders, assetTypeId).getRespBody()), AssetType.class);
+		
+		CustomAssertions.assertRequestAndResponseObj(201, TestHelper.actualResponseCode, requestAssetType,
+				responseAssetTypeFromGetRequestOnID);
+
+		// TODO: This needs to be generalized, as we might need to call it after
+		// every test method.
+		// Consider recording all assetTypeId in arraylist and then delete them
+		// all in the @After method.
+		assetTypeAPI.delete(microservice, environment, apiRequestHeaders, assetTypeId);
+	}
+
+	/*
+	 * POSITIVE TESTS END
+	 */
+
 }
