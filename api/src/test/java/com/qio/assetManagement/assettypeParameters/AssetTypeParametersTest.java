@@ -48,7 +48,7 @@ public class AssetTypeParametersTest {
 		userName = userConfig.getString("user.username");
 		password = userConfig.getString("user.password");
 		environment = envConfig.getString("env.name");
-		microservice = Microservice.ASSET_TYPE.toString();
+		microservice = Microservice.ASSET.toString();
 		apiRequestHeaders = new APIHeaders(userName, password);
 	}
 	

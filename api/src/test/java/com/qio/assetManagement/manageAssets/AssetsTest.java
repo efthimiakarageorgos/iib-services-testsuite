@@ -15,20 +15,15 @@ import com.qio.lib.common.BaseHelper;
 import com.qio.lib.common.Microservice;
 import com.qio.lib.exception.ServerResponse;
 
-//import com.qio.lib.apiHelpers.MAssetTypeAPIHelper;
-//import com.qio.model.assetType.AssetType;
-//import com.qio.model.assetType.helper.AssetTypeHelper;
-
 import com.qio.lib.apiHelpers.MAssetAPIHelper;
 import com.qio.lib.apiHelpers.MAssetTypeAPIHelper;
 import com.qio.model.asset.Asset;
 import com.qio.model.asset.helper.AssetHelper;
+
 import com.qio.model.assetType.AssetType;
 import com.qio.model.assetType.helper.AssetTypeHelper;
-
-//import com.qio.lib.apiHelpers.MTenantAPIHelper;
-//import com.qio.model.tenant.Tenant;
-//import com.qio.model.tenant.helper.TenantHelper;
+import com.qio.model.tenant.Tenant;
+import com.qio.model.tenant.helper.TenantHelper;
 
 import com.qio.testHelper.TestHelper;
 import com.typesafe.config.Config;
@@ -38,15 +33,8 @@ import org.apache.log4j.Logger;
 
 public class AssetsTest {
 	private BaseHelper baseHelper = new BaseHelper();
-//	private  MAssetTypeAPIHelper assetTypeAPI = new MAssetTypeAPIHelper();
-//	private AssetTypeHelper assetTypeHelper;
-//	private AssetType requestAssetType;
-//	private AssetType responseAssetType;
-//	
-//	private  MTenantAPIHelper tenantAPI = new MTenantAPIHelper();
-//	private TenantHelper tenantHelper;
-//	private Tenant requestTenant;
-//	private Tenant responseTenant;
+	private AssetTypeHelper assetTypeHelper;
+	private TenantHelper tenantHelper;
 	
 	private  MAssetAPIHelper assetAPI = new MAssetAPIHelper();
 	private AssetHelper assetHelper;
@@ -55,15 +43,15 @@ public class AssetsTest {
 	
 	private static String userName;
 	private static String password;
-//	private static String microserviceAT;
-//	private static String microserviceT;
-	private static String microserviceAS;
+	private static String microservice;
 	private static String environment;
 	private static APIHeaders apiRequestHeaders;
 	
+	private AssetType responseAssetTypePreDef;
+	private Tenant responseTenantPreDef;
+	
 	private ServerResponse serverResp;
 	final static Logger logger = Logger.getRootLogger();
-
 	
 	@BeforeClass
 	public static void initSetupBeforeAllTests(){
@@ -73,19 +61,28 @@ public class AssetsTest {
 		userName = userConfig.getString("user.username");
 		password = userConfig.getString("user.password");
 		environment = envConfig.getString("env.name");
-//		microserviceAT = Microservice.ASSET_TYPE.toString();
-//		microserviceT = Microservice.TENANT.toString();
-		microserviceAS = Microservice.ASSET.toString();
+		microservice = Microservice.ASSET.toString();
 		apiRequestHeaders = new APIHeaders(userName, password);
+		
 	}
 	
 	@Before
-	public void initSetupBeforeEveryTest()  {
+	public void initSetupBeforeEveryTest() throws JsonGenerationException, JsonMappingException, IOException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException{
 		// Initializing a new set of objects before each test case.
 //		assetTypeHelper = new AssetTypeHelper();
-//		requestAssetType = new AssetType();
-//		responseAssetType = new AssetType();
-	
+		
+//		responseAssetTypePreDef = new AssetType();
+//		responseAssetTypePreDef = assetTypeHelper.createAssetType("WithNoAttributesAndParameters");
+//		
+//		tenantHelper = new TenantHelper();
+//		
+//		responseTenantPreDef = new Tenant();
+//		responseTenantPreDef = tenantHelper.createTenant();
+//		
+		assetHelper = new AssetHelper();
+		requestAsset = new Asset();
+		responseAsset = new Asset();
+		
 		serverResp = new ServerResponse();
 	}
 	
@@ -96,38 +93,18 @@ public class AssetsTest {
 	// RREHM-XXX (Asset abbreviation contains spaces)
 	@Test
 	public void shouldNotCreateAssetWhenAbbrContainsSpaces() throws JsonGenerationException, JsonMappingException, IOException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException{
-		assetHelper = new AssetHelper("WithNoAttributesAndParameters");
-		requestAsset = new Asset();
-		responseAsset = new Asset();
-//		requestAssetType = assetTypeHelper.getAssetTypeWithNoAttributesAndParameters();
-//		responseAssetType = TestHelper.getResponseObjForCreate(baseHelper, requestAssetType, microserviceAT, environment, apiRequestHeaders, assetTypeAPI, AssetType.class);
-//		String assetTypeHref=responseAssetType.get_links().getSelf().getHref();
-//		
-//		int i=assetTypeHref.lastIndexOf("/");
-//		int length=assetTypeHref.length();
-//		String assetTypeId=assetTypeHref.substring(i+1, length);
-//		
-//		logger.info("aaa "+assetTypeId);
-//			
-//		tenantHelper = new TenantHelper();
-//		requestTenant = new Tenant();
-//		responseTenant = new Tenant();
-//		
-//		requestTenant = tenantHelper.getTenant();
-//		responseTenant = TestHelper.getResponseObjForCreate(baseHelper, requestTenant, microserviceT, environment, apiRequestHeaders, tenantAPI, Tenant.class);
-//		
-//		
-//		String tenantId=responseTenant.getTenantId();
-//		logger.info("aaa "+tenantId);
+		//requestAsset = assetHelper.getAssetCreateDependencies("WithNoAttributesAndParameters");
+		requestAsset = assetHelper.getAssetWithPredefinedAssetTypeAndTenant("57100685e4b0e57aafdc1982", "57100685e4b041804ad298eb");
+		//requestAsset = assetHelper.getAssetWithPredefinedAssetTypeAndTenant("57100685e4b0e57aafdc1982", responseTenantPreDef.getTenantId());
 		
-		
-		requestAsset = assetHelper.getAsset();
+//		logger.info("bbb "+requestAsset.getAssetType());
+//		logger.info("ccc "+requestAsset.getTenant());
 			
 		// Setting Asset abbreviation to contain spaces
 		String abbr=requestAsset.getAbbreviation();
 		requestAsset.setAbbreviation("Abrr has a space"+abbr);
 			
-		serverResp = TestHelper.getResponseObjForCreate(baseHelper, requestAsset, microserviceAS, environment, apiRequestHeaders, assetAPI, ServerResponse.class);
+		serverResp = TestHelper.getResponseObjForCreate(baseHelper, requestAsset, microservice, environment, apiRequestHeaders, assetAPI, ServerResponse.class);
 		
 		CustomAssertions.assertServerError(500,
 				"com.qiotec.application.exceptions.InvalidInputException",
@@ -135,125 +112,101 @@ public class AssetsTest {
 				serverResp);
 	}
 	
-	// RREHM-XXX (Asset abbreviation is longer than 50 chars)
-	@Test
-	public void shouldNotCreateAssetWhenAbbreviationIsLongerThan50Chars() throws JsonGenerationException, JsonMappingException, IOException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException{
-		assetHelper = new AssetHelper("WithNoAttributesAndParameters");
-		requestAsset = new Asset();
-		responseAsset = new Asset();
-		
-		requestAsset = assetHelper.getAsset();
-		
-		// Setting Asset abbreviation to be longer than 50 chars
-		requestAsset.setAbbreviation("51charlong51charlong51charlong51charlong51charSlong");
-						
-		serverResp = TestHelper.getResponseObjForCreate(baseHelper, requestAsset, microserviceAS, environment, apiRequestHeaders, assetAPI, ServerResponse.class);
-		
-		CustomAssertions.assertServerError(500,
-				"com.qiotec.application.exceptions.InvalidInputException",
-				"Asset  abbreviation Should Less Than 50 Character",
-				serverResp);
-	}
-	
-	// RREHM-XXX (Asset abbreviation is blank)
-	@Test
-	public void shouldNotCreateAssetWhenAbbreviationIsBlank() throws JsonGenerationException, JsonMappingException, IOException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException{
-		assetHelper = new AssetHelper("WithNoAttributesAndParameters");
-		requestAsset = new Asset();
-		responseAsset = new Asset();
-		
-		requestAsset = assetHelper.getAsset();
-		// Setting Asset abbreviation to null
-		requestAsset.setAbbreviation("");
-							
-		serverResp = TestHelper.getResponseObjForCreate(baseHelper, requestAsset, microserviceAS, environment, apiRequestHeaders, assetAPI, ServerResponse.class);
-		
-		CustomAssertions.assertServerError(500,
-				"com.qiotec.application.exceptions.InvalidInputException",
-				"Asset abbreviation Should not be Empty",
-				serverResp);
-	}
-		
-	// RREHM-XXX (Asset abbreviation is null - missing)
-	@Test
-	public void shouldNotCreateAssetWhenAbbreviationIsNull() throws JsonGenerationException, JsonMappingException, IOException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException{
-		assetHelper = new AssetHelper("WithNoAttributesAndParameters");
-		requestAsset = new Asset();
-		responseAsset = new Asset();
-		
-		requestAsset = assetHelper.getAsset();				
-		// Setting Asset abbreviation to null
-		requestAsset.setAbbreviation(null);
-								
-		serverResp = TestHelper.getResponseObjForCreate(baseHelper, requestAsset, microserviceAS, environment, apiRequestHeaders, assetAPI, ServerResponse.class);
-		
-		CustomAssertions.assertServerError(500,
-				"com.qiotec.application.exceptions.InvalidInputException",
-				"Asset abbreviation is a required field.",
-				serverResp);
-	}
-	
-	// RREHM-xxx (Asset abbreviation contains special chars)
-	@Test
-	public void shouldNotCreateAssetWhenAbbrContainsSpecialChars() throws JsonGenerationException, JsonMappingException, IOException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException{
-		assetHelper = new AssetHelper("WithNoAttributesAndParameters");
-		requestAsset = new Asset();
-		responseAsset = new Asset();
-		
-		requestAsset = assetHelper.getAsset();
-		
-		String defaultAbbr=requestAsset.getAbbreviation();
-		int count = TestHelper.SPECIAL_CHARS.length();
-			
-		for (int i=0; i < count; i++) {
-			requestAsset.setAbbreviation(TestHelper.SPECIAL_CHARS.charAt(i)+defaultAbbr);
-						
-			serverResp = TestHelper.getResponseObjForCreate(baseHelper, requestAsset, microserviceAS, environment, apiRequestHeaders, assetAPI, ServerResponse.class);
-			
-			CustomAssertions.assertServerError(500,
-				"com.qiotec.application.exceptions.InvalidInputException",
-				"Asset abbreviation must not contain illegal characters", serverResp);
-		}
-	}
-		
-	// RREHM-xxx (Asset name is blank)
-	@Test
-	public void shouldNotCreateAssetWhenNameIsBlank() throws JsonGenerationException, JsonMappingException, IOException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException{
-		assetHelper = new AssetHelper("WithNoAttributesAndParameters");
-		requestAsset = new Asset();
-		responseAsset = new Asset();
-		
-		requestAsset = assetHelper.getAsset();				
-		// Setting Asset name to blank
-		requestAsset.setName("");
-								
-		serverResp = TestHelper.getResponseObjForCreate(baseHelper, requestAsset, microserviceAS, environment, apiRequestHeaders, assetAPI, ServerResponse.class);
-		
-		CustomAssertions.assertServerError(500,
-				"com.qiotec.application.exceptions.InvalidInputException",
-				"Asset name Should not Empty",
-				serverResp);
-	}
-		
-	// RREHM-yyy (Asset Name is null - missing)
-	@Test
-	public void shouldNotCreateAssetTypeWhenNameIsNull() throws JsonGenerationException, JsonMappingException, IOException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException{
-		assetHelper = new AssetHelper("WithNoAttributesAndParameters");
-		requestAsset = new Asset();
-		responseAsset = new Asset();
-		
-		requestAsset = assetHelper.getAsset();		
-		// Setting Asset name to null
-		requestAsset.setName(null);
-						
-		serverResp = TestHelper.getResponseObjForCreate(baseHelper, requestAsset, microserviceAS, environment, apiRequestHeaders, assetAPI, ServerResponse.class);
-		
-		CustomAssertions.assertServerError(500,
-				"com.qiotec.application.exceptions.InvalidInputException",
-				"Asset name is a required field.",
-				serverResp);
-	}
-	
+//	// RREHM-XXX (Asset abbreviation is longer than 50 chars)
+//	@Test
+//	public void shouldNotCreateAssetWhenAbbreviationIsLongerThan50Chars() throws JsonGenerationException, JsonMappingException, IOException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException{
+//		requestAsset = assetHelper.getAssetCreateDependencies("WithNoAttributesAndParameters");
+//		
+//		// Setting Asset abbreviation to be longer than 50 chars
+//		requestAsset.setAbbreviation("51charlong51charlong51charlong51charlong51charSlong");
+//						
+//		serverResp = TestHelper.getResponseObjForCreate(baseHelper, requestAsset, microservice, environment, apiRequestHeaders, assetAPI, ServerResponse.class);
+//		
+//		CustomAssertions.assertServerError(500,
+//				"com.qiotec.application.exceptions.InvalidInputException",
+//				"Asset  abbreviation Should Less Than 50 Character",
+//				serverResp);
+//	}
+//	
+//	// RREHM-XXX (Asset abbreviation is blank)
+//	@Test
+//	public void shouldNotCreateAssetWhenAbbreviationIsBlank() throws JsonGenerationException, JsonMappingException, IOException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException{
+//		requestAsset = assetHelper.getAssetCreateDependencies("WithNoAttributesAndParameters");
+//		// Setting Asset abbreviation to null
+//		requestAsset.setAbbreviation("");
+//							
+//		serverResp = TestHelper.getResponseObjForCreate(baseHelper, requestAsset, microservice, environment, apiRequestHeaders, assetAPI, ServerResponse.class);
+//		
+//		CustomAssertions.assertServerError(500,
+//				"com.qiotec.application.exceptions.InvalidInputException",
+//				"Asset abbreviation Should not be Empty",
+//				serverResp);
+//	}
+//		
+//	// RREHM-XXX (Asset abbreviation is null - missing)
+//	@Test
+//	public void shouldNotCreateAssetWhenAbbreviationIsNull() throws JsonGenerationException, JsonMappingException, IOException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException{
+//		requestAsset = assetHelper.getAssetCreateDependencies("WithNoAttributesAndParameters");				
+//		// Setting Asset abbreviation to null
+//		requestAsset.setAbbreviation(null);
+//								
+//		serverResp = TestHelper.getResponseObjForCreate(baseHelper, requestAsset, microservice, environment, apiRequestHeaders, assetAPI, ServerResponse.class);
+//		
+//		CustomAssertions.assertServerError(500,
+//				"com.qiotec.application.exceptions.InvalidInputException",
+//				"Asset abbreviation is a required field.",
+//				serverResp);
+//	}
+//	
+//	// RREHM-xxx (Asset abbreviation contains special chars)
+//	@Test
+//	public void shouldNotCreateAssetWhenAbbrContainsSpecialChars() throws JsonGenerationException, JsonMappingException, IOException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException{
+//		requestAsset = assetHelper.getAssetCreateDependencies("WithNoAttributesAndParameters");
+//		
+//		String defaultAbbr=requestAsset.getAbbreviation();
+//		int count = TestHelper.SPECIAL_CHARS.length();
+//			
+//		for (int i=0; i < count; i++) {
+//			requestAsset.setAbbreviation(TestHelper.SPECIAL_CHARS.charAt(i)+defaultAbbr);
+//						
+//			serverResp = TestHelper.getResponseObjForCreate(baseHelper, requestAsset, microservice, environment, apiRequestHeaders, assetAPI, ServerResponse.class);
+//			
+//			CustomAssertions.assertServerError(500,
+//				"com.qiotec.application.exceptions.InvalidInputException",
+//				"Asset abbreviation must not contain illegal characters", serverResp);
+//		}
+//	}
+//		
+//	// RREHM-xxx (Asset name is blank)
+//	@Test
+//	public void shouldNotCreateAssetWhenNameIsBlank() throws JsonGenerationException, JsonMappingException, IOException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException{
+//		requestAsset = assetHelper.getAssetCreateDependencies("WithNoAttributesAndParameters");			
+//		// Setting Asset name to blank
+//		requestAsset.setName("");
+//								
+//		serverResp = TestHelper.getResponseObjForCreate(baseHelper, requestAsset, microservice, environment, apiRequestHeaders, assetAPI, ServerResponse.class);
+//		
+//		CustomAssertions.assertServerError(500,
+//				"com.qiotec.application.exceptions.InvalidInputException",
+//				"Asset name Should not Empty",
+//				serverResp);
+//	}
+//		
+//	// RREHM-yyy (Asset Name is null - missing)
+//	@Test
+//	public void shouldNotCreateAssetTypeWhenNameIsNull() throws JsonGenerationException, JsonMappingException, IOException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException{
+//		requestAsset = assetHelper.getAssetCreateDependencies("WithNoAttributesAndParameters");		
+//		// Setting Asset name to null
+//		requestAsset.setName(null);
+//						
+//		serverResp = TestHelper.getResponseObjForCreate(baseHelper, requestAsset, microservice, environment, apiRequestHeaders, assetAPI, ServerResponse.class);
+//		
+//		CustomAssertions.assertServerError(500,
+//				"com.qiotec.application.exceptions.InvalidInputException",
+//				"Asset name is a required field.",
+//				serverResp);
+//	}
+//	
 		
 //	// RREHM-ZZZ (Asset name is longer than 50 chars)
 //	@Test
