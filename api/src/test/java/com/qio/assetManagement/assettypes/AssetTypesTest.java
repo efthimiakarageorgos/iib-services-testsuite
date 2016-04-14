@@ -51,7 +51,7 @@ public class AssetTypesTest {
 	}
 	
 	@Before
-	public void initSetupBeforeEceryTest(){
+	public void initSetupBeforeEveryTest(){
 		// Initializing a new set of objects before each test case.
 		assetTypeHelper = new AssetTypeHelper();
 		requestAssetType = new AssetType();
@@ -153,7 +153,7 @@ public class AssetTypesTest {
 	public void shouldNotCreateAssetTypeWhenNameIsBlank() throws JsonGenerationException, JsonMappingException, IOException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException{
 		requestAssetType = assetTypeHelper.getAssetTypeWithNoAttributesAndParameters();
 								
-		// Setting AssetType abbreviation to null
+		// Setting AssetType name to blank
 		requestAssetType.setName("");
 								
 		serverResp = TestHelper.getResponseObjForCreate(baseHelper, requestAssetType, microservice, environment, apiRequestHeaders, assetTypeAPI, ServerResponse.class);
@@ -169,7 +169,7 @@ public class AssetTypesTest {
 	public void shouldNotCreateAssetTypeWhenNameIsNull() throws JsonGenerationException, JsonMappingException, IOException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException{
 		requestAssetType = assetTypeHelper.getAssetTypeWithNoAttributesAndParameters();
 						
-		// Setting AssetType abbreviation to null
+		// Setting AssetType name to null
 		requestAssetType.setName(null);
 						
 		serverResp = TestHelper.getResponseObjForCreate(baseHelper, requestAssetType, microservice, environment, apiRequestHeaders, assetTypeAPI, ServerResponse.class);
