@@ -13,7 +13,7 @@ public class Tenant {
 	private String description;
 
 	// returned in the response of a POST request
-	@JsonProperty("tenantId")
+	@JsonProperty("tenantid")
 	private String tenantId;
 
 	@JsonProperty("_links")
