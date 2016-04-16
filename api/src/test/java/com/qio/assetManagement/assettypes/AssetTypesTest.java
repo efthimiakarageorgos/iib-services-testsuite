@@ -46,12 +46,12 @@ public class AssetTypesTest {
 		userName = userConfig.getString("user.username");
 		password = userConfig.getString("user.password");
 		environment = envConfig.getString("env.name");
-		microservice = Microservice.ASSET.toString();
+		microservice = Microservice.ASSET_TYPE.toString();
 		apiRequestHeaders = new APIHeaders(userName, password);
 	}
 	
 	@Before
-	public void initSetupBeforeEveryTest(){
+	public void initSetupBeforeEceryTest(){
 		// Initializing a new set of objects before each test case.
 		assetTypeHelper = new AssetTypeHelper();
 		requestAssetType = new AssetType();
@@ -153,7 +153,7 @@ public class AssetTypesTest {
 	public void shouldNotCreateAssetTypeWhenNameIsBlank() throws JsonGenerationException, JsonMappingException, IOException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException{
 		requestAssetType = assetTypeHelper.getAssetTypeWithNoAttributesAndParameters();
 								
-		// Setting AssetType name to blank
+		// Setting AssetType abbreviation to null
 		requestAssetType.setName("");
 								
 		serverResp = TestHelper.getResponseObjForCreate(baseHelper, requestAssetType, microservice, environment, apiRequestHeaders, assetTypeAPI, ServerResponse.class);
@@ -169,7 +169,7 @@ public class AssetTypesTest {
 	public void shouldNotCreateAssetTypeWhenNameIsNull() throws JsonGenerationException, JsonMappingException, IOException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException{
 		requestAssetType = assetTypeHelper.getAssetTypeWithNoAttributesAndParameters();
 						
-		// Setting AssetType name to null
+		// Setting AssetType abbreviation to null
 		requestAssetType.setName(null);
 						
 		serverResp = TestHelper.getResponseObjForCreate(baseHelper, requestAssetType, microservice, environment, apiRequestHeaders, assetTypeAPI, ServerResponse.class);
