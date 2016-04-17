@@ -1,48 +1,58 @@
 
 
-package com.qio.model.tenant;
+package com.qio.model.asset;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.codehaus.jackson.annotate.JsonProperty;
 
 import com.qio.model.common.Links;
 
-public class Tenant {
+public class Asset {
 	private String abbreviation;
 	private String name;
 	private String description;
+	private String status;
+	private String assetType;
+	private String tenant;
 
 	// returned in the response of a POST request
-	@JsonProperty("tenantId")
-	private String tenantId;
+	@JsonProperty("assetid")
+	private String assetId;
 
 	@JsonProperty("_links")
 	private Links _links;
 
-	public Tenant() {
+	public Asset() {
 	}
 
 	@SuppressWarnings("serial")
-	public Tenant(String timeStamp) {
-		this.abbreviation = "T" + timeStamp;
-		this.name = "T" + timeStamp + "Name";
-		this.description = "T" + timeStamp + "Desc";
+	public Asset(String timeStamp, String assetType, String tenant) {
+		this.abbreviation = "A" + timeStamp;
+		this.name = "A" + timeStamp + "Name";
+		this.description = "A" + timeStamp + "Desc";
+		this.status = "AssetCreated";
+		this.assetType = assetType;
+		this.tenant = tenant;
 	}
 
-	public Tenant(String abbreviation, String name, String description) {
+	public Asset(String abbreviation, String name, String description, String assetType, String tenant, String status) {
 		this.abbreviation = abbreviation;
 		this.name = name;
 		this.description = description;
+		this.assetType = assetType;
+		this.tenant = tenant;
 	}
 
-	public String getTenantId() {
-		return tenantId;
+	public String getAssetId() {
+		return assetId;
 	}
 
-	public void setTenantId(String tenantId) {
-		this.tenantId = tenantId;
+	public void setAssetId(String assetId) {
+		this.assetId = assetId;
 	}
 
 	public String getAbbreviation() {
@@ -53,6 +63,30 @@ public class Tenant {
 		this.abbreviation = abbreviation;
 	}
 
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+	
+	public String getAssetType() {
+		return assetType;
+	}
+
+	public void setAssetType(String assetType) {
+		this.assetType = assetType;
+	}
+	
+	public String getTenant() {
+		return tenant;
+	}
+
+	public void setTenant(String tenant) {
+		this.tenant = tenant;
+	}
+	
 	public String getName() {
 		return name;
 	}
@@ -77,16 +111,21 @@ public class Tenant {
 		this._links = _links;
 	}
 
+	// TODO:
+	/*
+	 * If two objects do not match, then its simply going to print out their
+	 * string representations in the logger message. I need to figure out a
+	 * better way for this.
+	 */
 	@Override
 	public boolean equals(Object responseObj) {
 		Logger logger = Logger.getRootLogger();
 		Boolean equalityCheckFlag = true;
 		try {
-
-			if (!(responseObj instanceof Tenant) || responseObj == null)
+			if (!(responseObj instanceof Asset) || responseObj == null)
 				return false;
 
-			Field[] fields = Tenant.class.getDeclaredFields();
+			Field[] fields = Asset.class.getDeclaredFields();
 			for (Field field : fields) {
 				Object requestVal = field.get(this);
 				Object responseVal = field.get(responseObj);
