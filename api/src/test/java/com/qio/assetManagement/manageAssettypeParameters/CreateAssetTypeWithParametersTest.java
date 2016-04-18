@@ -1,4 +1,4 @@
-package com.qio.assetManagement.assettypeParameters;
+package com.qio.assetManagement.manageAssettypeParameters;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -24,7 +24,7 @@ import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
 
 
-public class AssetTypeParametersTest {
+public class CreateAssetTypeWithParametersTest {
 
 	private BaseHelper baseHelper = new BaseHelper();
 	private  MAssetTypeAPIHelper assetTypeAPI = new MAssetTypeAPIHelper();
@@ -60,6 +60,9 @@ public class AssetTypeParametersTest {
 		responseAssetType = new AssetType();
 		serverResp = new ServerResponse();
 	}
+	
+	// The following test cases go here:
+	// issuetype=Test and issue in (linkedIssues("RREHM-1192")) and issue in  linkedIssues("RREHM-41")
 	
 	/*
 	 * NEGATIVE TESTS START
@@ -99,9 +102,7 @@ public class AssetTypeParametersTest {
 	@Test
 	public void shouldNotCreateAssetTypeWhenParAbbrIsLongerThan255Chars() throws JsonGenerationException, JsonMappingException, IOException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException{
 		requestAssetType = assetTypeHelper.getAssetTypeWithAllParameters();
-		// Setting AssetType Parameter abbreviation to be longer than 255 chars.
-		String abbrLongerThan255Chars = "256charactelong256charactelong256charactelong256charactelong256charactelong256charactelong256charactelong256charactelong256charactelong256charactelong256charactelong256charactelong256charactelong256charactelong256charactelong256charactelong256characteRlong";
-		requestAssetType.getParameters().get(FIRST_ELEMENT).setAbbreviation(abbrLongerThan255Chars);
+		requestAssetType.getParameters().get(FIRST_ELEMENT).setAbbreviation(TestHelper.TWOFIFTYSIX_CHARS);
 		
 		serverResp = TestHelper.getResponseObjForCreate(baseHelper, requestAssetType, microservice, environment, apiRequestHeaders, assetTypeAPI, ServerResponse.class);
 		
@@ -161,6 +162,14 @@ public class AssetTypeParametersTest {
 		assetTypeAPI.delete(microservice, environment, apiRequestHeaders, assetTypeId);
 	}
 
+	// RREHM-611 ()
+	
+	// RREHM-633 ()
+	
+	// RREHM-1077 ()
+	
+	// RREHM-1614 ()
+	
 	/*
 	 * POSITIVE TESTS END
 	 */
