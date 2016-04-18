@@ -1,4 +1,4 @@
-package com.qio.assetManagement.managAssettypes;
+package com.qio.assetManagement.manageAssettypes;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -22,7 +22,7 @@ import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
 
 
-public class GetAssetTypesTest {
+public class UpdateAssetTypesTest {
 
 	private BaseHelper baseHelper = new BaseHelper();
 	private  MAssetTypeAPIHelper assetTypeAPI = new MAssetTypeAPIHelper();
@@ -60,13 +60,25 @@ public class GetAssetTypesTest {
 	}
 	
 	// The following test cases go here:
-	// issuetype=Test and issue in (linkedIssues("RREHM-1189")) and issue in  linkedIssues("RREHM-949") 
+	// issuetype=Test and issue in (linkedIssues("RREHM-1189")) and issue in  linkedIssues("RREHM-57") 
 	
 	/*
 	 * NEGATIVE TESTS START
 	 */
-	// RREHM-1248 ()	
-
+	
+	// RREHM-858 ()
+	
+	// RREHM-859 ()
+	
+	// RREHM-860 ()
+	
+	// RREHM-542 ()
+	
+	// RREHM-540 ()
+	
+	// RREHM-538 ()
+	
+	// RREHM-537 ()
 	
 	/*
 	 * NEGATIVE TESTS END
@@ -75,7 +87,7 @@ public class GetAssetTypesTest {
 	/*
 	 * POSITIVE TESTS START
 	 */
-	// RREHM-1247 ()
+	// RREHM-483 ()
 	
-	// RREHM-1245 ()
+	// RREHM-381 ()
 }

@@ -1,4 +1,4 @@
-package com.qio.assetManagement.assettypeAttributes;
+package com.qio.assetManagement.manageAssettypeAttributes;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -23,7 +23,7 @@ import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
 
 
-public class AssetTypeAttributesTest {
+public class CreateAssetTypeWithAttributesTest {
 
 	private BaseHelper baseHelper = new BaseHelper();
 	private MAssetTypeAPIHelper assetTypeAPI = new MAssetTypeAPIHelper();
@@ -36,7 +36,7 @@ public class AssetTypeAttributesTest {
 	private AssetType requestAssetType;
 	private AssetType responseAssetType;
 	private ServerResponse serverResp;
-	final static Logger logger = Logger.getLogger(AssetTypeAttributesTest.class);
+	final static Logger logger = Logger.getLogger(CreateAssetTypeWithAttributesTest.class);
 
 	private final int FIRST_ELEMENT = 0;
 	
