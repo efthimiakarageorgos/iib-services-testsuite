@@ -1,12 +1,15 @@
-package com.qio.assetManagement.manageAssettypes;
+package com.qio.assetManagement.manageAssetTypeAttributes;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 
+import org.apache.log4j.Logger;
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.AfterClass;
 import org.junit.Test;
 
 import com.qio.lib.apiHelpers.APIHeaders;
@@ -22,10 +25,9 @@ import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
 
 
-public class GetAssetTypesTest {
-
-	private BaseHelper baseHelper = new BaseHelper();
-	private  MAssetTypeAPIHelper assetTypeAPI = new MAssetTypeAPIHelper();
+public class CreateAssetTypeAttributesTest {	
+	private static BaseHelper baseHelper;
+	private static MAssetTypeAPIHelper assetTypeAPI;
 	private static String userName;
 	private static String password;
 	private static String microservice;
@@ -35,8 +37,11 @@ public class GetAssetTypesTest {
 	private AssetType requestAssetType;
 	private AssetType responseAssetType;
 	private ServerResponse serverResp;
-
+	private static ArrayList<String> idsForAllCreatedAssetTypes;
+	
+	final static Logger logger = Logger.getLogger(CreateAssetTypeAttributesTest.class);
 	private final int FIRST_ELEMENT = 0;
+		
 	
 	@BeforeClass
 	public static void initSetupBeforeAllTests(){
@@ -48,10 +53,14 @@ public class GetAssetTypesTest {
 		environment = envConfig.getString("env.name");
 		microservice = Microservice.ASSET.toString();
 		apiRequestHeaders = new APIHeaders(userName, password);
+		
+		baseHelper = new BaseHelper();
+		assetTypeAPI = new MAssetTypeAPIHelper();
+		idsForAllCreatedAssetTypes = new ArrayList<String>();
 	}
 	
 	@Before
-	public void initSetupBeforeEceryTest(){
+	public void initSetupBeforeEveryTest(){
 		// Initializing a new set of objects before each test case.
 		assetTypeHelper = new AssetTypeHelper();
 		requestAssetType = new AssetType();
@@ -59,14 +68,30 @@ public class GetAssetTypesTest {
 		serverResp = new ServerResponse();
 	}
 	
-	// The following test cases go here:
-	// issuetype=Test and issue in (linkedIssues("RREHM-1189")) and issue in  linkedIssues("RREHM-949") 
+	@AfterClass
+	public static void cleanUpAfterAllTests() throws JsonGenerationException, JsonMappingException,
+			IllegalAccessException,
+			IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException, IOException {
+
+		for (String assetTypeId : idsForAllCreatedAssetTypes) {
+			TestHelper.deleteRequestObj(baseHelper, microservice, environment, assetTypeId, apiRequestHeaders,
+					assetTypeAPI, AssetType.class);
+		}
+	}
+	
+	// This file should contain these tests
+	// issuetype = Test AND issue in (linkedIssues(RREHM-1193)) AND issue in (linkedIssues(RREHM-38))
 	
 	/*
 	 * NEGATIVE TESTS START
 	 */
-	// RREHM-1248 ()	
 
+	// RREHM-843 ()
+	// RREHM-842 ()
+	// RREHM-841 ()
+	// RREHM-847 ()
+	// RREHM-849 ()
+	// RREHM-848 ()
 	
 	/*
 	 * NEGATIVE TESTS END
@@ -75,7 +100,15 @@ public class GetAssetTypesTest {
 	/*
 	 * POSITIVE TESTS START
 	 */
-	// RREHM-1247 ()
 	
-	// RREHM-1245 ()
+	// RREHM-840 ()
+	// RREHM-846 ()
+	// RREHM-844 ()
+	// RREHM-838 ()
+	
+	
+	
+	/*
+	 * POSITIVE TESTS END
+	 */
 }
