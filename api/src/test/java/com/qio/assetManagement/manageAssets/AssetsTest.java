@@ -65,12 +65,6 @@ public class AssetsTest {
 		responseAssetTypePreDef = new AssetType();
 		responseAssetTypePreDef = assetTypeTestHelper.createAssetType("WithNoAttributesAndParameters");
 		
-//		String assetTypeHref=responseAssetTypePreDef.get_links().getSelf().getHref();
-//		int i=assetTypeHref.lastIndexOf("/");
-//		int length=assetTypeHref.length();
-//		assetTypeId=assetTypeHref.substring(i+1, length);
-		
-		
 		String[] assetTypeHrefLinkSplitArray = (responseAssetTypePreDef.get_links().getSelf().getHref()).split("/");
 		assetTypeId = assetTypeHrefLinkSplitArray[assetTypeHrefLinkSplitArray.length - 1];
 		
