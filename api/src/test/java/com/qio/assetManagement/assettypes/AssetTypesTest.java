@@ -46,7 +46,7 @@ public class AssetTypesTest {
 		userName = userConfig.getString("user.username");
 		password = userConfig.getString("user.password");
 		environment = envConfig.getString("env.name");
-		microservice = Microservice.ASSET_TYPE.toString();
+		microservice = Microservice.ASSET.toString();
 		apiRequestHeaders = new APIHeaders(userName, password);
 	}
 	
@@ -57,6 +57,8 @@ public class AssetTypesTest {
 		requestAssetType = new AssetType();
 		responseAssetType = new AssetType();
 		serverResp = new ServerResponse();
+		
+		requestAssetType = assetTypeHelper.getAssetTypeWithNoAttributesAndParameters();
 	}
 	
 	/*
@@ -66,10 +68,8 @@ public class AssetTypesTest {
 	// RREHM-435 (AssetType abbreviation contains spaces)
 	@Test
 	public void shouldNotCreateAssetTypeWhenAbbrContainsSpaces() throws JsonGenerationException, JsonMappingException, IOException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException{
-		requestAssetType = assetTypeHelper.getAssetTypeWithNoAttributesAndParameters();
 		//requestAssetType = assetTypeHelper.getAssetTypeWithDefaultParameter();
-			
-		// Setting AssetType abbreviation to contain spaces
+		
 		String abbr=requestAssetType.getAbbreviation();
 		requestAssetType.setAbbreviation("Abrr has a space"+abbr);
 			
@@ -84,10 +84,7 @@ public class AssetTypesTest {
 	// RREHM-436 (AssetType abbreviation is longer than 50 chars)
 	@Test
 	public void shouldNotCreateAssetTypeWhenAbbreviationIsLongerThan50Chars() throws JsonGenerationException, JsonMappingException, IOException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException{
-		requestAssetType = assetTypeHelper.getAssetTypeWithNoAttributesAndParameters();
-						
-		// Setting AssetType abbreviation to be longer than 50 chars
-		requestAssetType.setAbbreviation("51charlong51charlong51charlong51charlong51charSlong");
+		requestAssetType.setAbbreviation(TestHelper.FIFTYONE_CHARS);
 						
 		serverResp = TestHelper.getResponseObjForCreate(baseHelper, requestAssetType, microservice, environment, apiRequestHeaders, assetTypeAPI, ServerResponse.class);
 		
@@ -100,9 +97,6 @@ public class AssetTypesTest {
 	// RREHM-468 (AssetType abbreviation is blank)
 	@Test
 	public void shouldNotCreateAssetTypeWhenAbbreviationIsBlank() throws JsonGenerationException, JsonMappingException, IOException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException{
-		requestAssetType = assetTypeHelper.getAssetTypeWithNoAttributesAndParameters();
-							
-		// Setting AssetType abbreviation to null
 		requestAssetType.setAbbreviation("");
 							
 		serverResp = TestHelper.getResponseObjForCreate(baseHelper, requestAssetType, microservice, environment, apiRequestHeaders, assetTypeAPI, ServerResponse.class);
@@ -116,9 +110,6 @@ public class AssetTypesTest {
 	// RREHM-385 (AssetType abbreviation is null - missing)
 	@Test
 	public void shouldNotCreateAssetTypeWhenAbbreviationIsNull() throws JsonGenerationException, JsonMappingException, IOException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException{
-		requestAssetType = assetTypeHelper.getAssetTypeWithNoAttributesAndParameters();
-								
-		// Setting AssetType abbreviation to null
 		requestAssetType.setAbbreviation(null);
 								
 		serverResp = TestHelper.getResponseObjForCreate(baseHelper, requestAssetType, microservice, environment, apiRequestHeaders, assetTypeAPI, ServerResponse.class);
@@ -132,8 +123,6 @@ public class AssetTypesTest {
 	// RREHM-433 (AssetType abbreviation contains special chars)
 	@Test
 	public void shouldNotCreateAssetTypeWhenAbbrContainsSpecialChars() throws JsonGenerationException, JsonMappingException, IOException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException{
-		requestAssetType = assetTypeHelper.getAssetTypeWithNoAttributesAndParameters();
-			
 		String defaultAbbr=requestAssetType.getAbbreviation();
 		int count = TestHelper.SPECIAL_CHARS.length();
 			
@@ -151,9 +140,6 @@ public class AssetTypesTest {
 	// RREHM-384 (AssetType name is blank)
 	@Test
 	public void shouldNotCreateAssetTypeWhenNameIsBlank() throws JsonGenerationException, JsonMappingException, IOException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException{
-		requestAssetType = assetTypeHelper.getAssetTypeWithNoAttributesAndParameters();
-								
-		// Setting AssetType abbreviation to null
 		requestAssetType.setName("");
 								
 		serverResp = TestHelper.getResponseObjForCreate(baseHelper, requestAssetType, microservice, environment, apiRequestHeaders, assetTypeAPI, ServerResponse.class);
@@ -167,9 +153,6 @@ public class AssetTypesTest {
 	// RREHM-384 (AssetType Name is null - missing)
 	@Test
 	public void shouldNotCreateAssetTypeWhenNameIsNull() throws JsonGenerationException, JsonMappingException, IOException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException{
-		requestAssetType = assetTypeHelper.getAssetTypeWithNoAttributesAndParameters();
-						
-		// Setting AssetType abbreviation to null
 		requestAssetType.setName(null);
 						
 		serverResp = TestHelper.getResponseObjForCreate(baseHelper, requestAssetType, microservice, environment, apiRequestHeaders, assetTypeAPI, ServerResponse.class);
@@ -184,10 +167,7 @@ public class AssetTypesTest {
 	// RREHM-437 (AssetType name is longer than 50 chars)
 	@Test
 	public void shouldNotCreateAssetTypeWhenNameIsLongerThan50Chars() throws JsonGenerationException, JsonMappingException, IOException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException{
-		requestAssetType = assetTypeHelper.getAssetTypeWithNoAttributesAndParameters();
-				
-		// Setting AssetType name to be longer than 50 chars
-		requestAssetType.setName("51charlong51charlong51charlong51charlong51charSlong");
+		requestAssetType.setName(TestHelper.FIFTYONE_CHARS);
 				
 		serverResp = TestHelper.getResponseObjForCreate(baseHelper, requestAssetType, microservice, environment, apiRequestHeaders, assetTypeAPI, ServerResponse.class);
 		
@@ -201,10 +181,7 @@ public class AssetTypesTest {
 	// RREHM-440 (AssetType description is longer than 255 chars)
 	@Test
 	public void shouldNotCreateAssetTypeWhenDescriptionIsLongerThan255Chars() throws JsonGenerationException, JsonMappingException, IOException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException{
-		requestAssetType = assetTypeHelper.getAssetTypeWithNoAttributesAndParameters();
-					
-		// Setting AssetType description to be longer than 255 chars
-		requestAssetType.setDescription("256charactelong256charactelong256charactelong256charactelong256charactelong256charactelong256charactelong256charactelong256charactelong256charactelong256charactelong256charactelong256charactelong256charactelong256charactelong256charactelong256characteRlong");
+		requestAssetType.setDescription(TestHelper.TWOFIFTYSIX_CHARS);
 					
 		serverResp = TestHelper.getResponseObjForCreate(baseHelper, requestAssetType, microservice, environment, apiRequestHeaders, assetTypeAPI, ServerResponse.class);
 		

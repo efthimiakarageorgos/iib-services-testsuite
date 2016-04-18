@@ -1,4 +1,4 @@
-package com.qio.tenantManagement.tenants;
+package com.qio.tenantManagement.manageTenants;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -64,7 +64,7 @@ public class TenantsTest {
 	 * NEGATIVE TESTS START
 	 */
 	
-	// RREHM-338 (Tenant Name is null - missing)
+	// RREHM-338 (Tenant with no unique abbreviation)
 	@Ignore
 	public void shouldNotCreateTenantWhenAbbreviationIsNotUnique() throws JsonGenerationException, JsonMappingException, IOException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException{
 		requestTenant2 = tenantHelper.getTenant();
@@ -131,9 +131,8 @@ public class TenantsTest {
 	@Test
 	public void shouldNotCreateTenantWhenAbbreviationIsEmpty() throws JsonGenerationException, JsonMappingException, IOException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException{
 		requestTenant = tenantHelper.getTenant();
-		String defaultAbbr=requestTenant.getAbbreviation();
 		
-		// Setting Tenant abbreviation to empty
+		String defaultAbbr=requestTenant.getAbbreviation();
 		requestTenant.setAbbreviation("");
 		requestTenant.setName("ThisTenantShouldNotGetCreated"+defaultAbbr);
 									
@@ -151,9 +150,8 @@ public class TenantsTest {
 	@Test
 	public void shouldNotCreateTenantWhenAbbrIsLongerThan50Chars() throws JsonGenerationException, JsonMappingException, IOException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException{
 		requestTenant = tenantHelper.getTenant();
-				
-		// Setting tenant abbr to be longer than 50 chars
-		requestTenant.setAbbreviation("51charlong51charlong51charlong51charlong51charSlong");
+			
+		requestTenant.setAbbreviation(TestHelper.FIFTYONE_CHARS);
 				
 		serverResp = TestHelper.getResponseObjForCreate(baseHelper, requestTenant, microservice, environment, apiRequestHeaders, tenantAPI, ServerResponse.class);
 		
@@ -207,7 +205,7 @@ public class TenantsTest {
 		requestTenant = tenantHelper.getTenant();
 					
 		// Setting tenant name to be longer than 255 chars
-		requestTenant.setName("256charactelong256charactelong256charactelong256charactelong256charactelong256charactelong256charactelong256charactelong256charactelong256charactelong256charactelong256charactelong256charactelong256charactelong256charactelong256charactelong256characteRlong");
+		requestTenant.setName(TestHelper.TWOFIFTYSIX_CHARS);
 					
 		serverResp = TestHelper.getResponseObjForCreate(baseHelper, requestTenant, microservice, environment, apiRequestHeaders, tenantAPI, ServerResponse.class);
 		

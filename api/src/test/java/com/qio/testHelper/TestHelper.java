@@ -14,6 +14,8 @@ import com.qio.lib.connection.ConnectionResponse;
 public class TestHelper {
 	
 	public static String SPECIAL_CHARS = "~^%{&@}$#*()+=!~";
+	public static String TWOFIFTYSIX_CHARS = "256charactelong256charactelong256charactelong256charactelong256charactelong256charactelong256charactelong256charactelong256charactelong256charactelong256charactelong256charactelong256charactelong256charactelong256charactelong256charactelong256characteRlong";
+	public static String FIFTYONE_CHARS= "51charlong51charlong51charlong51charlong51charSlong";
 	public static int actualResponseCode;
 
 	public static <T> T getResponseObjForCreate(BaseHelper baseHelper, Object requestObject, String microservice,
