@@ -2,10 +2,11 @@ package com.qio.assetManagement.assettypeParameters;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 
-import org.apache.log4j.Logger;
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;
+import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -26,8 +27,8 @@ import com.typesafe.config.ConfigFactory;
 
 public class AssetTypeParametersTest {
 
-	private BaseHelper baseHelper = new BaseHelper();
-	private  MAssetTypeAPIHelper assetTypeAPI = new MAssetTypeAPIHelper();
+	private static BaseHelper baseHelper;
+	private static MAssetTypeAPIHelper assetTypeAPI;
 	private static String userName;
 	private static String password;
 	private static String microservice;
@@ -37,6 +38,7 @@ public class AssetTypeParametersTest {
 	private AssetType requestAssetType;
 	private AssetType responseAssetType;
 	private ServerResponse serverResp;
+	private static ArrayList<String> idsForAllCreatedAssetTypes;
 
 	private final int FIRST_ELEMENT = 0;
 	
@@ -50,6 +52,10 @@ public class AssetTypeParametersTest {
 		environment = envConfig.getString("env.name");
 		microservice = Microservice.ASSET.toString();
 		apiRequestHeaders = new APIHeaders(userName, password);
+
+		baseHelper = new BaseHelper();
+		assetTypeAPI = new MAssetTypeAPIHelper();
+		idsForAllCreatedAssetTypes = new ArrayList<String>();
 	}
 	
 	@Before
@@ -61,6 +67,17 @@ public class AssetTypeParametersTest {
 		serverResp = new ServerResponse();
 	}
 	
+	@AfterClass
+	public static void cleanUpAfterAllTests() throws JsonGenerationException, JsonMappingException,
+			IllegalAccessException,
+			IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException, IOException {
+
+		for (String assetTypeId : idsForAllCreatedAssetTypes) {
+			TestHelper.deleteRequestObj(baseHelper, microservice, environment, assetTypeId, apiRequestHeaders,
+					assetTypeAPI, AssetType.class);
+		}
+	}
+
 	/*
 	 * NEGATIVE TESTS START
 	 */
@@ -139,26 +156,23 @@ public class AssetTypeParametersTest {
 			InvocationTargetException, NoSuchMethodException, SecurityException {
 
 		requestAssetType = assetTypeHelper.getAssetTypeWithOneParameter(ParameterDataType.Float);
-
 		responseAssetType = TestHelper.getResponseObjForCreate(baseHelper, requestAssetType, microservice, environment,
 				apiRequestHeaders, assetTypeAPI, AssetType.class);
-		final Logger logger = Logger.getRootLogger();
-		logger.info(responseAssetType.get_links().getSelf().getHref());
-		
-		String[] assetTypeHrefLinkSplitArray = (responseAssetType.get_links().getSelf().getHref()).split("/");
-		String assetTypeId = assetTypeHrefLinkSplitArray[assetTypeHrefLinkSplitArray.length - 1];
-		
-		AssetType responseAssetTypeFromGetRequestOnID = baseHelper.toClassObject((assetTypeAPI.retrieve(microservice,
-				environment, apiRequestHeaders, assetTypeId).getRespBody()), AssetType.class);
-		
-		CustomAssertions.assertRequestAndResponseObj(201, TestHelper.actualResponseCode, requestAssetType,
-				responseAssetTypeFromGetRequestOnID);
 
-		// TODO: This needs to be generalized, as we might need to call it after
-		// every test method.
-		// Consider recording all assetTypeId in arraylist and then delete them
-		// all in the @After method.
-		assetTypeAPI.delete(microservice, environment, apiRequestHeaders, assetTypeId);
+		// RV1: comparing CreatedObject with CreateRequest, along with response
+		// codes.
+		CustomAssertions.assertRequestAndResponseObj(201, TestHelper.responseCodeForInputRequest, requestAssetType,
+				responseAssetType);
+
+		String assetTypeId = TestHelper.getElementId(responseAssetType.get_links().getSelf().getHref());
+		idsForAllCreatedAssetTypes.add(assetTypeId);
+
+		AssetType committedAssetType = TestHelper.getResponseObjForRetrieve(baseHelper, microservice, environment,
+				assetTypeId, apiRequestHeaders, assetTypeAPI, AssetType.class);
+
+		// RV2: comparing CommittedObject with CreatedObject, without the
+		// response codes.
+		CustomAssertions.assertRequestAndResponseObj(responseAssetType, committedAssetType);
 	}
 
 	/*

@@ -20,4 +20,12 @@ public class CustomAssertions {
 		assertEquals(expectedRespCode, actualRespCode);
 		assertTrue(requestObj.equals(responseObj));
 	}
+
+	public static void assertRequestAndResponseObj(Object requestObj, Object responseObj) {
+		// Here the expected and actual response codes do not matter, therefore
+		// setting them both to 0, so as to ignore the assertion on them in the
+		// called method.
+		assertRequestAndResponseObj(0, 0, requestObj, responseObj);
+	}
+
 }
