@@ -13,7 +13,6 @@ import com.qio.lib.common.BaseHelper;
 import com.qio.lib.common.Microservice;
 import com.qio.model.tenant.Tenant;
 import com.qio.model.tenant.helper.TenantHelper;
-import com.qio.testHelper.TestHelper;
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
 

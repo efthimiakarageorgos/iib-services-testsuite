@@ -1,23 +1,15 @@
-package com.qio.assetManagement.managAssettypes;
+package com.qio.assetManagement.manageAssetTypes;
 
-import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
-
-import org.codehaus.jackson.JsonGenerationException;
-import org.codehaus.jackson.map.JsonMappingException;
 import org.junit.Before;
 import org.junit.BeforeClass;
-import org.junit.Test;
 
 import com.qio.lib.apiHelpers.APIHeaders;
 import com.qio.lib.apiHelpers.MAssetTypeAPIHelper;
-import com.qio.lib.assertions.CustomAssertions;
 import com.qio.lib.common.BaseHelper;
 import com.qio.lib.common.Microservice;
 import com.qio.lib.exception.ServerResponse;
 import com.qio.model.assetType.AssetType;
 import com.qio.model.assetType.helper.AssetTypeHelper;
-import com.qio.testHelper.TestHelper;
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
 
