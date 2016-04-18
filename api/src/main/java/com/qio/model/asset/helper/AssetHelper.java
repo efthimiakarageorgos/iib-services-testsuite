@@ -1,35 +1,30 @@
 
-
 package com.qio.model.asset.helper;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;
 
 import com.qio.model.asset.Asset;
-
 import com.qio.model.assetType.AssetType;
 //import com.qio.model.assetType.helper.AssetTypeHelper;
-import com.qio.testHelper.AssetTypeTestHelper;
-
+//import com.qio.testHelper.AssetTypeTestHelper;
 import com.qio.model.tenant.Tenant;
 //import com.qio.model.tenant.helper.TenantHelper;
-import com.qio.testHelper.TenantTestHelper;
+//import com.qio.testHelper.TenantTestHelper;
 
 public class AssetHelper {
 	Asset asset;
 	
 	//private AssetTypeHelper assetTypeHelper;
-	private AssetTypeTestHelper assetTypeTestHelper;
+	// private AssetTypeTestHelper assetTypeTestHelper;
 	private AssetType responseAssetType;
 	private String assetTypeId;
 	
 	//private TenantHelper tenantHelper;
-	private TenantTestHelper tenantTestHelper;
+	// private TenantTestHelper tenantTestHelper;
 	private Tenant responseTenant;
 	private String tenantId;
 	
@@ -48,7 +43,8 @@ public class AssetHelper {
 		//Create Asset Type
 		//assetTypeHelper = new AssetTypeHelper();
 		responseAssetType = new AssetType();	
-		responseAssetType = assetTypeTestHelper.createAssetType(assetTypeFlavor);
+		// responseAssetType =
+		// assetTypeTestHelper.createAssetType(assetTypeFlavor);
 		
 //		String assetTypeHref=responseAssetType.get_links().getSelf().getHref();			
 //		int i=assetTypeHref.lastIndexOf("/");
@@ -61,7 +57,7 @@ public class AssetHelper {
 		//Create Tenant
 		//tenantHelper = new TenantHelper();
 		responseTenant = new Tenant();
-		responseTenant = tenantTestHelper.createTenant();
+		// responseTenant = tenantTestHelper.createTenant();
 		
 		asset.setAssetType(assetTypeId);
 		asset.setTenant(responseTenant.getTenantId());

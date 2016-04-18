@@ -12,7 +12,7 @@ public class MAssetTypeAPIHelper extends MBaseAPIHelper {
 		return super.create(microservice, environment, createOrUpdateAssetTypeEndpoint, payload, apiRequestHeaders);
 	}
 	
-	public void delete(String microservice, String environment, APIHeaders apiRequestHeaders, String assetTypeId) {
+	public void delete(String microservice, String environment, String assetTypeId, APIHeaders apiRequestHeaders) {
 		super.delete(microservice, environment, replaceAssetTypeIdInSingleAssetTypeEndpoint(assetTypeId), apiRequestHeaders);
 	}
 
@@ -25,7 +25,7 @@ public class MAssetTypeAPIHelper extends MBaseAPIHelper {
 		return super.retrieve(microservice, environment, getAllAssetTypesEndpoint, apiRequestHeaders);
 	}
 	
-	public ConnectionResponse retrieve(String microservice, String environment, APIHeaders apiRequestHeaders, String assetTypeId) {
+	public ConnectionResponse retrieve(String microservice, String environment, String assetTypeId, APIHeaders apiRequestHeaders) {
 		return super.retrieve(microservice, environment, replaceAssetTypeIdInSingleAssetTypeEndpoint(assetTypeId), apiRequestHeaders);
 	}
 	
