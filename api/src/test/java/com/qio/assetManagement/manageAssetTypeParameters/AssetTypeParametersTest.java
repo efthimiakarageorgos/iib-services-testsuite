@@ -1,4 +1,4 @@
-package com.qio.assetManagement.assettypeParameters;
+package com.qio.assetManagement.manageAssetTypeParameters;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
