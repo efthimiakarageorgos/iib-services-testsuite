@@ -84,76 +84,76 @@ public class AssetsTest {
 		serverResp = new ServerResponse();
 	}
 	
-	/*
-	 * NEGATIVE TESTS START
-	 */
-	
-	// RREHM-629 (Asset abbreviation contains spaces)
-	@Test
-	public void shouldNotCreateAssetWhenAbbrContainsSpaces() throws JsonGenerationException, JsonMappingException, IOException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException{
-		//requestAsset = assetHelper.getAssetCreateDependencies("WithNoAttributesAndParameters");
-		requestAsset = assetHelper.getAssetWithPredefinedAssetTypeAndTenant(assetTypeId, tenantId);
-		
-		logger.info("assetTypeId "+assetTypeId + " tenantId " + tenantId);
-		
-		String abbr=requestAsset.getAbbreviation();
-		requestAsset.setAbbreviation("Abrr has a space"+abbr);
-		
-		serverResp = TestHelper.getResponseObjForCreate(baseHelper, requestAsset, microservice, environment, apiRequestHeaders, assetAPI, ServerResponse.class);
-		
-		CustomAssertions.assertServerError(500,
-				"com.qiotec.application.exceptions.InvalidInputException",
-				"Asset Abbreviation must not contain Spaces",
-				serverResp);
-	}
-	
-	// RREHM-630 (Asset abbreviation is longer than 50 chars)
-	@Test
-	public void shouldNotCreateAssetWhenAbbreviationIsLongerThan50Chars() throws JsonGenerationException, JsonMappingException, IOException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException{
-		requestAsset = assetHelper.getAssetWithPredefinedAssetTypeAndTenant(assetTypeId, tenantId);
-		
-		requestAsset.setAbbreviation(TestHelper.FIFTYONE_CHARS);
-						
-		serverResp = TestHelper.getResponseObjForCreate(baseHelper, requestAsset, microservice, environment, apiRequestHeaders, assetAPI, ServerResponse.class);
-		
-		CustomAssertions.assertServerError(500,
-				"com.qiotec.application.exceptions.InvalidInputException",
-				"Asset  abbreviation Should Less Than 50 Character",
-				serverResp);
-	}
-	
-	// RREHM-593 (Asset abbreviation is blank)
-	@Test
-	public void shouldNotCreateAssetWhenAbbreviationIsBlank() throws JsonGenerationException, JsonMappingException, IOException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException{
-		requestAsset = assetHelper.getAssetWithPredefinedAssetTypeAndTenant(assetTypeId, tenantId);
-		requestAsset.setAbbreviation("");
-							
-		serverResp = TestHelper.getResponseObjForCreate(baseHelper, requestAsset, microservice, environment, apiRequestHeaders, assetAPI, ServerResponse.class);
-		
-		CustomAssertions.assertServerError(500,
-				"com.qiotec.application.exceptions.InvalidInputException",
-				"Asset abbreviation Should not be Empty",
-				serverResp);
-	}
-		
-	// RREHM-594 (Asset abbreviation is null - missing)
-	@Test
-	public void shouldNotCreateAssetWhenAbbreviationIsNull() throws JsonGenerationException, JsonMappingException, IOException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException{
-		requestAsset = assetHelper.getAssetWithPredefinedAssetTypeAndTenant(assetTypeId, tenantId);				
-		requestAsset.setAbbreviation(null);
-								
-		serverResp = TestHelper.getResponseObjForCreate(baseHelper, requestAsset, microservice, environment, apiRequestHeaders, assetAPI, ServerResponse.class);
-		
-		CustomAssertions.assertServerError(500,
-				"com.qiotec.application.exceptions.InvalidInputException",
-				"Asset abbreviation is a required field.",
-				serverResp);
-	}
-	
+//	/*
+//	 * NEGATIVE TESTS START
+//	 */
+//	
+//	// RREHM-629 (Asset abbreviation contains spaces)
+//	@Test
+//	public void shouldNotCreateAssetWhenAbbrContainsSpaces() throws JsonGenerationException, JsonMappingException, IOException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException{
+//		requestAsset = assetHelper.getAssetWithPredefinedAssetTypeAndTenant(assetTypeId, tenantId);
+//		
+//		String abbr=requestAsset.getAbbreviation();
+//		requestAsset.setAbbreviation("Abrr has a space"+abbr);
+//		
+//		serverResp = TestHelper.getResponseObjForCreate(baseHelper, requestAsset, microservice, environment, apiRequestHeaders, assetAPI, ServerResponse.class);
+//		
+//		CustomAssertions.assertServerError(500,
+//				"com.qiotec.application.exceptions.InvalidInputException",
+//				"Asset Abbreviation must not contain Spaces",
+//				serverResp);
+//	}
+//	
+//	// RREHM-630 (Asset abbreviation is longer than 50 chars)
+//	@Test
+//	public void shouldNotCreateAssetWhenAbbreviationIsLongerThan50Chars() throws JsonGenerationException, JsonMappingException, IOException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException{
+//		requestAsset = assetHelper.getAssetWithPredefinedAssetTypeAndTenant(assetTypeId, tenantId);
+//		
+//		//THIS METHOD does not work - we do not need it for this test
+//		//requestAsset = assetHelper.getAssetCreateDependencies("WithOneAttribute");
+//		
+//		requestAsset.setAbbreviation(TestHelper.FIFTYONE_CHARS);
+//						
+//		serverResp = TestHelper.getResponseObjForCreate(baseHelper, requestAsset, microservice, environment, apiRequestHeaders, assetAPI, ServerResponse.class);
+//		
+//		CustomAssertions.assertServerError(500,
+//				"com.qiotec.application.exceptions.InvalidInputException",
+//				"Asset  abbreviation Should Less Than 50 Character",
+//				serverResp);
+//	}
+//	
+//	// RREHM-593 (Asset abbreviation is blank)
+//	@Test
+//	public void shouldNotCreateAssetWhenAbbreviationIsBlank() throws JsonGenerationException, JsonMappingException, IOException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException{
+//		requestAsset = assetHelper.getAssetWithPredefinedAssetTypeAndTenant(assetTypeId, tenantId);
+//		requestAsset.setAbbreviation("");
+//							
+//		serverResp = TestHelper.getResponseObjForCreate(baseHelper, requestAsset, microservice, environment, apiRequestHeaders, assetAPI, ServerResponse.class);
+//		
+//		CustomAssertions.assertServerError(500,
+//				"com.qiotec.application.exceptions.InvalidInputException",
+//				"Asset abbreviation Should not be Empty",
+//				serverResp);
+//	}
+//		
+//	// RREHM-594 (Asset abbreviation is null - missing)
+//	@Test
+//	public void shouldNotCreateAssetWhenAbbreviationIsNull() throws JsonGenerationException, JsonMappingException, IOException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException{
+//		requestAsset = assetHelper.getAssetWithPredefinedAssetTypeAndTenant(assetTypeId, tenantId);				
+//		requestAsset.setAbbreviation(null);
+//								
+//		serverResp = TestHelper.getResponseObjForCreate(baseHelper, requestAsset, microservice, environment, apiRequestHeaders, assetAPI, ServerResponse.class);
+//		
+//		CustomAssertions.assertServerError(500,
+//				"com.qiotec.application.exceptions.InvalidInputException",
+//				"Asset abbreviation is a required field.",
+//				serverResp);
+//	}
+//	
 //	// RREHM-632 (Asset abbreviation contains special chars)
 //	@Test
 //	public void shouldNotCreateAssetWhenAbbrContainsSpecialChars() throws JsonGenerationException, JsonMappingException, IOException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException{
-//		requestAsset = assetHelper.getAssetWithPredefinedAssetTypeAndTenant(assetTypeId, tenantId);	
+//		requestAsset = assetHelper.getAssetWithPredefinedAssetTypeAndTenant(assetTypeId, tenantId);
 //		
 //		String defaultAbbr=requestAsset.getAbbreviation();
 //		int count = TestHelper.SPECIAL_CHARS.length();
@@ -169,57 +169,85 @@ public class AssetsTest {
 //		}
 //	}
 //		
-	// RREHM-600 (Asset name is blank)
+//	// RREHM-600 (Asset name is blank)
+//	@Test
+//	public void shouldNotCreateAssetWhenNameIsBlank() throws JsonGenerationException, JsonMappingException, IOException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException{
+//		requestAsset = assetHelper.getAssetWithPredefinedAssetTypeAndTenant(assetTypeId, tenantId);			
+//		requestAsset.setName("");
+//								
+//		serverResp = TestHelper.getResponseObjForCreate(baseHelper, requestAsset, microservice, environment, apiRequestHeaders, assetAPI, ServerResponse.class);
+//		
+//		CustomAssertions.assertServerError(500,
+//				"com.qiotec.application.exceptions.InvalidInputException",
+//				"Asset name Should not Empty",
+//				serverResp);
+//	}
+//		
+//	// RREHM-598 (Asset Name is null - missing)
+//	@Test
+//	public void shouldNotCreateAssetWhenNameIsNull() throws JsonGenerationException, JsonMappingException, IOException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException{
+//		requestAsset = assetHelper.getAssetWithPredefinedAssetTypeAndTenant(assetTypeId, tenantId);		
+//		requestAsset.setName(null);
+//						
+//		serverResp = TestHelper.getResponseObjForCreate(baseHelper, requestAsset, microservice, environment, apiRequestHeaders, assetAPI, ServerResponse.class);
+//		
+//		CustomAssertions.assertServerError(500,
+//				"com.qiotec.application.exceptions.InvalidInputException",
+//				"Asset name is a required field.",
+//				serverResp);
+//	}
+//	
+//		
+//	// RREHM-631 (Asset name is longer than 255 chars)
+//	@Test
+//	public void shouldNotCreateAssetWhenNameIsLongerThan255Chars() throws JsonGenerationException, JsonMappingException, IOException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException{
+//		requestAsset = assetHelper.getAssetWithPredefinedAssetTypeAndTenant(assetTypeId, tenantId);		
+//				
+//		requestAsset.setName(TestHelper.TWOFIFTYSIX_CHARS);
+//				
+//		serverResp = TestHelper.getResponseObjForCreate(baseHelper, requestAsset, microservice, environment, apiRequestHeaders, assetAPI, ServerResponse.class);
+//		
+//		CustomAssertions.assertServerError(500,
+//				"com.qiotec.application.exceptions.InvalidInputException",
+//				"Asset name should be less than 255 characters",
+//				serverResp);
+//	}
+//	
+//	
+//	/*
+//	 * NEGATIVE TESTS END
+//	 */
+//	// RREHM-628 (Asset name is longer than 255 chars)
 	@Test
-	public void shouldNotCreateAssetWhenNameIsBlank() throws JsonGenerationException, JsonMappingException, IOException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException{
-		requestAsset = assetHelper.getAssetWithPredefinedAssetTypeAndTenant(assetTypeId, tenantId);			
-		requestAsset.setName("");
-								
-		serverResp = TestHelper.getResponseObjForCreate(baseHelper, requestAsset, microservice, environment, apiRequestHeaders, assetAPI, ServerResponse.class);
-		
-		CustomAssertions.assertServerError(500,
-				"com.qiotec.application.exceptions.InvalidInputException",
-				"Asset name Should not Empty",
-				serverResp);
-	}
-		
-	// RREHM-598 (Asset Name is null - missing)
-	@Test
-	public void shouldNotCreateAssetWhenNameIsNull() throws JsonGenerationException, JsonMappingException, IOException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException{
-		requestAsset = assetHelper.getAssetWithPredefinedAssetTypeAndTenant(assetTypeId, tenantId);		
-		requestAsset.setName(null);
-						
-		serverResp = TestHelper.getResponseObjForCreate(baseHelper, requestAsset, microservice, environment, apiRequestHeaders, assetAPI, ServerResponse.class);
-		
-		CustomAssertions.assertServerError(500,
-				"com.qiotec.application.exceptions.InvalidInputException",
-				"Asset name is a required field.",
-				serverResp);
-	}
-	
-		
-	// RREHM-631 (Asset name is longer than 255 chars)
-	@Test
-	public void shouldNotCreateAssetWhenNameIsLongerThan255Chars() throws JsonGenerationException, JsonMappingException, IOException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException{
+	public void shouldCreateAssetWithUniqueAbbrWithWhenAbbrContainsDashUnderscoreDot() throws JsonGenerationException, JsonMappingException, IOException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException{
 		requestAsset = assetHelper.getAssetWithPredefinedAssetTypeAndTenant(assetTypeId, tenantId);		
 				
-		requestAsset.setName(TestHelper.TWOFIFTYSIX_CHARS);
-				
-		serverResp = TestHelper.getResponseObjForCreate(baseHelper, requestAsset, microservice, environment, apiRequestHeaders, assetAPI, ServerResponse.class);
+		String abbr=requestAsset.getAbbreviation();
+		requestAsset.setAbbreviation(abbr+"_-.");
 		
-		CustomAssertions.assertServerError(500,
-				"com.qiotec.application.exceptions.InvalidInputException",
-				"Asset name should be less than 255 characters",
-				serverResp);
+		logger.info("2342343");
+		responseAsset = TestHelper.getResponseObjForCreate(baseHelper, requestAsset, microservice, environment, apiRequestHeaders, assetAPI, Asset.class);
+		
+		logger.info("aaa111");
+		// RV1: comparing CreatedObject with CreateRequest, along with response codes.
+		CustomAssertions.assertRequestAndResponseObj(201, TestHelper.responseCodeForInputRequest, requestAsset, responseAsset);
+
+		String assetId = TestHelper.getElementId(responseAsset.get_links().getSelf().getHref());
+		//idsForAllCreatedAssets.add(assetId);
+
+		logger.info("aaa");
+		Asset committedAsset = TestHelper.getResponseObjForRetrieve(baseHelper, microservice, environment, assetId, apiRequestHeaders, assetAPI, Asset.class);
+		logger.info("bbbb");
+		// RV2: comparing CommittedObject with CreatedObject, without the response codes.
+		CustomAssertions.assertRequestAndResponseObj(responseAsset, committedAsset);
+				
 	}
-	
-	
 	/*
-	 * NEGATIVE TESTS END
+	 * POSITIVE TESTS START
 	 */
 	
 	/*
-	 * POSITIVE TESTS START
+	 * POSITIVE TESTS END
 	 */
 	
 }
