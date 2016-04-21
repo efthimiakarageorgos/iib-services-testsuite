@@ -166,7 +166,7 @@ public class CreateAssetTypeWithParametersTest  {
 		CustomAssertions.assertRequestAndResponseObj(201, TestHelper.responseCodeForInputRequest, requestAssetType,
 				responseAssetType);
 
-		String assetTypeId = TestHelper.getElementId(responseAssetType.get_links().getSelf().getHref());
+		String assetTypeId = TestHelper.getElementId(responseAssetType.get_links().getSelfLink().getHref());
 		idsForAllCreatedAssetTypes.add(assetTypeId);
 
 		AssetType committedAssetType = TestHelper.getResponseObjForRetrieve(baseHelper, microservice, environment,

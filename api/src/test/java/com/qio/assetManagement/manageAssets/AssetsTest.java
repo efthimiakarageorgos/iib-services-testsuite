@@ -16,8 +16,9 @@ import com.qio.lib.assertions.CustomAssertions;
 import com.qio.lib.common.BaseHelper;
 import com.qio.lib.common.Microservice;
 import com.qio.lib.exception.ServerResponse;
-import com.qio.model.asset.Asset;
-import com.qio.model.asset.helper.AssetHelper;
+import com.qio.model.asset.AssetRequest;
+import com.qio.model.asset.AssetResponse;
+import com.qio.model.asset.helper.AssetRequestHelper;
 import com.qio.model.assetType.AssetType;
 import com.qio.model.tenant.Tenant;
 import com.qio.testHelper.AssetTypeTestHelper;
@@ -32,9 +33,9 @@ public class AssetsTest {
 	private static TenantTestHelper tenantTestHelper;
 	
 	private  MAssetAPIHelper assetAPI = new MAssetAPIHelper();
-	private AssetHelper assetHelper;
-	private Asset requestAsset;
-	private Asset responseAsset;
+	private AssetRequestHelper assetHelper;
+	private AssetRequest requestAsset;
+	private AssetResponse responseAsset;
 	
 	private static String userName;
 	private static String password;
@@ -65,7 +66,7 @@ public class AssetsTest {
 		responseAssetTypePreDef = new AssetType();
 		responseAssetTypePreDef = assetTypeTestHelper.createAssetType("WithNoAttributesAndParameters");
 		
-		String[] assetTypeHrefLinkSplitArray = (responseAssetTypePreDef.get_links().getSelf().getHref()).split("/");
+		String[] assetTypeHrefLinkSplitArray = (responseAssetTypePreDef.get_links().getSelfLink().getHref()).split("/");
 		assetTypeId = assetTypeHrefLinkSplitArray[assetTypeHrefLinkSplitArray.length - 1];
 		
 		tenantTestHelper = new TenantTestHelper();
@@ -77,9 +78,9 @@ public class AssetsTest {
 	@Before
 	public void initSetupBeforeEveryTest() throws JsonGenerationException, JsonMappingException, IOException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException{
 		// Initializing a new set of objects before each test case.	
-		assetHelper = new AssetHelper();
-		requestAsset = new Asset();
-		responseAsset = new Asset();
+		assetHelper = new AssetRequestHelper();
+		requestAsset = new AssetRequest();
+		responseAsset = new AssetResponse();
 		
 		serverResp = new ServerResponse();
 	}
@@ -222,22 +223,20 @@ public class AssetsTest {
 	public void shouldCreateAssetWithUniqueAbbrWithWhenAbbrContainsDashUnderscoreDot() throws JsonGenerationException, JsonMappingException, IOException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException{
 		requestAsset = assetHelper.getAssetWithPredefinedAssetTypeAndTenant(assetTypeId, tenantId);		
 				
-		String abbr=requestAsset.getAbbreviation();
+		String abbr = requestAsset.getAbbreviation();
 		requestAsset.setAbbreviation(abbr+"_-.");
 		
-		logger.info("2342343");
-		responseAsset = TestHelper.getResponseObjForCreate(baseHelper, requestAsset, microservice, environment, apiRequestHeaders, assetAPI, Asset.class);
+		responseAsset = TestHelper.getResponseObjForCreate(baseHelper, requestAsset, microservice, environment,
+				apiRequestHeaders, assetAPI, AssetResponse.class);
 		
-		logger.info("aaa111");
 		// RV1: comparing CreatedObject with CreateRequest, along with response codes.
 		CustomAssertions.assertRequestAndResponseObj(201, TestHelper.responseCodeForInputRequest, requestAsset, responseAsset);
 
-		String assetId = TestHelper.getElementId(responseAsset.get_links().getSelf().getHref());
+		String assetId = TestHelper.getElementId(responseAsset.get_links().getSelfLink().getHref());
 		//idsForAllCreatedAssets.add(assetId);
 
-		logger.info("aaa");
-		Asset committedAsset = TestHelper.getResponseObjForRetrieve(baseHelper, microservice, environment, assetId, apiRequestHeaders, assetAPI, Asset.class);
-		logger.info("bbbb");
+		AssetResponse committedAsset = TestHelper.getResponseObjForRetrieve(baseHelper, microservice, environment,
+				assetId, apiRequestHeaders, assetAPI, AssetResponse.class);
 		// RV2: comparing CommittedObject with CreatedObject, without the response codes.
 		CustomAssertions.assertRequestAndResponseObj(responseAsset, committedAsset);
 				
