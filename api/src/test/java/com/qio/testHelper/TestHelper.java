@@ -36,8 +36,6 @@ public class TestHelper {
 		ConnectionResponse conRespPost = (ConnectionResponse) createMethod.invoke(apiHelperObj, microservice,
 				environment, payload, apiRequestHeaders);
 		responseCodeForInputRequest = conRespPost.getRespCode();
-		
-		logger.info("234234DDD3");
 		return (T) baseHelper.toClassObject(conRespPost.getRespBody(), classType);
 	}
 
