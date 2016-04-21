@@ -1,10 +1,6 @@
-
-
 package com.qio.model.asset;
 
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.codehaus.jackson.annotate.JsonProperty;
