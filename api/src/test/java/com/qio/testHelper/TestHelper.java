@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
+import org.apache.log4j.Logger;
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;
 
@@ -11,18 +12,21 @@ import com.qio.lib.apiHelpers.APIHeaders;
 import com.qio.lib.common.BaseHelper;
 import com.qio.lib.connection.ConnectionResponse;
 
+
 public class TestHelper {
 	
 	public static String SPECIAL_CHARS = "~^%{&@}$#*()+=!~";
 	public static String TWOFIFTYSIX_CHARS = "256charactelong256charactelong256charactelong256charactelong256charactelong256charactelong256charactelong256charactelong256charactelong256charactelong256charactelong256charactelong256charactelong256charactelong256charactelong256charactelong256characteRlong";
 	public static String FIFTYONE_CHARS= "51charlong51charlong51charlong51charlong51charSlong";
 	public static int responseCodeForInputRequest;
+	
+	final static Logger logger = Logger.getRootLogger();
 
 	public static <T> T getResponseObjForCreate(BaseHelper baseHelper, Object requestObject, String microservice,
 			String environment, APIHeaders apiRequestHeaders, Object apiHelperObj, Class<T> classType)
 					throws JsonGenerationException, JsonMappingException, IOException, IllegalAccessException,
 					IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
-
+		
 		Class[] methodArgs = new Class[4];
 		methodArgs[0] = methodArgs[1] = methodArgs[2] = String.class;
 		methodArgs[3] = APIHeaders.class;

@@ -1,8 +1,9 @@
-package com.qio.assetManagement.manageAssettypes;
+package com.qio.assetManagement.manageAssetTypeParameters;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 
+import org.apache.log4j.Logger;
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.junit.Before;
@@ -17,12 +18,13 @@ import com.qio.lib.common.Microservice;
 import com.qio.lib.exception.ServerResponse;
 import com.qio.model.assetType.AssetType;
 import com.qio.model.assetType.helper.AssetTypeHelper;
+import com.qio.model.assetType.helper.ParameterDataType;
 import com.qio.testHelper.TestHelper;
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
 
 
-public class UpdateAssetTypesTest {
+public class CreateAssetTypeParametersTest {
 
 	private BaseHelper baseHelper = new BaseHelper();
 	private  MAssetTypeAPIHelper assetTypeAPI = new MAssetTypeAPIHelper();
@@ -51,7 +53,7 @@ public class UpdateAssetTypesTest {
 	}
 	
 	@Before
-	public void initSetupBeforeEceryTest(){
+	public void initSetupBeforeEveryTest(){
 		// Initializing a new set of objects before each test case.
 		assetTypeHelper = new AssetTypeHelper();
 		requestAssetType = new AssetType();
@@ -60,25 +62,25 @@ public class UpdateAssetTypesTest {
 	}
 	
 	// The following test cases go here:
-	// issuetype=Test and issue in (linkedIssues("RREHM-1189")) and issue in  linkedIssues("RREHM-57") 
+	// issuetype=Test and issue in (linkedIssues("RREHM-1192")) and issue in  linkedIssues("RREHM-901")
 	
 	/*
 	 * NEGATIVE TESTS START
 	 */
+
+	// RREHM-1099 ()
 	
-	// RREHM-858 ()
+	// RREHM-1097 ()
 	
-	// RREHM-859 ()
+	// RREHM-1095 ()
 	
-	// RREHM-860 ()
+	// RREHM-932 ()
 	
-	// RREHM-542 ()
+	// RREHM-905 ()
 	
-	// RREHM-540 ()
+	// RREHM-845 ()
 	
-	// RREHM-538 ()
-	
-	// RREHM-537 ()
+	// RREHM-1098 ()
 	
 	/*
 	 * NEGATIVE TESTS END
@@ -87,7 +89,18 @@ public class UpdateAssetTypesTest {
 	/*
 	 * POSITIVE TESTS START
 	 */
-	// RREHM-483 ()
+	// RREHM-1290 ()
+
+	// RREHM-1100 ()
 	
-	// RREHM-381 ()
+	// RREHM-1075 ()
+	
+	// RREHM-1616 ()
+	
+	
+	
+	/*
+	 * POSITIVE TESTS END
+	 */
+
 }
