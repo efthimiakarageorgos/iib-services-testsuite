@@ -1,5 +1,3 @@
-
-
 package com.qio.model.tenant;
 
 import java.lang.reflect.Field;

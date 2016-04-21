@@ -1,4 +1,3 @@
-
 package com.qio.model.asset.helper;
 
 import java.io.IOException;
@@ -10,9 +9,8 @@ import org.codehaus.jackson.map.JsonMappingException;
 
 import com.qio.model.asset.Asset;
 import com.qio.model.assetType.AssetType;
-import com.qio.testHelper.AssetTypeTestHelper;
-
 import com.qio.model.tenant.Tenant;
+import com.qio.testHelper.AssetTypeTestHelper;
 import com.qio.testHelper.TenantTestHelper;
 
 
