@@ -7,48 +7,34 @@ import org.codehaus.jackson.annotate.JsonProperty;
 
 import com.qio.model.common.Links;
 
-public class Asset {
-	private String abbreviation;
-	private String name;
-	private String description;
-	private String status;
-	private String assetType;
-	private String tenant;
-
-	// returned in the response of a POST request
-	@JsonProperty("assetid")
-	private String assetId;
+public abstract class Asset {
+	protected String abbreviation;
+	protected String name;
+	protected String description;
+	protected String status;
+	protected String tenant;
+	protected String createdDate;
 
 	@JsonProperty("_links")
-	private Links _links;
+	protected Links _links;
 
 	public Asset() {
 	}
 
 	@SuppressWarnings("serial")
-	public Asset(String timeStamp, String assetType, String tenant) {
+	public Asset(String timeStamp, String tenant) {
 		this.abbreviation = "A" + timeStamp;
 		this.name = "A" + timeStamp + "Name";
 		this.description = "A" + timeStamp + "Desc";
 		this.status = "AssetCreated";
-		this.assetType = assetType;
 		this.tenant = tenant;
 	}
 
-	public Asset(String abbreviation, String name, String description, String assetType, String tenant, String status) {
+	public Asset(String abbreviation, String name, String description, String tenant, String status) {
 		this.abbreviation = abbreviation;
 		this.name = name;
 		this.description = description;
-		this.assetType = assetType;
 		this.tenant = tenant;
-	}
-
-	public String getAssetId() {
-		return assetId;
-	}
-
-	public void setAssetId(String assetId) {
-		this.assetId = assetId;
 	}
 
 	public String getAbbreviation() {
@@ -65,14 +51,6 @@ public class Asset {
 
 	public void setStatus(String status) {
 		this.status = status;
-	}
-	
-	public String getAssetType() {
-		return assetType;
-	}
-
-	public void setAssetType(String assetType) {
-		this.assetType = assetType;
 	}
 	
 	public String getTenant() {

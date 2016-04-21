@@ -1,52 +1,68 @@
 package com.qio.model.common;
 
+import java.lang.reflect.Field;
+
 import org.apache.log4j.Logger;
 import org.codehaus.jackson.annotate.JsonProperty;
 
 public class Links {
 	@JsonProperty("self")
-	private Self self;
+	private SelfLink selfLink;
 
-	public Self getSelf() {
-		return self;
+	@JsonProperty("tenant")
+	private TenantLink tenantLink;
+
+	public SelfLink getSelfLink() {
+		return selfLink;
 	}
 
-	public void setSelf(Self self) {
-		this.self = self;
+	public void setSelfLink(SelfLink self) {
+		this.selfLink = self;
 	}
 
-	/*
-	 * Since these classes only have one field each, therefore we have used a
-	 * simpler version of the equals method here. Once fields start to grow, we
-	 * can follow similar implementation for this method as we have done in
-	 * other classes.
-	 */
+	public TenantLink getTenantLink() {
+		return tenantLink;
+	}
+
+	public void setTenantLink(TenantLink tenantLink) {
+		this.tenantLink = tenantLink;
+	}
+
 	@Override
 	public boolean equals(Object responseObj) {
 		Logger logger = Logger.getRootLogger();
 		Boolean equalityCheckFlag = true;
+		try {
+			if (!(responseObj instanceof Links) || responseObj == null)
+				return false;
 
-		if (!(responseObj instanceof Links) || responseObj == null)
-			return false;
-
-		Self requestSelf = this.getSelf();
-		Self responseSelf = ((Links) responseObj).getSelf();
-
-		if (requestSelf != null)
-			if (!requestSelf.equals(responseSelf)) {
-				equalityCheckFlag = false;
-				logger.info("Class Name: " + this.getClass().getName()
-						+ " --> Match failed on property: href, Request Value: " + requestSelf + ", Response Value: "
-						+ responseSelf);
+			Field[] fields = Links.class.getDeclaredFields();
+			for (Field field : fields) {
+				Object requestVal = field.get(this);
+				Object responseVal = field.get(responseObj);
+				if (requestVal != null)
+					if (!requestVal.equals(responseVal)) {
+						equalityCheckFlag = false;
+						logger.info("Class Name: " + this.getClass().getName() + " --> Match failed on property: "
+								+ field.getName() + ", Request Value: " + requestVal + ", Response Value: "
+								+ responseVal);
+						break;
+					}
 			}
+		} catch (IllegalArgumentException e) {
+			logger.error(e.getMessage());
+		} catch (IllegalAccessException e) {
+			logger.error(e.getMessage());
+		}
 		return equalityCheckFlag;
 	}
 
 	/**
-	 * Inner class to capture the Self attribute returned as a part of the
-	 * _links object.
+	 * TODO: Here we just need to check that the format of url is correct, i.e.
+	 * it should be like https://<>/<>/ etc
 	 */
-	public class Self {
+
+	public class HrefLinks {
 		@JsonProperty("href")
 		String href;
 
@@ -63,11 +79,11 @@ public class Links {
 			Logger logger = Logger.getRootLogger();
 			Boolean equalityCheckFlag = true;
 
-			if (!(responseObj instanceof Self) || responseObj == null)
+			if (!(responseObj instanceof HrefLinks) || responseObj == null)
 				return false;
 
 			String requestHref = this.getHref();
-			String responseHref = ((Self) responseObj).getHref();
+			String responseHref = ((HrefLinks) responseObj).getHref();
 
 			if (requestHref != null)
 				if (!requestHref.equals(responseHref)) {
@@ -78,5 +94,16 @@ public class Links {
 				}
 			return equalityCheckFlag;
 		}
+
+		/**
+		 * TODO: Here we just need to check that the format of url is correct,
+		 * i.e. it should be like https://<>/<>/ etc
+		 */
+	}
+
+	public class SelfLink extends HrefLinks {
+	}
+
+	public class TenantLink extends HrefLinks {
 	}
 }
