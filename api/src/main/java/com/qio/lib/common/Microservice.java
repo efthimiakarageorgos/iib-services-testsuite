@@ -10,6 +10,10 @@ public enum Microservice {
 	//ASSET("assets"),
 	ASSET("assets-new-qa"),
 	TENANT("tenant-management-qa");
+	
+	
+//	ASSET("assets"),
+//	TENANT("tenant-management");
 
 	/*
 	 * The following section of code does not require any change, if more microservice enum constants are added above.
