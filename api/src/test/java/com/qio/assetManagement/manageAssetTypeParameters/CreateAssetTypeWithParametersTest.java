@@ -12,29 +12,20 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.qio.lib.apiHelpers.APIHeaders;
+import com.qio.common.BaseTestSetupAndTearDown;
 import com.qio.lib.apiHelpers.MAssetTypeAPIHelper;
 import com.qio.lib.assertions.CustomAssertions;
-import com.qio.lib.common.BaseHelper;
 import com.qio.lib.common.Microservice;
 import com.qio.lib.exception.ServerResponse;
 import com.qio.model.assetType.AssetType;
 import com.qio.model.assetType.helper.AssetTypeHelper;
 import com.qio.model.assetType.helper.ParameterDataType;
 import com.qio.testHelper.TestHelper;
-import com.typesafe.config.Config;
-import com.typesafe.config.ConfigFactory;
 
 
-public class CreateAssetTypeWithParametersTest  {
+public class CreateAssetTypeWithParametersTest extends BaseTestSetupAndTearDown {
 
-	private static BaseHelper baseHelper;
 	private static MAssetTypeAPIHelper assetTypeAPI;
-	private static String userName;
-	private static String password;
-	private static String microservice;
-	private static String environment;
-	private static APIHeaders apiRequestHeaders;
 	private AssetTypeHelper assetTypeHelper;
 	private AssetType requestAssetType;
 	private AssetType responseAssetType;
@@ -45,16 +36,7 @@ public class CreateAssetTypeWithParametersTest  {
 	
 	@BeforeClass
 	public static void initSetupBeforeAllTests(){
-		Config userConfig = ConfigFactory.load("user_creds.conf");
-		Config envConfig = ConfigFactory.load("environments.conf");
-		
-		userName = userConfig.getString("user.username");
-		password = userConfig.getString("user.password");
-		environment = envConfig.getString("env.name");
-		microservice = Microservice.ASSET.toString();
-		apiRequestHeaders = new APIHeaders(userName, password);
-
-		baseHelper = new BaseHelper();
+		baseInitSetupBeforeAllTests(Microservice.ASSET.toString());
 		assetTypeAPI = new MAssetTypeAPIHelper();
 		idsForAllCreatedAssetTypes = new ArrayList<String>();
 	}
