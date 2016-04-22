@@ -10,10 +10,9 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.qio.lib.apiHelpers.APIHeaders;
+import com.qio.common.BaseTestSetupAndTearDown;
 import com.qio.lib.apiHelpers.MAssetAPIHelper;
 import com.qio.lib.assertions.CustomAssertions;
-import com.qio.lib.common.BaseHelper;
 import com.qio.lib.common.Microservice;
 import com.qio.lib.exception.ServerResponse;
 import com.qio.model.asset.AssetRequest;
@@ -24,24 +23,15 @@ import com.qio.model.tenant.Tenant;
 import com.qio.testHelper.AssetTypeTestHelper;
 import com.qio.testHelper.TenantTestHelper;
 import com.qio.testHelper.TestHelper;
-import com.typesafe.config.Config;
-import com.typesafe.config.ConfigFactory;
 
-public class AssetsTest {
-	private BaseHelper baseHelper = new BaseHelper();
+public class AssetsTest extends BaseTestSetupAndTearDown {
 	private static AssetTypeTestHelper assetTypeTestHelper;
 	private static TenantTestHelper tenantTestHelper;
 	
-	private  MAssetAPIHelper assetAPI = new MAssetAPIHelper();
+	private static MAssetAPIHelper assetAPI;
 	private AssetRequestHelper assetHelper;
 	private AssetRequest requestAsset;
 	private AssetResponse responseAsset;
-	
-	private static String userName;
-	private static String password;
-	private static String microservice;
-	private static String environment;
-	private static APIHeaders apiRequestHeaders;
 	
 	private static AssetType responseAssetTypePreDef;
 	private static String assetTypeId;
@@ -53,14 +43,8 @@ public class AssetsTest {
 	
 	@BeforeClass
 	public static void initSetupBeforeAllTests() throws JsonGenerationException, JsonMappingException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException, IOException{
-		Config userConfig = ConfigFactory.load("user_creds.conf");
-		Config envConfig = ConfigFactory.load("environments.conf");
-		
-		userName = userConfig.getString("user.username");
-		password = userConfig.getString("user.password");
-		environment = envConfig.getString("env.name");
-		microservice = Microservice.ASSET.toString();
-		apiRequestHeaders = new APIHeaders(userName, password);
+		baseInitSetupBeforeAllTests(Microservice.ASSET.toString());
+		assetAPI = new MAssetAPIHelper();
 		
 		assetTypeTestHelper = new AssetTypeTestHelper();
 		responseAssetTypePreDef = new AssetType();

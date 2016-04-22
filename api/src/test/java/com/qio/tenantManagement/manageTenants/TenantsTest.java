@@ -10,28 +10,19 @@ import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import com.qio.lib.apiHelpers.APIHeaders;
+import com.qio.common.BaseTestSetupAndTearDown;
 import com.qio.lib.apiHelpers.MTenantAPIHelper;
 import com.qio.lib.assertions.CustomAssertions;
-import com.qio.lib.common.BaseHelper;
 import com.qio.lib.common.Microservice;
 import com.qio.lib.exception.ServerResponse;
 import com.qio.model.tenant.Tenant;
 import com.qio.model.tenant.helper.TenantHelper;
 import com.qio.testHelper.TestHelper;
-import com.typesafe.config.Config;
-import com.typesafe.config.ConfigFactory;
 
 
-public class TenantsTest {
+public class TenantsTest extends BaseTestSetupAndTearDown {
 
-	private BaseHelper baseHelper = new BaseHelper();
-	private  MTenantAPIHelper tenantAPI = new MTenantAPIHelper();
-	private static String userName;
-	private static String password;
-	private static String microservice;
-	private static String environment;
-	private static APIHeaders apiRequestHeaders;
+	private static MTenantAPIHelper tenantAPI;
 	private TenantHelper tenantHelper;
 	private Tenant requestTenant;
 	private Tenant responseTenant;
@@ -41,14 +32,8 @@ public class TenantsTest {
 	
 	@BeforeClass
 	public static void initSetupBeforeAllTests(){
-		Config userConfig = ConfigFactory.load("user_creds.conf");
-		Config envConfig = ConfigFactory.load("environments.conf");
-		
-		userName = userConfig.getString("user.username");
-		password = userConfig.getString("user.password");
-		environment = envConfig.getString("env.name");
-		microservice = Microservice.TENANT.toString();
-		apiRequestHeaders = new APIHeaders(userName, password);
+		baseInitSetupBeforeAllTests(Microservice.TENANT.toString());
+		tenantAPI = new MTenantAPIHelper();
 	}
 	
 	@Before
