@@ -2,7 +2,6 @@ package com.qio.assetManagement.manageAssetTypeAttributes;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
 
 import org.apache.log4j.Logger;
 import org.codehaus.jackson.JsonGenerationException;
@@ -27,7 +26,6 @@ public class CreateAssetTypeWithAttributesTest extends BaseTestSetupAndTearDown 
 	private AssetTypeHelper assetTypeHelper;
 	private AssetType requestAssetType;
 	private ServerResponse serverResp;
-	private static ArrayList<String> idsForAllCreatedAssetTypes;
 	
 	final static Logger logger = Logger.getLogger(CreateAssetTypeWithAttributesTest.class);
 	private final int FIRST_ELEMENT = 0;
@@ -37,7 +35,6 @@ public class CreateAssetTypeWithAttributesTest extends BaseTestSetupAndTearDown 
 	public static void initSetupBeforeAllTests(){
 		baseInitSetupBeforeAllTests(Microservice.ASSET.toString());
 		assetTypeAPI = new MAssetTypeAPIHelper();
-		idsForAllCreatedAssetTypes = new ArrayList<String>();
 	}
 	
 	@Before
@@ -53,10 +50,7 @@ public class CreateAssetTypeWithAttributesTest extends BaseTestSetupAndTearDown 
 			IllegalAccessException,
 			IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException, IOException {
 
-		for (String assetTypeId : idsForAllCreatedAssetTypes) {
-			TestHelper.deleteRequestObj(baseHelper, microservice, environment, assetTypeId, apiRequestHeaders,
-					assetTypeAPI, AssetType.class);
-		}
+		baseCleanUpAfterAllTests(assetTypeAPI);
 	}
 	
 	// This file should contain these tests
