@@ -102,7 +102,7 @@ public class AssetTypeAttribute {
 				if (requestVal != null)
 					if (!requestVal.equals(responseVal)) {
 						equalityCheckFlag = false;
-						logger.info("Class Name: " + this.getClass().getName() + " --> Match failed on property: "
+						logger.error("Class Name: " + this.getClass().getName() + " --> Match failed on property: "
 								+ field.getName() + ", Request Value: " + requestVal + ", Response Value: "
 								+ responseVal);
 						break;
