@@ -59,8 +59,8 @@ public class TestHelper {
 		return (T) baseHelper.toClassObject(conRespGet.getRespBody(), classType);
 	}
 	
-	public static <T> void deleteRequestObj(BaseHelper baseHelper, String microservice, String environment,
-			String elementId, APIHeaders apiRequestHeaders, Object apiHelperObj, Class<T> classType)
+	public static <T> void deleteRequestObj(String microservice, String environment, String elementId,
+			APIHeaders apiRequestHeaders, Object apiHelperObj)
 					throws JsonGenerationException, JsonMappingException, IOException, IllegalAccessException,
 					IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
 

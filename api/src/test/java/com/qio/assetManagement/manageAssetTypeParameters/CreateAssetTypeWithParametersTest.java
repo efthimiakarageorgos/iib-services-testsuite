@@ -3,7 +3,6 @@ package com.qio.assetManagement.manageAssetTypeParameters;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
 
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;
@@ -30,7 +29,6 @@ public class CreateAssetTypeWithParametersTest extends BaseTestSetupAndTearDown 
 	private AssetType requestAssetType;
 	private AssetType responseAssetType;
 	private ServerResponse serverResp;
-	private static ArrayList<String> idsForAllCreatedAssetTypes;
 
 	private final int FIRST_ELEMENT = 0;
 	
@@ -38,7 +36,6 @@ public class CreateAssetTypeWithParametersTest extends BaseTestSetupAndTearDown 
 	public static void initSetupBeforeAllTests(){
 		baseInitSetupBeforeAllTests(Microservice.ASSET.toString());
 		assetTypeAPI = new MAssetTypeAPIHelper();
-		idsForAllCreatedAssetTypes = new ArrayList<String>();
 	}
 	
 	@Before
@@ -52,13 +49,9 @@ public class CreateAssetTypeWithParametersTest extends BaseTestSetupAndTearDown 
 	
 	@AfterClass
 	public static void cleanUpAfterAllTests() throws JsonGenerationException, JsonMappingException,
-			IllegalAccessException,
-			IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException, IOException {
-
-		for (String assetTypeId : idsForAllCreatedAssetTypes) {
-			TestHelper.deleteRequestObj(baseHelper, microservice, environment, assetTypeId, apiRequestHeaders,
-					assetTypeAPI, AssetType.class);
-		}
+			IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException,
+			SecurityException, IOException {
+		baseCleanUpAfterAllTests(assetTypeAPI);
 	}
 
 	/*
@@ -149,7 +142,7 @@ public class CreateAssetTypeWithParametersTest extends BaseTestSetupAndTearDown 
 				responseAssetType);
 
 		String assetTypeId = TestHelper.getElementId(responseAssetType.get_links().getSelfLink().getHref());
-		idsForAllCreatedAssetTypes.add(assetTypeId);
+		idsForAllCreatedElements.add(assetTypeId);
 
 		AssetType committedAssetType = TestHelper.getResponseObjForRetrieve(baseHelper, microservice, environment,
 				assetTypeId, apiRequestHeaders, assetTypeAPI, AssetType.class);
