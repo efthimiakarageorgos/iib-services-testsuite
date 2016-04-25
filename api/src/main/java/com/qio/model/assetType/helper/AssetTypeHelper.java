@@ -8,34 +8,31 @@ import com.qio.model.assetType.AssetTypeAttribute;
 import com.qio.model.assetType.AssetTypeParameter;
 
 public class AssetTypeHelper {
-	AssetType assetType;
+	AssetType assetType = null;
 	
-	// creates an assetType with default values for assetType, its attributes and its parameters.
-	public AssetTypeHelper(){
-		java.util.Date date= new java.util.Date();
+	/*
+	 * This method is invoked from each of the following methods to make sure
+	 * every time a new assettype is created with a unique timestamp.
+	 */
+	private void initDefaultAssetType() {
+		java.util.Date date = new java.util.Date();
 		String timestamp = Long.toString(date.getTime());
 		assetType = new AssetType(timestamp);
 	}
-	
+
 	/*
 	 * AssetType objects with Attributes only 
 	 */
 
 	public AssetType getAssetTypeWithNoAttributes(){
+		initDefaultAssetType();
 		assetType.setAttributes(null);
 		return assetType;
 	}
 
 	public AssetType getAssetTypeWithOneAttribute(AttributeDataType attributeDataType){
-		String attributeDataTypePrefix = "ABBR" + attributeDataType.toString();
-		List<AssetTypeAttribute> assetTypeAttributeSingle = new ArrayList<AssetTypeAttribute>();
-		
-		assetTypeAttributeSingle.add(new AssetTypeAttribute(attributeDataTypePrefix,
-				attributeDataTypePrefix + " Name",
-				attributeDataTypePrefix + " Desc",
-				"",
-				attributeDataType.toString()));
-		assetType.setAttributes(assetTypeAttributeSingle);
+		initDefaultAssetType();
+		assetType.setAttributes(getAssetTypeAttributeWithInputDataType(attributeDataType));
 		assetType.setParameters(null);
 		return assetType;
 	}
@@ -43,14 +40,25 @@ public class AssetTypeHelper {
 	public AssetType getAssetTypeWithAllAttributes(){
 		List<AssetTypeAttribute> assetTypeAttributeAll = new ArrayList<AssetTypeAttribute>();
 		for(AttributeDataType dataType: AttributeDataType.values()){
-			assetTypeAttributeAll.addAll((getAssetTypeWithOneAttribute(dataType)).getAttributes());
+			assetTypeAttributeAll.addAll(getAssetTypeAttributeWithInputDataType(dataType));
 		}
+		initDefaultAssetType();
 		assetType.setAttributes(assetTypeAttributeAll);
 		assetType.setParameters(null);
 		return assetType;
 	}
 	
+	public List<AssetTypeAttribute> getAssetTypeAttributeWithInputDataType(AttributeDataType attributeDataType) {
+		String attributeDataTypePrefix = "ABBR" + attributeDataType.toString();
+		List<AssetTypeAttribute> assetTypeAttribute = new ArrayList<AssetTypeAttribute>();
+
+		assetTypeAttribute.add(new AssetTypeAttribute(attributeDataTypePrefix, attributeDataTypePrefix + " Name",
+				attributeDataTypePrefix + " Desc", "", attributeDataType.toString()));
+		return assetTypeAttribute;
+	}
+
 	public AssetType getAssetTypeWithDefaultAttribute(){
+		initDefaultAssetType();
 		assetType.setParameters(null);
 		return assetType;
 	}
@@ -60,19 +68,14 @@ public class AssetTypeHelper {
 	 */
 	
 	public AssetType getAssetTypeWithNoParameters(){
+		initDefaultAssetType();
 		assetType.setParameters(null);
 		return assetType;
 	}
 	
 	public AssetType getAssetTypeWithOneParameter(ParameterDataType parameterDataType){
-		String parameterDataTypePrefix = "ABBR" + parameterDataType.toString();
-		List<AssetTypeParameter> assetTypeParameterSingle = new ArrayList<AssetTypeParameter>();
-		
-		assetTypeParameterSingle.add(new AssetTypeParameter(parameterDataTypePrefix,
-				parameterDataTypePrefix + " Desc",
-				"Unit",
-				parameterDataType.toString()));
-		assetType.setParameters(assetTypeParameterSingle);
+		initDefaultAssetType();
+		assetType.setParameters(getAssetTypeParameterWithInputDataType(parameterDataType));
 		assetType.setAttributes(null);
 		return assetType;
 	}
@@ -80,14 +83,25 @@ public class AssetTypeHelper {
 	public AssetType getAssetTypeWithAllParameters(){
 		List<AssetTypeParameter> assetTypeParameterAll = new ArrayList<AssetTypeParameter>();
 		for(ParameterDataType dataType: ParameterDataType.values()){
-			assetTypeParameterAll.addAll((getAssetTypeWithOneParameter(dataType)).getParameters());
+			assetTypeParameterAll.addAll(getAssetTypeParameterWithInputDataType(dataType));
 		}
+		initDefaultAssetType();
 		assetType.setParameters(assetTypeParameterAll);
 		assetType.setAttributes(null);
 		return assetType;
 	}
-	
+
+	public List<AssetTypeParameter> getAssetTypeParameterWithInputDataType(ParameterDataType parameterDataType) {
+		String parameterDataTypePrefix = "ABBR" + parameterDataType.toString();
+		List<AssetTypeParameter> assetTypeParameter = new ArrayList<AssetTypeParameter>();
+
+		assetTypeParameter.add(new AssetTypeParameter(parameterDataTypePrefix, parameterDataTypePrefix + " Desc",
+				"Unit", parameterDataType.toString()));
+		return assetTypeParameter;
+	}
+
 	public AssetType getAssetTypeWithDefaultParameter(){
+		initDefaultAssetType();
 		assetType.setAttributes(null);
 		return assetType;
 	}
@@ -97,6 +111,7 @@ public class AssetTypeHelper {
 	 */
 	
 	public AssetType getAssetTypeWithNoAttributesAndParameters(){
+		initDefaultAssetType();
 		assetType.setAttributes(null);
 		assetType.setParameters(null);
 		return assetType;
@@ -105,6 +120,7 @@ public class AssetTypeHelper {
 	public AssetType getAssetTypeWithAllAttributesAndParameters(){
 		AssetType assetTypeAttrTemp = getAssetTypeWithAllAttributes();
 		AssetType assetTypeParamTemp = getAssetTypeWithAllParameters();
+		initDefaultAssetType();
 		assetType.setAttributes(assetTypeAttrTemp.getAttributes());
 		assetType.setParameters(assetTypeParamTemp.getParameters());
 		return assetType;

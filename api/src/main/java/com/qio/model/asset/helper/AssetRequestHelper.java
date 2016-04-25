@@ -32,9 +32,9 @@ public class AssetRequestHelper {
 	private String tenantId;
 	
 	final static Logger logger = Logger.getRootLogger();
-	
+
 	// creates an asset that links to an assetType and tenant.
-	public AssetRequestHelper() {
+	private void initDefaultAsset() {
 		assetTypeId="";
 		tenantId="";
 		
@@ -42,7 +42,7 @@ public class AssetRequestHelper {
 		String timestamp = Long.toString(date.getTime());
 		asset = new AssetRequest(timestamp, assetTypeId, tenantId);
 	}
-	
+
 	public AssetRequest getAssetCreateDependencies(String assetTypeFlavor)throws JsonGenerationException, JsonMappingException, IOException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
 		//Create Asset Type
 		responseAssetType = new AssetType();	
@@ -56,6 +56,7 @@ public class AssetRequestHelper {
 		responseTenant = new Tenant();
 		// responseTenant = tenantTestHelper.createTenant();
 		
+		initDefaultAsset();
 		asset.setAssetType(assetTypeId);
 		asset.setTenant(responseTenant.getTenantId());
 		
@@ -64,6 +65,7 @@ public class AssetRequestHelper {
 	}
 
 	public AssetRequest getAssetWithPredefinedAssetTypeAndTenant(String assetTypeId, String tenantId) {
+		initDefaultAsset();
 		asset.setAssetType(assetTypeId);
 		asset.setTenant(tenantId);
 		return asset;

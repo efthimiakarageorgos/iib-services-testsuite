@@ -17,8 +17,10 @@ public class MBaseAPIHelper {
 		conManager.delete(getURI(microservice, environment, endpoint), apiRequestHeaders);
 	}
 	
-	public String update(){
-		return null;
+	public ConnectionResponse update(String microservice, String environment, String endpoint, String payload,
+			APIHeaders apiRequestHeaders) {
+		initConManager();
+		return conManager.put(getURI(microservice, environment, endpoint), payload, apiRequestHeaders);
 	}
 	
 	public ConnectionResponse retrieve(String microservice, String environment, String endpoint, APIHeaders apiRequestHeaders){

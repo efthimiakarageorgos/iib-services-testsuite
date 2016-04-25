@@ -116,8 +116,57 @@ public class ConnectionManager {
 		return conResp;
 	}
 
-	public ConnectionResponse put(){
-		return null;
+	public ConnectionResponse put(String URI, String payload, APIHeaders apiHeaders) {
+		ConnectionResponse conResp = new ConnectionResponse();
+		URL url;
+		try {
+			url = new URL(URI);
+			HttpURLConnection con = (HttpURLConnection) url.openConnection();
+			con.setRequestMethod("PUT");
+
+			// add request header
+			con.setRequestProperty("Accept", apiHeaders.getAcceptType());
+			con.setRequestProperty("Content-Type", apiHeaders.getContentType());
+			con.setRequestProperty("X-Auth-Username", apiHeaders.getUserName());
+			con.setRequestProperty("X-Auth-Password", apiHeaders.getPassword());
+
+			// Send post request
+			con.setDoOutput(true);
+			DataOutputStream wr = new DataOutputStream(con.getOutputStream());
+			wr.writeBytes(payload);
+			wr.flush();
+			wr.close();
+
+			logger.debug("Sending 'PUT' request to URL : " + URI);
+			logger.debug("Request payload : " + payload);
+
+			int responseCode = con.getResponseCode();
+			conResp.setRespCode(responseCode);
+
+			BufferedReader in;
+			if (responseCode != 200)
+				in = new BufferedReader(new InputStreamReader(con.getErrorStream()));
+			else
+				in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+
+			String inputLine;
+			StringBuffer response = new StringBuffer();
+
+			while ((inputLine = in.readLine()) != null) {
+				response.append(inputLine);
+			}
+			in.close();
+
+			conResp.setRespBody(response.toString());
+
+			// print result
+			logger.debug("Response Code and Body: " + conResp.toString());
+
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			logger.error(e.getMessage());
+		}
+		return conResp;
 	}
 
 	public void delete(String URI, APIHeaders apiHeaders){

@@ -7,7 +7,7 @@ public class TenantHelper {
 	Tenant tenant;
 	
 	// creates a tenant with default values for its properties.
-	public TenantHelper(){
+	private void initDefaultTenant() {
 		java.util.Date date= new java.util.Date();
 		String timestamp = Long.toString(date.getTime());
 		tenant = new Tenant(timestamp);
@@ -18,6 +18,7 @@ public class TenantHelper {
 	 */
 
 	public Tenant getTenant(){
+		initDefaultTenant();
 		return tenant;
 	}
 }
