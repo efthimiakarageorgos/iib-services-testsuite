@@ -16,9 +16,10 @@ public class MAssetTypeAPIHelper extends MBaseAPIHelper {
 		super.delete(microservice, environment, replaceAssetTypeIdInSingleAssetTypeEndpoint(assetTypeId), apiRequestHeaders);
 	}
 
-	public String update() {
-		// TODO Auto-generated method stub
-		return null;
+	public ConnectionResponse update(String microservice, String environment, String payload,
+			String assetTypeId, APIHeaders apiRequestHeaders) {
+		return super.update(microservice, environment, replaceAssetTypeIdInSingleAssetTypeEndpoint(assetTypeId),
+				payload, apiRequestHeaders);
 	}
 	
 	public ConnectionResponse retrieve(String microservice, String environment, APIHeaders apiRequestHeaders) {

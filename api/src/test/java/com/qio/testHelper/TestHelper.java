@@ -74,6 +74,23 @@ public class TestHelper {
 		// responseCodeForInputRequest = conRespDelete.getRespCode();
 	}
 
+	public static <T> T getResponseObjForUpdate(BaseHelper baseHelper, Object requestObject, String microservice,
+			String environment, String elementId, APIHeaders apiRequestHeaders, Object apiHelperObj, Class<T> classType)
+					throws JsonGenerationException, JsonMappingException, IOException, IllegalAccessException,
+					IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
+
+		Class[] methodArgs = new Class[5];
+		methodArgs[0] = methodArgs[1] = methodArgs[2] = methodArgs[3] = String.class;
+		methodArgs[4] = APIHeaders.class;
+		Method updateMethod = apiHelperObj.getClass().getMethod("update", methodArgs);
+
+		String payload = baseHelper.toJSONString(requestObject);
+		ConnectionResponse conRespPut = (ConnectionResponse) updateMethod.invoke(apiHelperObj, microservice,
+				environment, payload, elementId, apiRequestHeaders);
+		responseCodeForInputRequest = conRespPut.getRespCode();
+		return (T) baseHelper.toClassObject(conRespPut.getRespBody(), classType);
+	}
+
 	/**
 	 * This method parses out the id from the input href link, which as observed
 	 * is the last part in the links.

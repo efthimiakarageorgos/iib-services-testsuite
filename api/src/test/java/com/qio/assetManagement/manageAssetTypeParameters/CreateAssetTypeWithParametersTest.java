@@ -93,9 +93,7 @@ public class CreateAssetTypeWithParametersTest extends BaseTestSetupAndTearDown 
 	@Test
 	public void shouldNotCreateAssetTypeWhenParAbbrIsLongerThan255Chars() throws JsonGenerationException, JsonMappingException, IOException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException{
 		requestAssetType = assetTypeHelper.getAssetTypeWithAllParameters();
-		// Setting AssetType Parameter abbreviation to be longer than 255 chars.
-		String abbrLongerThan255Chars = "256charactelong256charactelong256charactelong256charactelong256charactelong256charactelong256charactelong256charactelong256charactelong256charactelong256charactelong256charactelong256charactelong256charactelong256charactelong256charactelong256characteRlong";
-		requestAssetType.getParameters().get(FIRST_ELEMENT).setAbbreviation(abbrLongerThan255Chars);
+		requestAssetType.getParameters().get(FIRST_ELEMENT).setAbbreviation(TestHelper.TWOFIFTYSIX_CHARS);
 		
 		serverResp = TestHelper.getResponseObjForCreate(baseHelper, requestAssetType, microservice, environment, apiRequestHeaders, assetTypeAPI, ServerResponse.class);
 		
@@ -119,6 +117,23 @@ public class CreateAssetTypeWithParametersTest extends BaseTestSetupAndTearDown 
 				"Parameter Abbreviation must not contain Spaces",
 				serverResp);
 	}
+
+	// RREHM-633 ()
+	@Test
+	public void shouldNotCreateAssetTypeWhenDataTypeIsInvalidForOneOfTheInputParameters()
+			throws JsonGenerationException, JsonMappingException, IOException, IllegalAccessException,
+			IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
+		requestAssetType = assetTypeHelper.getAssetTypeWithAllParameters();
+		// Setting data type for one of the parameters to be invalid.
+		requestAssetType.getParameters().get(FIRST_ELEMENT).setDatatype("FicticiousDataType");
+
+		serverResp = TestHelper.getResponseObjForCreate(baseHelper, requestAssetType, microservice, environment,
+				apiRequestHeaders, assetTypeAPI, ServerResponse.class);
+
+		CustomAssertions.assertServerError(400, "org.springframework.http.converter.HttpMessageNotReadableException",
+				serverResp);
+	}
+
 	/*
 	 * NEGATIVE TESTS END
 	 */
@@ -153,13 +168,73 @@ public class CreateAssetTypeWithParametersTest extends BaseTestSetupAndTearDown 
 	}
 
 	// RREHM-611 ()
+	@Test
+	public void shouldCreateAssetTypeWithUniqueAbbrWithParametersOfAllDataType() throws JsonGenerationException,
+			JsonMappingException, IOException, IllegalAccessException, IllegalArgumentException,
+			InvocationTargetException, NoSuchMethodException, SecurityException {
+
+		requestAssetType = assetTypeHelper.getAssetTypeWithAllParameters();
+
+		responseAssetType = TestHelper.getResponseObjForCreate(baseHelper, requestAssetType, microservice, environment,
+				apiRequestHeaders, assetTypeAPI, AssetType.class);
+		CustomAssertions.assertRequestAndResponseObj(201, TestHelper.responseCodeForInputRequest, requestAssetType,
+				responseAssetType);
+
+		String assetTypeId = TestHelper.getElementId(responseAssetType.get_links().getSelfLink().getHref());
+		idsForAllCreatedElements.add(assetTypeId);
+
+		AssetType committedAssetType = TestHelper.getResponseObjForRetrieve(baseHelper, microservice, environment,
+				assetTypeId, apiRequestHeaders, assetTypeAPI, AssetType.class);
+		CustomAssertions.assertRequestAndResponseObj(responseAssetType, committedAssetType);
+	}
 	
-	// RREHM-633 ()
-		
 	// RREHM-1077 ()
-		
+	@Test
+	public void shouldCreateAssetTypeWithUniqueAbbrWithOneParameterContainingSpecialCharInItsAbbr()
+			throws JsonGenerationException, JsonMappingException, IOException, IllegalAccessException,
+			IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
+
+		for (char specialChar : TestHelper.SPECIAL_CHARS.toCharArray()) {
+			requestAssetType = assetTypeHelper.getAssetTypeWithOneParameter(ParameterDataType.String);
+			String origFirstParamAbbr = requestAssetType.getParameters().get(FIRST_ELEMENT).getAbbreviation();
+			requestAssetType.getParameters().get(FIRST_ELEMENT).setAbbreviation(specialChar + origFirstParamAbbr);
+
+			responseAssetType = TestHelper.getResponseObjForCreate(baseHelper, requestAssetType, microservice,
+					environment, apiRequestHeaders, assetTypeAPI, AssetType.class);
+			CustomAssertions.assertRequestAndResponseObj(201, TestHelper.responseCodeForInputRequest, requestAssetType,
+					responseAssetType);
+
+			String assetTypeId = TestHelper.getElementId(responseAssetType.get_links().getSelfLink().getHref());
+			idsForAllCreatedElements.add(assetTypeId);
+
+			AssetType committedAssetType = TestHelper.getResponseObjForRetrieve(baseHelper, microservice, environment,
+					assetTypeId, apiRequestHeaders, assetTypeAPI, AssetType.class);
+			CustomAssertions.assertRequestAndResponseObj(responseAssetType, committedAssetType);
+		}
+	}
+
 	// RREHM-1614 ()
-	
+	@Test
+	public void shouldCreateAssetTypeWithUniqueAbbrWithOneParameterHavingNoDescription() throws JsonGenerationException,
+			JsonMappingException, IOException, IllegalAccessException, IllegalArgumentException,
+			InvocationTargetException, NoSuchMethodException, SecurityException {
+
+		requestAssetType = assetTypeHelper.getAssetTypeWithOneParameter(ParameterDataType.String);
+		requestAssetType.getParameters().get(FIRST_ELEMENT).setDescription("");
+
+		responseAssetType = TestHelper.getResponseObjForCreate(baseHelper, requestAssetType, microservice, environment,
+				apiRequestHeaders, assetTypeAPI, AssetType.class);
+		CustomAssertions.assertRequestAndResponseObj(201, TestHelper.responseCodeForInputRequest, requestAssetType,
+				responseAssetType);
+
+		String assetTypeId = TestHelper.getElementId(responseAssetType.get_links().getSelfLink().getHref());
+		idsForAllCreatedElements.add(assetTypeId);
+
+		AssetType committedAssetType = TestHelper.getResponseObjForRetrieve(baseHelper, microservice, environment,
+				assetTypeId, apiRequestHeaders, assetTypeAPI, AssetType.class);
+		CustomAssertions.assertRequestAndResponseObj(responseAssetType, committedAssetType);
+	}
+
 	/*
 	 * POSITIVE TESTS END
 	 */
