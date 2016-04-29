@@ -12,29 +12,27 @@ import com.qio.lib.apiHelpers.APIHeaders;
 import com.qio.lib.common.BaseHelper;
 import com.qio.lib.connection.ConnectionResponse;
 
-
 public class TestHelper {
-	
+
 	public static String SPECIAL_CHARS = "~^%{&@}$#*()+=!~";
 	public static String TWOFIFTYSIX_CHARS = "256charactelong256charactelong256charactelong256charactelong256charactelong256charactelong256charactelong256charactelong256charactelong256charactelong256charactelong256charactelong256charactelong256charactelong256charactelong256charactelong256characteRlong";
-	public static String FIFTYONE_CHARS= "51charlong51charlong51charlong51charlong51charSlong";
+	public static String FIFTYONE_CHARS = "51charlong51charlong51charlong51charlong51charSlong";
 	public static int responseCodeForInputRequest;
-	
+
 	final static Logger logger = Logger.getRootLogger();
 
-	public static <T> T getResponseObjForCreate(BaseHelper baseHelper, Object requestObject, String microservice,
-			String environment, APIHeaders apiRequestHeaders, Object apiHelperObj, Class<T> classType)
-					throws JsonGenerationException, JsonMappingException, IOException, IllegalAccessException,
-					IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
-		
+	public static <T> T getResponseObjForCreate(BaseHelper baseHelper, Object requestObject, String microservice, String environment,
+			APIHeaders apiRequestHeaders, Object apiHelperObj, Class<T> classType) throws JsonGenerationException, JsonMappingException, IOException,
+					IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
+
 		Class[] methodArgs = new Class[4];
 		methodArgs[0] = methodArgs[1] = methodArgs[2] = String.class;
 		methodArgs[3] = APIHeaders.class;
 		Method createMethod = apiHelperObj.getClass().getMethod("create", methodArgs);
-		
+
 		String payload = baseHelper.toJSONString(requestObject);
-		ConnectionResponse conRespPost = (ConnectionResponse) createMethod.invoke(apiHelperObj, microservice,
-				environment, payload, apiRequestHeaders);
+		ConnectionResponse conRespPost = (ConnectionResponse) createMethod.invoke(apiHelperObj, microservice, environment, payload,
+				apiRequestHeaders);
 		responseCodeForInputRequest = conRespPost.getRespCode();
 		return (T) baseHelper.toClassObject(conRespPost.getRespBody(), classType);
 	}
@@ -43,41 +41,53 @@ public class TestHelper {
 	 * elementId - refers the unique GUID identifier for AssetType,
 	 * AssetTypeAttribute etc.
 	 */
-	public static <T> T getResponseObjForRetrieve(BaseHelper baseHelper, String microservice, String environment,
-			String elementId, APIHeaders apiRequestHeaders, Object apiHelperObj, Class<T> classType)
-					throws JsonGenerationException, JsonMappingException, IOException, IllegalAccessException,
-					IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
+	public static <T> T getResponseObjForRetrieve(BaseHelper baseHelper, String microservice, String environment, String elementId,
+			APIHeaders apiRequestHeaders, Object apiHelperObj, Class<T> classType) throws JsonGenerationException, JsonMappingException, IOException,
+					IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
 
 		Class[] methodArgs = new Class[4];
 		methodArgs[0] = methodArgs[1] = methodArgs[2] = String.class;
 		methodArgs[3] = APIHeaders.class;
 		Method retrieveMethod = apiHelperObj.getClass().getMethod("retrieve", methodArgs);
 
-		ConnectionResponse conRespGet = (ConnectionResponse) retrieveMethod.invoke(apiHelperObj, microservice,
-				environment, elementId, apiRequestHeaders);
+		ConnectionResponse conRespGet = (ConnectionResponse) retrieveMethod.invoke(apiHelperObj, microservice, environment, elementId,
+				apiRequestHeaders);
 		responseCodeForInputRequest = conRespGet.getRespCode();
 		return (T) baseHelper.toClassObject(conRespGet.getRespBody(), classType);
 	}
-	
-	public static <T> void deleteRequestObj(String microservice, String environment, String elementId,
-			APIHeaders apiRequestHeaders, Object apiHelperObj)
-					throws JsonGenerationException, JsonMappingException, IOException, IllegalAccessException,
+
+	public static <T> T getResponseObjForRetrieveAll(BaseHelper baseHelper, String microservice, String environment, APIHeaders apiRequestHeaders,
+			Object apiHelperObj, Class<T> classType) throws JsonGenerationException, JsonMappingException, IOException, IllegalAccessException,
 					IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
+
+		Class[] methodArgs = new Class[3];
+		methodArgs[0] = methodArgs[1] = String.class;
+		methodArgs[2] = APIHeaders.class;
+		Method retrieveAllMethod = apiHelperObj.getClass().getMethod("retrieve", methodArgs);
+
+		ConnectionResponse conRespGet = (ConnectionResponse) retrieveAllMethod.invoke(apiHelperObj, microservice, environment, apiRequestHeaders);
+		responseCodeForInputRequest = conRespGet.getRespCode();
+		return (T) baseHelper.toClassObject(conRespGet.getRespBody(), classType);
+	}
+
+	public static <T> void deleteRequestObj(String microservice, String environment, String elementId, APIHeaders apiRequestHeaders,
+			Object apiHelperObj) throws JsonGenerationException, JsonMappingException, IOException, IllegalAccessException, IllegalArgumentException,
+					InvocationTargetException, NoSuchMethodException, SecurityException {
 
 		Class[] methodArgs = new Class[4];
 		methodArgs[0] = methodArgs[1] = methodArgs[2] = String.class;
 		methodArgs[3] = APIHeaders.class;
 		Method deleteMethod = apiHelperObj.getClass().getMethod("delete", methodArgs);
 
-		ConnectionResponse conRespDelete = (ConnectionResponse) deleteMethod.invoke(apiHelperObj, microservice,
-				environment, elementId, apiRequestHeaders);
+		ConnectionResponse conRespDelete = (ConnectionResponse) deleteMethod.invoke(apiHelperObj, microservice, environment, elementId,
+				apiRequestHeaders);
 		// responseCodeForInputRequest = conRespDelete.getRespCode();
 	}
 
-	public static <T> T getResponseObjForUpdate(BaseHelper baseHelper, Object requestObject, String microservice,
-			String environment, String elementId, APIHeaders apiRequestHeaders, Object apiHelperObj, Class<T> classType)
-					throws JsonGenerationException, JsonMappingException, IOException, IllegalAccessException,
-					IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
+	public static <T> T getResponseObjForUpdate(BaseHelper baseHelper, Object requestObject, String microservice, String environment,
+			String elementId, APIHeaders apiRequestHeaders, Object apiHelperObj, Class<T> classType) throws JsonGenerationException,
+					JsonMappingException, IOException, IllegalAccessException, IllegalArgumentException, InvocationTargetException,
+					NoSuchMethodException, SecurityException {
 
 		Class[] methodArgs = new Class[5];
 		methodArgs[0] = methodArgs[1] = methodArgs[2] = methodArgs[3] = String.class;
@@ -85,8 +95,8 @@ public class TestHelper {
 		Method updateMethod = apiHelperObj.getClass().getMethod("update", methodArgs);
 
 		String payload = baseHelper.toJSONString(requestObject);
-		ConnectionResponse conRespPut = (ConnectionResponse) updateMethod.invoke(apiHelperObj, microservice,
-				environment, payload, elementId, apiRequestHeaders);
+		ConnectionResponse conRespPut = (ConnectionResponse) updateMethod.invoke(apiHelperObj, microservice, environment, payload, elementId,
+				apiRequestHeaders);
 		responseCodeForInputRequest = conRespPut.getRespCode();
 		return (T) baseHelper.toClassObject(conRespPut.getRespBody(), classType);
 	}

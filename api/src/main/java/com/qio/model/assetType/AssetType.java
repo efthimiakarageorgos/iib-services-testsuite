@@ -54,6 +54,10 @@ public class AssetType {
 		this.attributes = attributes;
 		this.parameters = parameters;
 	}
+	
+	public AssetType(AssetType assetType){
+		this(assetType.getAbbreviation(), assetType.getName(), assetType.getDescription(), assetType.getAttributes(), assetType.getParameters());
+	}
 
 	public String getAssetTypeId() {
 		return assetTypeId;
