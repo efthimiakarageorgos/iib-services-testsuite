@@ -8,7 +8,7 @@ import org.codehaus.jackson.annotate.JsonProperty;
 import com.qio.model.common.Links;
 
 public class AssetTypeAttribute {
-	private String attributeId;
+	private String id;
 	private String abbreviation;
 	private String name;
 	private String description;
@@ -32,6 +32,11 @@ public class AssetTypeAttribute {
 		this.description = description;
 		this.unit = unit;
 		this.datatype = datatype;
+	}
+
+	public AssetTypeAttribute(AssetTypeAttribute assetTypeAttribute) {
+		this(assetTypeAttribute.getAbbreviation(), assetTypeAttribute.getName(), assetTypeAttribute.getDescription(), assetTypeAttribute.getUnit(),
+				assetTypeAttribute.getDatatype());
 	}
 
 	public String getAbbreviation() {
@@ -74,8 +79,12 @@ public class AssetTypeAttribute {
 		this.datatype = datatype;
 	}
 
-	public String getAttributeId() {
-		return attributeId;
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
 	}
 
 	public Links get_links() {
@@ -99,12 +108,11 @@ public class AssetTypeAttribute {
 			for (Field field : fields) {
 				Object requestVal = field.get(this);
 				Object responseVal = field.get(responseObj);
-				if (requestVal != null)
+				if (requestVal != null && !field.getName().equals("id"))
 					if (!requestVal.equals(responseVal)) {
 						equalityCheckFlag = false;
-						logger.error("Class Name: " + this.getClass().getName() + " --> Match failed on property: "
-								+ field.getName() + ", Request Value: " + requestVal + ", Response Value: "
-								+ responseVal);
+						logger.error("Class Name: " + this.getClass().getName() + " --> Match failed on property: " + field.getName()
+								+ ", Request Value: " + requestVal + ", Response Value: " + responseVal);
 						break;
 					}
 			}

@@ -8,7 +8,7 @@ import org.codehaus.jackson.annotate.JsonProperty;
 import com.qio.model.common.Links;
 
 public class AssetTypeParameter {
-	private String parameterId;
+	private String id;
 	private String abbreviation;
 	private String description;
 	private String baseuom;
@@ -31,6 +31,11 @@ public class AssetTypeParameter {
 		this.datatype = datatype;
 	}
 
+	public AssetTypeParameter(AssetTypeParameter assetTypeParameter) {
+		this(assetTypeParameter.getAbbreviation(), assetTypeParameter.getDescription(), assetTypeParameter.getBaseuom(), assetTypeParameter
+				.getDatatype());
+	}
+
 	public String getAbbreviation() {
 		return abbreviation;
 	}
@@ -47,11 +52,11 @@ public class AssetTypeParameter {
 		this.description = description;
 	}
 
-	public String getbaseuom() {
+	public String getBaseuom() {
 		return baseuom;
 	}
 
-	public void setbaseuom(String baseuom) {
+	public void setBaseuom(String baseuom) {
 		this.baseuom = baseuom;
 	}
 
@@ -63,8 +68,12 @@ public class AssetTypeParameter {
 		this.datatype = datatype;
 	}
 
-	public String getParameterId() {
-		return parameterId;
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
 	}
 
 	public Links get_links() {
@@ -88,12 +97,12 @@ public class AssetTypeParameter {
 			for (Field field : fields) {
 				Object requestVal = field.get(this);
 				Object responseVal = field.get(responseObj);
-				if (requestVal != null)
+				// Following if condition skips the match on 'id' property.
+				if (requestVal != null && !field.getName().equals("id"))
 					if (!requestVal.equals(responseVal)) {
 						equalityCheckFlag = false;
-						logger.error("Class Name: " + this.getClass().getName() + " --> Match failed on property: "
-								+ field.getName() + ", Request Value: " + requestVal + ", Response Value: "
-								+ responseVal);
+						logger.error("Class Name: " + this.getClass().getName() + " --> Match failed on property: " + field.getName()
+								+ ", Request Value: " + requestVal + ", Response Value: " + responseVal);
 						break;
 					}
 			}

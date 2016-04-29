@@ -8,7 +8,7 @@ import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;
 
 import com.qio.lib.apiHelpers.APIHeaders;
-import com.qio.lib.apiHelpers.MAssetTypeAPIHelper;
+import com.qio.lib.apiHelpers.assetType.MAssetTypeAPIHelper;
 import com.qio.lib.common.BaseHelper;
 import com.qio.testHelper.TestHelper;
 import com.typesafe.config.Config;
