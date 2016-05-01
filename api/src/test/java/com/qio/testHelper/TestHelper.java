@@ -113,4 +113,8 @@ public class TestHelper {
 		return assetTypeHrefLinkSplitArray[assetTypeHrefLinkSplitArray.length - 1];
 	}
 
+	public static String getCurrentTimeStamp() {
+		java.util.Date date = new java.util.Date();
+		return Long.toString(date.getTime());
+	}
 }
