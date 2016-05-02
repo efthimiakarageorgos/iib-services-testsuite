@@ -9,6 +9,10 @@ public class MAssetTypeAPIHelper extends MBaseAPIHelper {
 	private final String getOrDeleteSingleAssetTypeEndpointAbstract = "/assettypes/{assetTypeId}";
 	private final String getAllAssetTypesEndpoint = "/assettypes";
 
+	public String getGetOrDeleteSingleAssetTypeEndpointAbstract() {
+		return getOrDeleteSingleAssetTypeEndpointAbstract;
+	}
+
 	public ConnectionResponse create(String microservice, String environment, String payload, APIHeaders apiRequestHeaders) {
 		return super.create(microservice, environment, createOrUpdateAssetTypeEndpoint, payload, apiRequestHeaders);
 	}
@@ -29,7 +33,7 @@ public class MAssetTypeAPIHelper extends MBaseAPIHelper {
 		return super.retrieve(microservice, environment, replaceAssetTypeIdInSingleAssetTypeEndpoint(assetTypeId), apiRequestHeaders);
 	}
 
-	private String replaceAssetTypeIdInSingleAssetTypeEndpoint(String assetTypeId) {
+	protected String replaceAssetTypeIdInSingleAssetTypeEndpoint(String assetTypeId) {
 		String singleAssetTypeEndpoint = getOrDeleteSingleAssetTypeEndpointAbstract.replace("{assetTypeId}", assetTypeId);
 		return singleAssetTypeEndpoint;
 	}

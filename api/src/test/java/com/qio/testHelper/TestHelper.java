@@ -3,6 +3,7 @@ package com.qio.testHelper;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.codehaus.jackson.JsonGenerationException;
@@ -51,6 +52,37 @@ public class TestHelper {
 		Method retrieveMethod = apiHelperObj.getClass().getMethod("retrieve", methodArgs);
 
 		ConnectionResponse conRespGet = (ConnectionResponse) retrieveMethod.invoke(apiHelperObj, microservice, environment, elementId,
+				apiRequestHeaders);
+		responseCodeForInputRequest = conRespGet.getRespCode();
+		return (T) baseHelper.toClassObject(conRespGet.getRespBody(), classType);
+	}
+
+	public static <T> List<T> getListResponseObjForRetrieve(BaseHelper baseHelper, String microservice, String environment, String elementId,
+			APIHeaders apiRequestHeaders, Object apiHelperObj, Class<T> classType) throws JsonGenerationException, JsonMappingException, IOException,
+					IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
+
+		Class[] methodArgs = new Class[4];
+		methodArgs[0] = methodArgs[1] = methodArgs[2] = String.class;
+		methodArgs[3] = APIHeaders.class;
+		Method retrieveMethod = apiHelperObj.getClass().getMethod("retrieve", methodArgs);
+
+		ConnectionResponse conRespGet = (ConnectionResponse) retrieveMethod.invoke(apiHelperObj, microservice, environment, elementId,
+				apiRequestHeaders);
+		responseCodeForInputRequest = conRespGet.getRespCode();
+		return (List<T>) baseHelper.toClassObjectList(conRespGet.getRespBody(), classType);
+	}
+
+	public static <T> T getResponseObjForRetrieve(BaseHelper baseHelper, String microservice, String environment, String elementId,
+			String subElementId, APIHeaders apiRequestHeaders, Object apiHelperObj, Class<T> classType) throws JsonGenerationException,
+					JsonMappingException, IOException, IllegalAccessException, IllegalArgumentException, InvocationTargetException,
+					NoSuchMethodException, SecurityException {
+
+		Class[] methodArgs = new Class[5];
+		methodArgs[0] = methodArgs[1] = methodArgs[2] = methodArgs[3] = String.class;
+		methodArgs[4] = APIHeaders.class;
+		Method retrieveMethod = apiHelperObj.getClass().getMethod("retrieve", methodArgs);
+
+		ConnectionResponse conRespGet = (ConnectionResponse) retrieveMethod.invoke(apiHelperObj, microservice, environment, elementId, subElementId,
 				apiRequestHeaders);
 		responseCodeForInputRequest = conRespGet.getRespCode();
 		return (T) baseHelper.toClassObject(conRespGet.getRespBody(), classType);

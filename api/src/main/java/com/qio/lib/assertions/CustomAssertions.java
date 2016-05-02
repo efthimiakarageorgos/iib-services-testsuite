@@ -33,7 +33,11 @@ public class CustomAssertions {
 	}
 
 	public static void assertResponseCode(int expectedRespCode, int actualRespCode) {
-		assertRequestAndResponseObj(expectedRespCode, actualRespCode, null, null);
+		assertEquals(expectedRespCode, actualRespCode);
+	}
+
+	public static void assertRequestAndResponseObjForNullEqualityCheck(Object requestObj, Object responseObj) {
+		assertEquals(requestObj, responseObj);
 	}
 
 }
