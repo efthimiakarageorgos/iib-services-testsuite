@@ -67,7 +67,7 @@ public class AssetTypeTestHelper {
 			requestAssetType = assetTypeHelper.getAssetTypeWithAllAttributesAndParameters();
 		}
 		
-		responseAssetType = TestHelper.getResponseObjForCreate(baseHelper, requestAssetType, microservice, environment, apiRequestHeaders, assetTypeAPI, AssetType.class);
+		responseAssetType = TestHelper.getResponseObjForCreate(requestAssetType, microservice, environment, apiRequestHeaders, assetTypeAPI, AssetType.class);
 		
 		return responseAssetType;
 	}

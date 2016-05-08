@@ -32,7 +32,7 @@ public class TenantsTest extends BaseTestSetupAndTearDown {
 	
 	@BeforeClass
 	public static void initSetupBeforeAllTests(){
-		baseInitSetupBeforeAllTests(Microservice.TENANT.toString());
+		baseInitSetupBeforeAllTests("tenant");
 		tenantAPI = new MTenantAPIHelper();
 	}
 	
@@ -53,7 +53,7 @@ public class TenantsTest extends BaseTestSetupAndTearDown {
 	@Ignore
 	public void shouldNotCreateTenantWhenAbbreviationIsNotUnique() throws JsonGenerationException, JsonMappingException, IOException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException{
 		requestTenant2 = tenantHelper.getTenant();
-		serverResp = TestHelper.getResponseObjForCreate(baseHelper, requestTenant2, microservice, environment, apiRequestHeaders, tenantAPI, ServerResponse.class);
+		serverResp = TestHelper.getResponseObjForCreate(requestTenant2, microservice, environment, apiRequestHeaders, tenantAPI, ServerResponse.class);
 		
 		requestTenant = tenantHelper.getTenant();
 		
@@ -62,7 +62,7 @@ public class TenantsTest extends BaseTestSetupAndTearDown {
 		// Setting Tenant abbreviation to be the same as the name of tenant2
 		requestTenant.setAbbreviation(tenantAbbr2);
 									
-		serverResp = TestHelper.getResponseObjForCreate(baseHelper, requestTenant, microservice, environment, apiRequestHeaders, tenantAPI, ServerResponse.class);
+		serverResp = TestHelper.getResponseObjForCreate(requestTenant, microservice, environment, apiRequestHeaders, tenantAPI, ServerResponse.class);
 			
 		CustomAssertions.assertServerError(409,
 				null,
@@ -81,7 +81,7 @@ public class TenantsTest extends BaseTestSetupAndTearDown {
 		String defaultAbbr=requestTenant.getAbbreviation();
 		requestTenant.setAbbreviation("Abrr has a space"+defaultAbbr);
 			
-		serverResp = TestHelper.getResponseObjForCreate(baseHelper, requestTenant, microservice, environment, apiRequestHeaders, tenantAPI, ServerResponse.class);
+		serverResp = TestHelper.getResponseObjForCreate(requestTenant, microservice, environment, apiRequestHeaders, tenantAPI, ServerResponse.class);
 		
 		CustomAssertions.assertServerError(400,
 				null,
@@ -102,7 +102,7 @@ public class TenantsTest extends BaseTestSetupAndTearDown {
 		requestTenant.setAbbreviation(null);
 		requestTenant.setName("ThisTenantShouldNotGetCreated"+defaultAbbr);
 								
-		serverResp = TestHelper.getResponseObjForCreate(baseHelper, requestTenant, microservice, environment, apiRequestHeaders, tenantAPI, ServerResponse.class);
+		serverResp = TestHelper.getResponseObjForCreate(requestTenant, microservice, environment, apiRequestHeaders, tenantAPI, ServerResponse.class);
 		
 		CustomAssertions.assertServerError(400,
 				null,
@@ -121,7 +121,7 @@ public class TenantsTest extends BaseTestSetupAndTearDown {
 		requestTenant.setAbbreviation("");
 		requestTenant.setName("ThisTenantShouldNotGetCreated"+defaultAbbr);
 									
-		serverResp = TestHelper.getResponseObjForCreate(baseHelper, requestTenant, microservice, environment, apiRequestHeaders, tenantAPI, ServerResponse.class);
+		serverResp = TestHelper.getResponseObjForCreate(requestTenant, microservice, environment, apiRequestHeaders, tenantAPI, ServerResponse.class);
 			
 		CustomAssertions.assertServerError(400,
 				null,
@@ -138,7 +138,7 @@ public class TenantsTest extends BaseTestSetupAndTearDown {
 			
 		requestTenant.setAbbreviation(TestHelper.FIFTYONE_CHARS);
 				
-		serverResp = TestHelper.getResponseObjForCreate(baseHelper, requestTenant, microservice, environment, apiRequestHeaders, tenantAPI, ServerResponse.class);
+		serverResp = TestHelper.getResponseObjForCreate(requestTenant, microservice, environment, apiRequestHeaders, tenantAPI, ServerResponse.class);
 		
 		CustomAssertions.assertServerError(400,
 				null,
@@ -157,7 +157,7 @@ public class TenantsTest extends BaseTestSetupAndTearDown {
 		// Setting tenant name to empty
 		requestTenant.setName("");
 								
-		serverResp = TestHelper.getResponseObjForCreate(baseHelper, requestTenant, microservice, environment, apiRequestHeaders, tenantAPI, ServerResponse.class);
+		serverResp = TestHelper.getResponseObjForCreate(requestTenant, microservice, environment, apiRequestHeaders, tenantAPI, ServerResponse.class);
 		
 		CustomAssertions.assertServerError(400,
 				null,
@@ -174,7 +174,7 @@ public class TenantsTest extends BaseTestSetupAndTearDown {
 		// Setting Tenant name to null
 		requestTenant.setName("");
 								
-		serverResp = TestHelper.getResponseObjForCreate(baseHelper, requestTenant, microservice, environment, apiRequestHeaders, tenantAPI, ServerResponse.class);
+		serverResp = TestHelper.getResponseObjForCreate(requestTenant, microservice, environment, apiRequestHeaders, tenantAPI, ServerResponse.class);
 		
 		CustomAssertions.assertServerError(400,
 				null,
@@ -192,7 +192,7 @@ public class TenantsTest extends BaseTestSetupAndTearDown {
 		// Setting tenant name to be longer than 255 chars
 		requestTenant.setName(TestHelper.TWOFIFTYSIX_CHARS);
 					
-		serverResp = TestHelper.getResponseObjForCreate(baseHelper, requestTenant, microservice, environment, apiRequestHeaders, tenantAPI, ServerResponse.class);
+		serverResp = TestHelper.getResponseObjForCreate(requestTenant, microservice, environment, apiRequestHeaders, tenantAPI, ServerResponse.class);
 		
 		CustomAssertions.assertServerError(400,
 				null,

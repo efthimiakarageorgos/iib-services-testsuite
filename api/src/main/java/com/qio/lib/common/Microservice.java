@@ -9,7 +9,7 @@ public enum Microservice {
 	INSIGHT("insight-management"),
 	DN("diagnostic-networks"),
 	ASSET("assets"),
-	// ASSET("assets-new-qa"),
+//	 ASSET("assets-new-qa"),
 	TENANT("tenant-management-qa");
 
 	// ASSET("assets"),

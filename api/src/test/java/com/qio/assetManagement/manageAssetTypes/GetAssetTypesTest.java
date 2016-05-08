@@ -23,7 +23,7 @@ public class GetAssetTypesTest extends BaseTestSetupAndTearDown {
 	
 	@BeforeClass
 	public static void initSetupBeforeAllTests(){
-		baseInitSetupBeforeAllTests(Microservice.ASSET.toString());
+		baseInitSetupBeforeAllTests("asset");
 		assetTypeAPI = new MAssetTypeAPIHelper();
 	}
 	

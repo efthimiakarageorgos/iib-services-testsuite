@@ -11,8 +11,7 @@ public class AssetTypeHelper {
 	AssetType assetType = null;
 
 	/*
-	 * This method is invoked from each of the following methods to make sure
-	 * every time a new assettype is created with a unique timestamp.
+	 * This method is invoked from each of the following methods to make sure every time a new assettype is created with a unique timestamp.
 	 */
 	private void initDefaultAssetType() {
 		java.util.Date date = new java.util.Date();
@@ -30,9 +29,14 @@ public class AssetTypeHelper {
 		return assetType;
 	}
 
+	@SuppressWarnings("serial")
 	public AssetType getAssetTypeWithOneAttribute(AttributeDataType attributeDataType) {
 		initDefaultAssetType();
-		assetType.setAttributes(getAssetTypeAttributeWithInputDataType(attributeDataType));
+		assetType.setAttributes(new ArrayList<AssetTypeAttribute>() {
+			{
+				add(getAssetTypeAttributeWithInputDataType(attributeDataType));
+			}
+		});
 		assetType.setParameters(null);
 		return assetType;
 	}
@@ -40,7 +44,7 @@ public class AssetTypeHelper {
 	public AssetType getAssetTypeWithAllAttributes() {
 		List<AssetTypeAttribute> assetTypeAttributeAll = new ArrayList<AssetTypeAttribute>();
 		for (AttributeDataType dataType : AttributeDataType.values()) {
-			assetTypeAttributeAll.addAll(getAssetTypeAttributeWithInputDataType(dataType));
+			assetTypeAttributeAll.add(getAssetTypeAttributeWithInputDataType(dataType));
 		}
 		initDefaultAssetType();
 		assetType.setAttributes(assetTypeAttributeAll);
@@ -48,13 +52,10 @@ public class AssetTypeHelper {
 		return assetType;
 	}
 
-	public List<AssetTypeAttribute> getAssetTypeAttributeWithInputDataType(AttributeDataType attributeDataType) {
+	public AssetTypeAttribute getAssetTypeAttributeWithInputDataType(AttributeDataType attributeDataType) {
 		String attributeDataTypePrefix = "ABBR" + attributeDataType.toString();
-		List<AssetTypeAttribute> assetTypeAttribute = new ArrayList<AssetTypeAttribute>();
-
-		assetTypeAttribute.add(new AssetTypeAttribute(attributeDataTypePrefix, attributeDataTypePrefix + " Name", attributeDataTypePrefix + " Desc",
-				"", attributeDataType.toString()));
-		return assetTypeAttribute;
+		return new AssetTypeAttribute(attributeDataTypePrefix, attributeDataTypePrefix + " Name", attributeDataTypePrefix + " Desc", "",
+				attributeDataType.toString());
 	}
 
 	public AssetType getAssetTypeWithDefaultAttribute() {
@@ -99,14 +100,6 @@ public class AssetTypeHelper {
 	public AssetTypeParameter getAssetTypeParameterWithInputDataType(ParameterDataType parameterDataType) {
 		String parameterDataTypePrefix = "ABBR" + parameterDataType.toString();
 		return new AssetTypeParameter(parameterDataTypePrefix, parameterDataTypePrefix + " Desc", "Unit", parameterDataType.toString());
-		// List<AssetTypeParameter> assetTypeParameter = new
-		// ArrayList<AssetTypeParameter>();
-
-		// assetTypeParameter.add(new
-		// AssetTypeParameter(parameterDataTypePrefix, parameterDataTypePrefix +
-		// " Desc", "Unit", parameterDataType
-		// .toString()));
-		// return assetTypeParameter;
 	}
 
 	public AssetType getAssetTypeWithDefaultParameter() {

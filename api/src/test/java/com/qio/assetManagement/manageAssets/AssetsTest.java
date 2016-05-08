@@ -43,7 +43,7 @@ public class AssetsTest extends BaseTestSetupAndTearDown {
 	
 	@BeforeClass
 	public static void initSetupBeforeAllTests() throws JsonGenerationException, JsonMappingException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException, IOException{
-		baseInitSetupBeforeAllTests(Microservice.ASSET.toString());
+		baseInitSetupBeforeAllTests("asset");
 		assetAPI = new MAssetAPIHelper();
 		
 		assetTypeTestHelper = new AssetTypeTestHelper();
@@ -210,8 +210,8 @@ public class AssetsTest extends BaseTestSetupAndTearDown {
 		String abbr = requestAsset.getAbbreviation();
 		requestAsset.setAbbreviation(abbr+"_-.");
 		
-		responseAsset = TestHelper.getResponseObjForCreate(baseHelper, requestAsset, microservice, environment,
-				apiRequestHeaders, assetAPI, AssetResponse.class);
+		responseAsset = TestHelper.getResponseObjForCreate(requestAsset, microservice, environment, apiRequestHeaders,
+				assetAPI, AssetResponse.class);
 		
 		// RV1: comparing CreatedObject with CreateRequest, along with response codes.
 		CustomAssertions.assertRequestAndResponseObj(201, TestHelper.responseCodeForInputRequest, requestAsset, responseAsset);
@@ -219,8 +219,8 @@ public class AssetsTest extends BaseTestSetupAndTearDown {
 		String assetId = TestHelper.getElementId(responseAsset.get_links().getSelfLink().getHref());
 		//idsForAllCreatedAssets.add(assetId);
 
-		AssetResponse committedAsset = TestHelper.getResponseObjForRetrieve(baseHelper, microservice, environment,
-				assetId, apiRequestHeaders, assetAPI, AssetResponse.class);
+		AssetResponse committedAsset = TestHelper.getResponseObjForRetrieve(microservice, environment, assetId,
+				apiRequestHeaders, assetAPI, AssetResponse.class);
 		// RV2: comparing CommittedObject with CreatedObject, without the response codes.
 		CustomAssertions.assertRequestAndResponseObj(responseAsset, committedAsset);
 				

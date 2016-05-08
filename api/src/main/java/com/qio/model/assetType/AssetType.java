@@ -2,6 +2,7 @@ package com.qio.model.assetType;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -54,8 +55,8 @@ public class AssetType {
 		this.attributes = attributes;
 		this.parameters = parameters;
 	}
-	
-	public AssetType(AssetType assetType){
+
+	public AssetType(AssetType assetType) {
 		this(assetType.getAbbreviation(), assetType.getName(), assetType.getDescription(), assetType.getAttributes(), assetType.getParameters());
 	}
 
@@ -133,12 +134,16 @@ public class AssetType {
 			for (Field field : fields) {
 				Object requestVal = field.get(this);
 				Object responseVal = field.get(responseObj);
+				if (requestVal instanceof List) {
+					Collections.sort((List) requestVal);
+					Collections.sort((List) responseVal);
+				}
+
 				if (requestVal != null)
 					if (!requestVal.equals(responseVal)) {
 						equalityCheckFlag = false;
-						logger.error("Class Name: " + this.getClass().getName() + " --> Match failed on property: "
-								+ field.getName() + ", Request Value: " + requestVal + ", Response Value: "
-								+ responseVal);
+						logger.error("Class Name: " + this.getClass().getName() + " --> Match failed on property: " + field.getName()
+								+ ", Request Value: " + requestVal + ", Response Value: " + responseVal);
 						break;
 					}
 			}
