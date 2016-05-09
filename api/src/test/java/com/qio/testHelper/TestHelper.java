@@ -22,8 +22,8 @@ public class TestHelper {
 
 	final static Logger logger = Logger.getRootLogger();
 
-	public static <T> T getResponseObjForCreate(BaseHelper baseHelper, Object requestObject, String microservice, String environment,
-			APIHeaders apiRequestHeaders, Object apiHelperObj, Class<T> classType) throws JsonGenerationException, JsonMappingException, IOException,
+	public static <T> T getResponseObjForCreate(Object requestObject, String microservice, String environment, APIHeaders apiRequestHeaders,
+			Object apiHelperObj, Class<T> classType) throws JsonGenerationException, JsonMappingException, IOException,
 					IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
 
 		Class[] methodArgs = new Class[4];
@@ -31,19 +31,19 @@ public class TestHelper {
 		methodArgs[3] = APIHeaders.class;
 		Method createMethod = apiHelperObj.getClass().getMethod("create", methodArgs);
 
-		String payload = baseHelper.toJSONString(requestObject);
+		String payload = BaseHelper.toJSONString(requestObject);
 		ConnectionResponse conRespPost = (ConnectionResponse) createMethod.invoke(apiHelperObj, microservice, environment, payload,
 				apiRequestHeaders);
 		responseCodeForInputRequest = conRespPost.getRespCode();
-		return (T) baseHelper.toClassObject(conRespPost.getRespBody(), classType);
+		return (T) BaseHelper.toClassObject(conRespPost.getRespBody(), classType);
 	}
 
 	/**
 	 * elementId - refers the unique GUID identifier for AssetType,
 	 * AssetTypeAttribute etc.
 	 */
-	public static <T> T getResponseObjForRetrieve(BaseHelper baseHelper, String microservice, String environment, String elementId,
-			APIHeaders apiRequestHeaders, Object apiHelperObj, Class<T> classType) throws JsonGenerationException, JsonMappingException, IOException,
+	public static <T> T getResponseObjForRetrieve(String microservice, String environment, String elementId, APIHeaders apiRequestHeaders,
+			Object apiHelperObj, Class<T> classType) throws JsonGenerationException, JsonMappingException, IOException,
 					IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
 
 		Class[] methodArgs = new Class[4];
@@ -54,11 +54,11 @@ public class TestHelper {
 		ConnectionResponse conRespGet = (ConnectionResponse) retrieveMethod.invoke(apiHelperObj, microservice, environment, elementId,
 				apiRequestHeaders);
 		responseCodeForInputRequest = conRespGet.getRespCode();
-		return (T) baseHelper.toClassObject(conRespGet.getRespBody(), classType);
+		return (T) BaseHelper.toClassObject(conRespGet.getRespBody(), classType);
 	}
 
-	public static <T> List<T> getListResponseObjForRetrieve(BaseHelper baseHelper, String microservice, String environment, String elementId,
-			APIHeaders apiRequestHeaders, Object apiHelperObj, Class<T> classType) throws JsonGenerationException, JsonMappingException, IOException,
+	public static <T> List<T> getListResponseObjForRetrieve(String microservice, String environment, String elementId, APIHeaders apiRequestHeaders,
+			Object apiHelperObj, Class<T> classType) throws JsonGenerationException, JsonMappingException, IOException,
 					IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
 
 		Class[] methodArgs = new Class[4];
@@ -69,11 +69,11 @@ public class TestHelper {
 		ConnectionResponse conRespGet = (ConnectionResponse) retrieveMethod.invoke(apiHelperObj, microservice, environment, elementId,
 				apiRequestHeaders);
 		responseCodeForInputRequest = conRespGet.getRespCode();
-		return (List<T>) baseHelper.toClassObjectList(conRespGet.getRespBody(), classType);
+		return (List<T>) BaseHelper.toClassObjectList(conRespGet.getRespBody(), classType);
 	}
 
-	public static <T> T getResponseObjForRetrieve(BaseHelper baseHelper, String microservice, String environment, String elementId,
-			String subElementId, APIHeaders apiRequestHeaders, Object apiHelperObj, Class<T> classType) throws JsonGenerationException,
+	public static <T> T getResponseObjForRetrieve(String microservice, String environment, String elementId, String subElementId,
+			APIHeaders apiRequestHeaders, Object apiHelperObj, Class<T> classType) throws JsonGenerationException,
 					JsonMappingException, IOException, IllegalAccessException, IllegalArgumentException, InvocationTargetException,
 					NoSuchMethodException, SecurityException {
 
@@ -85,11 +85,11 @@ public class TestHelper {
 		ConnectionResponse conRespGet = (ConnectionResponse) retrieveMethod.invoke(apiHelperObj, microservice, environment, elementId, subElementId,
 				apiRequestHeaders);
 		responseCodeForInputRequest = conRespGet.getRespCode();
-		return (T) baseHelper.toClassObject(conRespGet.getRespBody(), classType);
+		return (T) BaseHelper.toClassObject(conRespGet.getRespBody(), classType);
 	}
 
-	public static <T> T getResponseObjForRetrieveAll(BaseHelper baseHelper, String microservice, String environment, APIHeaders apiRequestHeaders,
-			Object apiHelperObj, Class<T> classType) throws JsonGenerationException, JsonMappingException, IOException, IllegalAccessException,
+	public static <T> T getResponseObjForRetrieveAll(String microservice, String environment, APIHeaders apiRequestHeaders, Object apiHelperObj,
+			Class<T> classType) throws JsonGenerationException, JsonMappingException, IOException, IllegalAccessException,
 					IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
 
 		Class[] methodArgs = new Class[3];
@@ -99,7 +99,7 @@ public class TestHelper {
 
 		ConnectionResponse conRespGet = (ConnectionResponse) retrieveAllMethod.invoke(apiHelperObj, microservice, environment, apiRequestHeaders);
 		responseCodeForInputRequest = conRespGet.getRespCode();
-		return (T) baseHelper.toClassObject(conRespGet.getRespBody(), classType);
+		return (T) BaseHelper.toClassObject(conRespGet.getRespBody(), classType);
 	}
 
 	public static <T> void deleteRequestObj(String microservice, String environment, String elementId, APIHeaders apiRequestHeaders,
@@ -116,8 +116,8 @@ public class TestHelper {
 		// responseCodeForInputRequest = conRespDelete.getRespCode();
 	}
 
-	public static <T> T getResponseObjForUpdate(BaseHelper baseHelper, Object requestObject, String microservice, String environment,
-			String elementId, APIHeaders apiRequestHeaders, Object apiHelperObj, Class<T> classType) throws JsonGenerationException,
+	public static <T> T getResponseObjForUpdate(Object requestObject, String microservice, String environment, String elementId,
+			APIHeaders apiRequestHeaders, Object apiHelperObj, Class<T> classType) throws JsonGenerationException,
 					JsonMappingException, IOException, IllegalAccessException, IllegalArgumentException, InvocationTargetException,
 					NoSuchMethodException, SecurityException {
 
@@ -126,11 +126,11 @@ public class TestHelper {
 		methodArgs[4] = APIHeaders.class;
 		Method updateMethod = apiHelperObj.getClass().getMethod("update", methodArgs);
 
-		String payload = baseHelper.toJSONString(requestObject);
+		String payload = BaseHelper.toJSONString(requestObject);
 		ConnectionResponse conRespPut = (ConnectionResponse) updateMethod.invoke(apiHelperObj, microservice, environment, payload, elementId,
 				apiRequestHeaders);
 		responseCodeForInputRequest = conRespPut.getRespCode();
-		return (T) baseHelper.toClassObject(conRespPut.getRespBody(), classType);
+		return (T) BaseHelper.toClassObject(conRespPut.getRespBody(), classType);
 	}
 
 	/**

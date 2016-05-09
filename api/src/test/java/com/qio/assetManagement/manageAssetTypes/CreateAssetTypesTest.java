@@ -32,7 +32,7 @@ public class CreateAssetTypesTest extends BaseTestSetupAndTearDown {
 	
 	@BeforeClass
 	public static void initSetupBeforeAllTests(){
-		baseInitSetupBeforeAllTests(Microservice.ASSET.toString());
+		baseInitSetupBeforeAllTests("asset");
 		assetTypeAPI = new MAssetTypeAPIHelper();
 	}
 	
@@ -63,7 +63,7 @@ public class CreateAssetTypesTest extends BaseTestSetupAndTearDown {
 		String abbr=requestAssetType.getAbbreviation();
 		requestAssetType.setAbbreviation("Abrr has a space"+abbr);
 			
-		serverResp = TestHelper.getResponseObjForCreate(baseHelper, requestAssetType, microservice, environment, apiRequestHeaders, assetTypeAPI, ServerResponse.class);
+		serverResp = TestHelper.getResponseObjForCreate(requestAssetType, microservice, environment, apiRequestHeaders, assetTypeAPI, ServerResponse.class);
 		
 		CustomAssertions.assertServerError(500,
 				"com.qiotec.application.exceptions.InvalidInputException",
@@ -76,7 +76,7 @@ public class CreateAssetTypesTest extends BaseTestSetupAndTearDown {
 	public void shouldNotCreateAssetTypeWhenAbbreviationIsLongerThan50Chars() throws JsonGenerationException, JsonMappingException, IOException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException{
 		requestAssetType.setAbbreviation(TestHelper.FIFTYONE_CHARS);
 						
-		serverResp = TestHelper.getResponseObjForCreate(baseHelper, requestAssetType, microservice, environment, apiRequestHeaders, assetTypeAPI, ServerResponse.class);
+		serverResp = TestHelper.getResponseObjForCreate(requestAssetType, microservice, environment, apiRequestHeaders, assetTypeAPI, ServerResponse.class);
 		
 		CustomAssertions.assertServerError(500,
 				"com.qiotec.application.exceptions.InvalidInputException",
@@ -89,7 +89,7 @@ public class CreateAssetTypesTest extends BaseTestSetupAndTearDown {
 	public void shouldNotCreateAssetTypeWhenAbbreviationIsBlank() throws JsonGenerationException, JsonMappingException, IOException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException{
 		requestAssetType.setAbbreviation("");
 							
-		serverResp = TestHelper.getResponseObjForCreate(baseHelper, requestAssetType, microservice, environment, apiRequestHeaders, assetTypeAPI, ServerResponse.class);
+		serverResp = TestHelper.getResponseObjForCreate(requestAssetType, microservice, environment, apiRequestHeaders, assetTypeAPI, ServerResponse.class);
 		
 		CustomAssertions.assertServerError(500,
 				"com.qiotec.application.exceptions.InvalidInputException",
@@ -102,7 +102,7 @@ public class CreateAssetTypesTest extends BaseTestSetupAndTearDown {
 	public void shouldNotCreateAssetTypeWhenAbbreviationIsNull() throws JsonGenerationException, JsonMappingException, IOException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException{
 		requestAssetType.setAbbreviation(null);
 								
-		serverResp = TestHelper.getResponseObjForCreate(baseHelper, requestAssetType, microservice, environment, apiRequestHeaders, assetTypeAPI, ServerResponse.class);
+		serverResp = TestHelper.getResponseObjForCreate(requestAssetType, microservice, environment, apiRequestHeaders, assetTypeAPI, ServerResponse.class);
 		
 		CustomAssertions.assertServerError(500,
 				"java.lang.NullPointerException",
@@ -119,7 +119,7 @@ public class CreateAssetTypesTest extends BaseTestSetupAndTearDown {
 		for (int i=0; i < count; i++) {
 			requestAssetType.setAbbreviation(TestHelper.SPECIAL_CHARS.charAt(i)+defaultAbbr);
 						
-			serverResp = TestHelper.getResponseObjForCreate(baseHelper, requestAssetType, microservice, environment, apiRequestHeaders, assetTypeAPI, ServerResponse.class);
+			serverResp = TestHelper.getResponseObjForCreate(requestAssetType, microservice, environment, apiRequestHeaders, assetTypeAPI, ServerResponse.class);
 			
 			CustomAssertions.assertServerError(500,
 				"com.qiotec.application.exceptions.InvalidInputException",
@@ -132,7 +132,7 @@ public class CreateAssetTypesTest extends BaseTestSetupAndTearDown {
 	public void shouldNotCreateAssetTypeWhenNameIsBlank() throws JsonGenerationException, JsonMappingException, IOException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException{
 		requestAssetType.setName("");
 								
-		serverResp = TestHelper.getResponseObjForCreate(baseHelper, requestAssetType, microservice, environment, apiRequestHeaders, assetTypeAPI, ServerResponse.class);
+		serverResp = TestHelper.getResponseObjForCreate(requestAssetType, microservice, environment, apiRequestHeaders, assetTypeAPI, ServerResponse.class);
 		
 		CustomAssertions.assertServerError(500,
 				"com.qiotec.application.exceptions.InvalidInputException",
@@ -145,7 +145,7 @@ public class CreateAssetTypesTest extends BaseTestSetupAndTearDown {
 	public void shouldNotCreateAssetTypeWhenNameIsNull() throws JsonGenerationException, JsonMappingException, IOException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException{
 		requestAssetType.setName(null);
 						
-		serverResp = TestHelper.getResponseObjForCreate(baseHelper, requestAssetType, microservice, environment, apiRequestHeaders, assetTypeAPI, ServerResponse.class);
+		serverResp = TestHelper.getResponseObjForCreate(requestAssetType, microservice, environment, apiRequestHeaders, assetTypeAPI, ServerResponse.class);
 		
 		CustomAssertions.assertServerError(500,
 				"java.lang.NullPointerException",
@@ -159,7 +159,7 @@ public class CreateAssetTypesTest extends BaseTestSetupAndTearDown {
 	public void shouldNotCreateAssetTypeWhenNameIsLongerThan50Chars() throws JsonGenerationException, JsonMappingException, IOException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException{
 		requestAssetType.setName(TestHelper.FIFTYONE_CHARS);
 				
-		serverResp = TestHelper.getResponseObjForCreate(baseHelper, requestAssetType, microservice, environment, apiRequestHeaders, assetTypeAPI, ServerResponse.class);
+		serverResp = TestHelper.getResponseObjForCreate(requestAssetType, microservice, environment, apiRequestHeaders, assetTypeAPI, ServerResponse.class);
 		
 		CustomAssertions.assertServerError(500,
 				"com.qiotec.application.exceptions.InvalidInputException",
@@ -173,7 +173,7 @@ public class CreateAssetTypesTest extends BaseTestSetupAndTearDown {
 	public void shouldNotCreateAssetTypeWhenDescriptionIsLongerThan255Chars() throws JsonGenerationException, JsonMappingException, IOException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException{
 		requestAssetType.setDescription(TestHelper.TWOFIFTYSIX_CHARS);
 					
-		serverResp = TestHelper.getResponseObjForCreate(baseHelper, requestAssetType, microservice, environment, apiRequestHeaders, assetTypeAPI, ServerResponse.class);
+		serverResp = TestHelper.getResponseObjForCreate(requestAssetType, microservice, environment, apiRequestHeaders, assetTypeAPI, ServerResponse.class);
 		
 		CustomAssertions.assertServerError(500,
 				"com.qiotec.application.exceptions.InvalidInputException",

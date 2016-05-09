@@ -6,14 +6,22 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 
 import org.apache.log4j.Logger;
+import org.codehaus.jackson.JsonGenerationException;
+import org.codehaus.jackson.map.JsonMappingException;
 
 import com.qio.lib.apiHelpers.APIHeaders;
+import com.qio.lib.common.BaseHelper;
+import com.typesafe.config.Config;
+import com.typesafe.config.ConfigFactory;
 
 public class ConnectionManager {
 
 	private static ConnectionManager conManager = null;
+	private OauthValidationResponse oauthValidationResponse = null;
 	final static Logger logger = Logger.getLogger(ConnectionManager.class);
 
 	// ensures that only one instance of this class exists at all time during
@@ -26,6 +34,7 @@ public class ConnectionManager {
 	}
 
 	public ConnectionResponse get(String URI, APIHeaders apiHeaders) {
+		initOauthAccessToken(apiHeaders);
 		ConnectionResponse conResp = new ConnectionResponse();
 		URL url;
 		try {
@@ -36,8 +45,7 @@ public class ConnectionManager {
 			// add request header
 			con.setRequestProperty("Accept", apiHeaders.getAcceptType());
 			con.setRequestProperty("Content-Type", apiHeaders.getContentType());
-			con.setRequestProperty("X-Auth-Username", apiHeaders.getUserName());
-			con.setRequestProperty("X-Auth-Password", apiHeaders.getPassword());
+			con.setRequestProperty("Authorization", oauthValidationResponse.getToken_type() + " " + oauthValidationResponse.getAccess_token());
 
 			logger.debug("Sending 'GET' request to URL : " + URI);
 
@@ -71,6 +79,7 @@ public class ConnectionManager {
 	}
 
 	public ConnectionResponse post(String URI, String payload, APIHeaders apiHeaders) {
+		initOauthAccessToken(apiHeaders);
 		ConnectionResponse conResp = new ConnectionResponse();
 		URL url;
 		try {
@@ -81,8 +90,7 @@ public class ConnectionManager {
 			// add request header
 			con.setRequestProperty("Accept", apiHeaders.getAcceptType());
 			con.setRequestProperty("Content-Type", apiHeaders.getContentType());
-			con.setRequestProperty("X-Auth-Username", apiHeaders.getUserName());
-			con.setRequestProperty("X-Auth-Password", apiHeaders.getPassword());
+			con.setRequestProperty("Authorization", oauthValidationResponse.getToken_type() + " " + oauthValidationResponse.getAccess_token());
 
 			// Send post request
 			con.setDoOutput(true);
@@ -124,6 +132,7 @@ public class ConnectionManager {
 	}
 
 	public ConnectionResponse put(String URI, String payload, APIHeaders apiHeaders) {
+		initOauthAccessToken(apiHeaders);
 		ConnectionResponse conResp = new ConnectionResponse();
 		URL url;
 		try {
@@ -134,10 +143,9 @@ public class ConnectionManager {
 			// add request header
 			con.setRequestProperty("Accept", apiHeaders.getAcceptType());
 			con.setRequestProperty("Content-Type", apiHeaders.getContentType());
-			con.setRequestProperty("X-Auth-Username", apiHeaders.getUserName());
-			con.setRequestProperty("X-Auth-Password", apiHeaders.getPassword());
+			con.setRequestProperty("Authorization", oauthValidationResponse.getToken_type() + " " + oauthValidationResponse.getAccess_token());
 
-			// Send post request
+			// Send put request
 			con.setDoOutput(true);
 			DataOutputStream wr = new DataOutputStream(con.getOutputStream());
 			wr.writeBytes(payload);
@@ -177,6 +185,7 @@ public class ConnectionManager {
 	}
 
 	public void delete(String URI, APIHeaders apiHeaders) {
+		initOauthAccessToken(apiHeaders);
 		ConnectionResponse conResp = new ConnectionResponse();
 		URL url;
 		try {
@@ -187,8 +196,7 @@ public class ConnectionManager {
 			// add request header
 			con.setRequestProperty("Accept", apiHeaders.getAcceptType());
 			con.setRequestProperty("Content-Type", apiHeaders.getContentType());
-			con.setRequestProperty("X-Auth-Username", apiHeaders.getUserName());
-			con.setRequestProperty("X-Auth-Password", apiHeaders.getPassword());
+			con.setRequestProperty("Authorization", oauthValidationResponse.getToken_type() + " " + oauthValidationResponse.getAccess_token());
 
 			// Send delete request
 			con.setDoOutput(true);
@@ -205,4 +213,101 @@ public class ConnectionManager {
 		}
 	}
 
+	private void initOauthAccessToken(APIHeaders apiHeaders) {
+		/*
+		 * Fetching new access token under the following scenarios: 1. if this is the first time we are going to fetch the access token. 2. if a new
+		 * object for APIHeaders has been instantiated, or its user/password has been changed(upon which the flag fetchNewAccessToken will be set to
+		 * True), or we explicitly set the flag fetchNewAccessToken to true. 3. if the access token has expired
+		 * 
+		 * TODO: Include the condition for expiry of the access token, although at present its set to 130min, but just in case its reduced and our
+		 * tests take longer to run then there can be a problem.
+		 */
+		try {
+			if (oauthValidationResponse == null || apiHeaders.getFetchNewAccessToken()) {
+				Config applicationUserConfig = ConfigFactory.load("application_user_creds.conf");
+				String basicAuthStr = "Basic " + Base64.getEncoder().encodeToString((applicationUserConfig.getString("application_user.username")
+						+ ":" + applicationUserConfig.getString("application_user.password")).getBytes());
+
+				ConnectionResponse conResp = getOauthValidationResponse(basicAuthStr, apiHeaders);
+
+				oauthValidationResponse = BaseHelper.toClassObject(conResp.getRespBody(), OauthValidationResponse.class);
+				apiHeaders.setFetchNewAccessToken(false);
+			}
+		} catch (JsonGenerationException e) {
+			// TODO Auto-generated catch block
+			logger.error(e.getMessage());
+		} catch (JsonMappingException e) {
+			// TODO Auto-generated catch block
+			logger.error(e.getMessage());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			logger.error(e.getMessage());
+		}
+	}
+
+	private ConnectionResponse getOauthValidationResponse(String basicAuthStr, APIHeaders apiHeaders) {
+		ConnectionResponse conResp = new ConnectionResponse();
+		URL url;
+		try {
+			Config oauthURIConfig = ConfigFactory.load("oauth_uri.conf");
+			// For now we are hardcoding to fetch the oauth access token against
+			// the DEV env only. However, in the future this needs to be
+			// parametrized.
+			String oauthURI = oauthURIConfig.getString("oauth_uri." + apiHeaders.getEnvRuntime());
+			url = new URL(oauthURI);
+			HttpURLConnection con = (HttpURLConnection) url.openConnection();
+			con.setRequestMethod("POST");
+
+			StringBuilder postParams = new StringBuilder();
+			postParams.append("username=" + apiHeaders.getUserName());
+			postParams.append("&password=" + apiHeaders.getPassword());
+			postParams.append("&grant_type=" + apiHeaders.getGrant_type());
+			postParams.append("&scope=" + apiHeaders.getScope());
+
+			byte[] postData = postParams.toString().getBytes(StandardCharsets.UTF_8);
+
+			// add request header
+			con.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+			con.setRequestProperty("charset", "utf-8");
+			con.setRequestProperty("Content-Length", Integer.toString(postData.length));
+			con.setRequestProperty("Authorization", basicAuthStr);
+
+			// Send post request
+			con.setDoOutput(true);
+			DataOutputStream wr = new DataOutputStream(con.getOutputStream());
+			// wr.writeBytes(postParams);
+			wr.write(postData);
+			wr.flush();
+			wr.close();
+
+			logger.debug("Sending 'POST' request to URL : " + oauthURI);
+
+			int responseCode = con.getResponseCode();
+			conResp.setRespCode(responseCode);
+
+			BufferedReader in;
+			if (responseCode != 200)
+				in = new BufferedReader(new InputStreamReader(con.getErrorStream()));
+			else
+				in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+
+			String inputLine;
+			StringBuffer response = new StringBuffer();
+
+			while ((inputLine = in.readLine()) != null) {
+				response.append(inputLine);
+			}
+			in.close();
+
+			conResp.setRespBody(response.toString());
+
+			// print result
+			logger.debug("Response Code and Body: " + conResp.toString());
+
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			logger.error(e.getMessage());
+		}
+		return conResp;
+	}
 }

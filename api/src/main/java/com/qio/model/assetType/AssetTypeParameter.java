@@ -7,7 +7,7 @@ import org.codehaus.jackson.annotate.JsonProperty;
 
 import com.qio.model.common.Links;
 
-public class AssetTypeParameter {
+public class AssetTypeParameter implements Comparable {
 	private String id;
 	private String abbreviation;
 	private String description;
@@ -112,5 +112,15 @@ public class AssetTypeParameter {
 			logger.error(e.getMessage());
 		}
 		return equalityCheckFlag;
+	}
+
+	@Override
+	public int compareTo(Object o) {
+		if (!(o instanceof AssetTypeParameter))
+			throw new ClassCastException();
+
+		AssetTypeParameter assetTypeParameter = (AssetTypeParameter) o;
+
+		return this.abbreviation.compareTo(assetTypeParameter.abbreviation);
 	}
 }

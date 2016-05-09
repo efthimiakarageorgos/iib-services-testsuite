@@ -49,7 +49,7 @@ public class TenantTestHelper {
 		responseTenant = new Tenant();
 		requestTenant = tenantHelper.getTenant();
 			
-		responseTenant = TestHelper.getResponseObjForCreate(baseHelper, requestTenant, microservice, environment, apiRequestHeaders, tenantAPI, Tenant.class);
+		responseTenant = TestHelper.getResponseObjForCreate(requestTenant, microservice, environment, apiRequestHeaders, tenantAPI, Tenant.class);
 		return responseTenant;
 	}
 }
