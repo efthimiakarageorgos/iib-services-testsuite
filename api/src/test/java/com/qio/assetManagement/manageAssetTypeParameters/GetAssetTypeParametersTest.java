@@ -54,8 +54,7 @@ public class GetAssetTypeParametersTest extends BaseTestSetupAndTearDown {
 	}
 
 	// The following test cases go here:
-	// issuetype = Test AND issue in (linkedIssues(RREHM-1192)) AND issue in
-	// (linkedIssues(RREHM-952), linkedIssues(RREHM-953))
+	// issuetype = Test AND issue in (linkedIssues(RREHM-1192)) AND issue in (linkedIssues(RREHM-952), linkedIssues(RREHM-953))
 
 	/*
 	 * NEGATIVE TESTS START

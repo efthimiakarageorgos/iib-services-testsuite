@@ -9,11 +9,8 @@ public enum Microservice {
 	INSIGHT("insight-management"),
 	DN("diagnostic-networks"),
 	ASSET("assets"),
-//	 ASSET("assets-new-qa"),
-	TENANT("tenant-management-qa");
-
-	// ASSET("assets"),
-	// TENANT("tenant-management");
+	TENANT("tenants");
+	
 
 	/*
 	 * The following section of code does not require any change, if more
