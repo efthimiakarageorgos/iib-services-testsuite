@@ -3,6 +3,7 @@ package com.qio.tenantManagement.manageTenants;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 
+import org.apache.log4j.Logger;
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.junit.Before;
@@ -20,7 +21,7 @@ import com.qio.model.tenant.helper.TenantHelper;
 import com.qio.testHelper.TestHelper;
 
 
-public class TenantsTest extends BaseTestSetupAndTearDown {
+public class CreateTenantsTest extends BaseTestSetupAndTearDown {
 
 	private static MTenantAPIHelper tenantAPI;
 	private TenantHelper tenantHelper;
@@ -28,6 +29,7 @@ public class TenantsTest extends BaseTestSetupAndTearDown {
 	private Tenant responseTenant;
 	private Tenant requestTenant2;
 	private ServerResponse serverResp;
+	final static Logger logger = Logger.getRootLogger();
 
 	
 	@BeforeClass
@@ -45,6 +47,9 @@ public class TenantsTest extends BaseTestSetupAndTearDown {
 		serverResp = new ServerResponse();
 	}
 	
+	// The following test cases go here:
+	// issuetype=Test and issue in (linkedIssues("RREHM-1191")) and issue in  linkedIssues("RREHM-37")
+	
 	/*
 	 * NEGATIVE TESTS START
 	 */
@@ -61,7 +66,7 @@ public class TenantsTest extends BaseTestSetupAndTearDown {
 									
 		// Setting Tenant abbreviation to be the same as the name of tenant2
 		requestTenant.setAbbreviation(tenantAbbr2);
-									
+		logger.info(microservice);	
 		serverResp = TestHelper.getResponseObjForCreate(requestTenant, microservice, environment, apiRequestHeaders, tenantAPI, ServerResponse.class);
 			
 		CustomAssertions.assertServerError(409,
@@ -204,8 +209,14 @@ public class TenantsTest extends BaseTestSetupAndTearDown {
 	 * NEGATIVE TESTS END
 	 */
 	
+	
 	/*
 	 * POSITIVE TESTS START
 	 */
+	// RREHM-336
+	// RREHM-982
 	
+	/*
+	 * POSITIVE TESTS END
+	 */
 }

@@ -49,7 +49,7 @@ public class CreateAssetTypesTest extends BaseTestSetupAndTearDown {
 	
 	
 	// The following test cases go here:
-		// issuetype=Test and issue in (linkedIssues("RREHM-1189")) and issue in  linkedIssues("RREHM-41") 
+	// issuetype=Test and issue in (linkedIssues("RREHM-1189")) and issue in  linkedIssues("RREHM-41") 
 		
 	/*
 	 * NEGATIVE TESTS START
