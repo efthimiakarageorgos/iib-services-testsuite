@@ -107,6 +107,7 @@ public class CreateAssetTypeAttributesTest extends BaseTestSetupAndTearDown {
 	// RREHM-842 () -- This needs to be looked into.
 
 	// RREHM-847 () -- Waiting for Effie's reply on this one.
+	
 	// RREHM-849 ()
 	@Test
 	public void shouldNotBeAllowedToAddNewAttributeWithSpecialCharsInItsAbbr() throws JsonGenerationException, JsonMappingException, IOException,

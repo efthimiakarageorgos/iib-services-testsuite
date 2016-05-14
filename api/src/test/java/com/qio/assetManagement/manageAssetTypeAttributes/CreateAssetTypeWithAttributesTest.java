@@ -235,8 +235,6 @@ public class CreateAssetTypeWithAttributesTest extends BaseTestSetupAndTearDown 
 		CustomAssertions.assertRequestAndResponseObj(responseAssetType, committedAssetType);
 	}
 
-	// RREHM-457 () -- This test case needs to be updated, as we datatype is no longer a list and instead is only a single string value now.
-
 	// RREHM-442 ()
 	@Test
 	public void shouldBeAllowedToCreateAnAssetTypeWithUniqueAbbrWithAttributesOfAllDatatypes() throws JsonGenerationException, JsonMappingException,
