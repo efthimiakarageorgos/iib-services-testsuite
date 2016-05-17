@@ -36,8 +36,8 @@ public class CreateTenantsTest extends BaseTestSetupAndTearDown {
 		baseInitSetupBeforeAllTests("tenant");
 		username = userConfig.getString("user.admin.username");
 		password = userConfig.getString("user.admin.password");
-		apiRequestHeaders.setUserName(username);
-		apiRequestHeaders.setPassword(password);
+		apiRequestHelper.setUserName(username);
+		apiRequestHelper.setPassword(password);
 		tenantAPI = new MTenantAPIHelper();
 	}
 
@@ -62,8 +62,7 @@ public class CreateTenantsTest extends BaseTestSetupAndTearDown {
 	public void shouldNotCreateTenantWhenAbbreviationIsNotUnique() throws JsonGenerationException, JsonMappingException, IOException,
 			IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
 		requestTenant2 = tenantHelper.getTenant();
-		serverResp = TestHelper.getResponseObjForCreate(requestTenant2, microservice, environment, apiRequestHeaders, tenantAPI,
-				ServerResponse.class);
+		serverResp = TestHelper.getResponseObjForCreate(requestTenant2, microservice, environment, apiRequestHelper, tenantAPI, ServerResponse.class);
 
 		requestTenant = tenantHelper.getTenant();
 
@@ -72,7 +71,7 @@ public class CreateTenantsTest extends BaseTestSetupAndTearDown {
 		// Setting Tenant abbreviation to be the same as the name of tenant2
 		requestTenant.setAbbreviation(tenantAbbr2);
 		logger.info(microservice);
-		serverResp = TestHelper.getResponseObjForCreate(requestTenant, microservice, environment, apiRequestHeaders, tenantAPI, ServerResponse.class);
+		serverResp = TestHelper.getResponseObjForCreate(requestTenant, microservice, environment, apiRequestHelper, tenantAPI, ServerResponse.class);
 
 		CustomAssertions.assertServerError(409, null, "Creating tenant failed, as another tenant has same abbreviation.", serverResp);
 		// GetTenant should not return two tenants with the same abbreviation
@@ -89,7 +88,7 @@ public class CreateTenantsTest extends BaseTestSetupAndTearDown {
 		String defaultAbbr = requestTenant.getAbbreviation();
 		requestTenant.setAbbreviation("Abrr has a space" + defaultAbbr);
 
-		serverResp = TestHelper.getResponseObjForCreate(requestTenant, microservice, environment, apiRequestHeaders, tenantAPI, ServerResponse.class);
+		serverResp = TestHelper.getResponseObjForCreate(requestTenant, microservice, environment, apiRequestHelper, tenantAPI, ServerResponse.class);
 
 		CustomAssertions.assertServerError(400, null, "Abbreviation should not have Space or Tab.", serverResp);
 		// GetTenant should not return a tenant with Abbreviation as specified above
@@ -107,7 +106,7 @@ public class CreateTenantsTest extends BaseTestSetupAndTearDown {
 		requestTenant.setAbbreviation(null);
 		requestTenant.setName("ThisTenantShouldNotGetCreated" + defaultAbbr);
 
-		serverResp = TestHelper.getResponseObjForCreate(requestTenant, microservice, environment, apiRequestHeaders, tenantAPI, ServerResponse.class);
+		serverResp = TestHelper.getResponseObjForCreate(requestTenant, microservice, environment, apiRequestHelper, tenantAPI, ServerResponse.class);
 
 		CustomAssertions.assertServerError(400, null, "Abbreviation is required, should be less than 50 characters.", serverResp);
 		// GetTenant should not return a tenant with Name as specified above
@@ -124,7 +123,7 @@ public class CreateTenantsTest extends BaseTestSetupAndTearDown {
 		requestTenant.setAbbreviation("");
 		requestTenant.setName("ThisTenantShouldNotGetCreated" + defaultAbbr);
 
-		serverResp = TestHelper.getResponseObjForCreate(requestTenant, microservice, environment, apiRequestHeaders, tenantAPI, ServerResponse.class);
+		serverResp = TestHelper.getResponseObjForCreate(requestTenant, microservice, environment, apiRequestHelper, tenantAPI, ServerResponse.class);
 
 		CustomAssertions.assertServerError(400, null, "Abbreviation is required, should be less than 50 characters.", serverResp);
 		// GetTenant should not return a tenant with Name as specified above.
@@ -139,7 +138,7 @@ public class CreateTenantsTest extends BaseTestSetupAndTearDown {
 
 		requestTenant.setAbbreviation(TestHelper.FIFTYONE_CHARS);
 
-		serverResp = TestHelper.getResponseObjForCreate(requestTenant, microservice, environment, apiRequestHeaders, tenantAPI, ServerResponse.class);
+		serverResp = TestHelper.getResponseObjForCreate(requestTenant, microservice, environment, apiRequestHelper, tenantAPI, ServerResponse.class);
 
 		CustomAssertions.assertServerError(400, null, "Abbreviation should be less than 50 characters.", serverResp);
 		// GetTenant should not return a tenant with abbr as specified above.
@@ -155,7 +154,7 @@ public class CreateTenantsTest extends BaseTestSetupAndTearDown {
 		// Setting tenant name to empty
 		requestTenant.setName("");
 
-		serverResp = TestHelper.getResponseObjForCreate(requestTenant, microservice, environment, apiRequestHeaders, tenantAPI, ServerResponse.class);
+		serverResp = TestHelper.getResponseObjForCreate(requestTenant, microservice, environment, apiRequestHelper, tenantAPI, ServerResponse.class);
 
 		CustomAssertions.assertServerError(400, null, "Tenant name is required, should be less than 255 characters.", serverResp);
 		// GetTenant should not return a tenant with Name equal to ""
@@ -170,7 +169,7 @@ public class CreateTenantsTest extends BaseTestSetupAndTearDown {
 		// Setting Tenant name to null
 		requestTenant.setName("");
 
-		serverResp = TestHelper.getResponseObjForCreate(requestTenant, microservice, environment, apiRequestHeaders, tenantAPI, ServerResponse.class);
+		serverResp = TestHelper.getResponseObjForCreate(requestTenant, microservice, environment, apiRequestHelper, tenantAPI, ServerResponse.class);
 
 		CustomAssertions.assertServerError(400, null, "Tenant name is required, should be less than 255 characters.", serverResp);
 		// GetTenant should not return a tenant with Name equal to null
@@ -186,7 +185,7 @@ public class CreateTenantsTest extends BaseTestSetupAndTearDown {
 		// Setting tenant name to be longer than 255 chars
 		requestTenant.setName(TestHelper.TWOFIFTYSIX_CHARS);
 
-		serverResp = TestHelper.getResponseObjForCreate(requestTenant, microservice, environment, apiRequestHeaders, tenantAPI, ServerResponse.class);
+		serverResp = TestHelper.getResponseObjForCreate(requestTenant, microservice, environment, apiRequestHelper, tenantAPI, ServerResponse.class);
 
 		CustomAssertions.assertServerError(400, null, "Tenant name should be less than 255 characters.", serverResp);
 		// GetTenant should not return a tenant with Name equal to name specified above

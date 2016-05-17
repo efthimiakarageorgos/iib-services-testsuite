@@ -43,7 +43,7 @@ public class CreateAssetTypeAttributesTest extends BaseTestSetupAndTearDown {
 			InvocationTargetException, NoSuchMethodException, SecurityException, IOException {
 		assetTypeHelper = new AssetTypeHelper();
 		requestAssetType = assetTypeHelper.getAssetTypeWithOneAttribute(AttributeDataType.String);
-		responseAssetType = TestHelper.getResponseObjForCreate(requestAssetType, microservice, environment, apiRequestHeaders, assetTypeAPI,
+		responseAssetType = TestHelper.getResponseObjForCreate(requestAssetType, microservice, environment, apiRequestHelper, assetTypeAPI,
 				AssetType.class);
 		assetTypeId = TestHelper.getElementId(responseAssetType.get_links().getSelfLink().getHref());
 		assetTypeAttributeId = TestHelper.getElementId(responseAssetType.getAttributes().get(FIRST_ELEMENT).get_links().getSelfLink().getHref());
@@ -78,8 +78,8 @@ public class CreateAssetTypeAttributesTest extends BaseTestSetupAndTearDown {
 		existingAssetTypeAttributes.add(assetTypeAttributeWithAbbrContainingSpaces);
 
 		requestAssetType.setAttributes(existingAssetTypeAttributes);
-		serverResp = TestHelper.getResponseObjForUpdate(requestAssetType, microservice, environment, assetTypeId, apiRequestHeaders, assetTypeAPI,
-				ServerResponse.class);
+		serverResp = TestHelper.getResponseObjForUpdate(requestAssetType, microservice, environment, assetTypeId, apiRequestHelper,
+				assetTypeAPI, ServerResponse.class);
 		CustomAssertions.assertServerError(500, "com.qiotec.application.exceptions.InvalidInputException",
 				"Attribute Abbreviation must not contain Spaces", serverResp);
 	}
@@ -98,8 +98,8 @@ public class CreateAssetTypeAttributesTest extends BaseTestSetupAndTearDown {
 		existingAssetTypeAttributes.add(assetTypeAttributeWithSameAbbr);
 
 		requestAssetType.setAttributes(existingAssetTypeAttributes);
-		serverResp = TestHelper.getResponseObjForUpdate(requestAssetType, microservice, environment, assetTypeId, apiRequestHeaders, assetTypeAPI,
-				ServerResponse.class);
+		serverResp = TestHelper.getResponseObjForUpdate(requestAssetType, microservice, environment, assetTypeId, apiRequestHelper,
+				assetTypeAPI, ServerResponse.class);
 		CustomAssertions.assertServerError(500, "com.qiotec.application.exceptions.InvalidInputException",
 				"Attribute Abbreviation Should not Contain Duplicate Entries", serverResp);
 	}
@@ -107,7 +107,7 @@ public class CreateAssetTypeAttributesTest extends BaseTestSetupAndTearDown {
 	// RREHM-842 () -- This needs to be looked into.
 
 	// RREHM-847 () -- Waiting for Effie's reply on this one.
-	
+
 	// RREHM-849 ()
 	@Test
 	public void shouldNotBeAllowedToAddNewAttributeWithSpecialCharsInItsAbbr() throws JsonGenerationException, JsonMappingException, IOException,
@@ -125,8 +125,8 @@ public class CreateAssetTypeAttributesTest extends BaseTestSetupAndTearDown {
 			existingAssetTypeAttributes.add(assetTypeAttributeWithSpecialCharAbbr);
 
 			requestAssetType.setAttributes(existingAssetTypeAttributes);
-			serverResp = TestHelper.getResponseObjForUpdate(requestAssetType, microservice, environment, assetTypeId, apiRequestHeaders, assetTypeAPI,
-					ServerResponse.class);
+			serverResp = TestHelper.getResponseObjForUpdate(requestAssetType, microservice, environment, assetTypeId, apiRequestHelper,
+					assetTypeAPI, ServerResponse.class);
 			CustomAssertions.assertServerError(500, "com.qiotec.application.exceptions.InvalidInputException",
 					"Asset Type Attribute Abbreviation must not contain illegal characters", serverResp);
 		}
@@ -145,8 +145,8 @@ public class CreateAssetTypeAttributesTest extends BaseTestSetupAndTearDown {
 		existingAssetTypeAttributes.add(assetTypeAttributeWithInvalidDatatype);
 
 		requestAssetType.setAttributes(existingAssetTypeAttributes);
-		serverResp = TestHelper.getResponseObjForUpdate(requestAssetType, microservice, environment, assetTypeId, apiRequestHeaders, assetTypeAPI,
-				ServerResponse.class);
+		serverResp = TestHelper.getResponseObjForUpdate(requestAssetType, microservice, environment, assetTypeId, apiRequestHelper,
+				assetTypeAPI, ServerResponse.class);
 		CustomAssertions.assertServerError(400, "org.springframework.http.converter.HttpMessageNotReadableException", serverResp);
 	}
 
@@ -162,8 +162,8 @@ public class CreateAssetTypeAttributesTest extends BaseTestSetupAndTearDown {
 		existingAssetTypeAttributes.add(assetTypeAttributeWithBlankDatatype);
 
 		requestAssetType.setAttributes(existingAssetTypeAttributes);
-		serverResp = TestHelper.getResponseObjForUpdate(requestAssetType, microservice, environment, assetTypeId, apiRequestHeaders, assetTypeAPI,
-				ServerResponse.class);
+		serverResp = TestHelper.getResponseObjForUpdate(requestAssetType, microservice, environment, assetTypeId, apiRequestHelper,
+				assetTypeAPI, ServerResponse.class);
 		CustomAssertions.assertServerError(400, "org.springframework.http.converter.HttpMessageNotReadableException", serverResp);
 	}
 

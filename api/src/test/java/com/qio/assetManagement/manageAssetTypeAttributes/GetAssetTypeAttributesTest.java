@@ -65,7 +65,7 @@ public class GetAssetTypeAttributesTest extends BaseTestSetupAndTearDown {
 			IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException, IOException {
 
 		String invalidAssetTypeId = "ThisAssetTypeDoesNotExist";
-		serverResp = TestHelper.getResponseObjForRetrieve(microservice, environment, invalidAssetTypeId, apiRequestHeaders, assetTypeAPI,
+		serverResp = TestHelper.getResponseObjForRetrieve(microservice, environment, invalidAssetTypeId, apiRequestHelper, assetTypeAPI,
 				ServerResponse.class);
 		CustomAssertions.assertServerError(500, "com.qiotec.application.exceptions.InvalidParameterException", "Wrong Asset Type id in the URL",
 				serverResp);
@@ -78,13 +78,13 @@ public class GetAssetTypeAttributesTest extends BaseTestSetupAndTearDown {
 			SecurityException, IOException {
 
 		requestAssetType = assetTypeHelper.getAssetTypeWithNoAttributesAndParameters();
-		responseAssetType = TestHelper.getResponseObjForCreate(requestAssetType, microservice, environment, apiRequestHeaders, assetTypeAPI,
+		responseAssetType = TestHelper.getResponseObjForCreate(requestAssetType, microservice, environment, apiRequestHelper, assetTypeAPI,
 				AssetType.class);
 		String assetTypeId = TestHelper.getElementId(responseAssetType.get_links().getSelfLink().getHref());
 		idsForAllCreatedElements.add(assetTypeId);
 
 		String invalidAssetTypeAttributeId = "ThisDoesNotExist";
-		serverResp = TestHelper.getResponseObjForRetrieve(microservice, environment, assetTypeId, invalidAssetTypeAttributeId, apiRequestHeaders,
+		serverResp = TestHelper.getResponseObjForRetrieve(microservice, environment, assetTypeId, invalidAssetTypeAttributeId, apiRequestHelper,
 				assetTypeAttributeAPI, ServerResponse.class);
 		CustomAssertions.assertServerError(500, "com.qiotec.application.exceptions.InvalidInputException",
 				"No Parameters are Associated with a given Asset Type", serverResp);
@@ -105,13 +105,13 @@ public class GetAssetTypeAttributesTest extends BaseTestSetupAndTearDown {
 			SecurityException, IOException {
 
 		requestAssetType = assetTypeHelper.getAssetTypeWithAllAttributes();
-		responseAssetType = TestHelper.getResponseObjForCreate(requestAssetType, microservice, environment, apiRequestHeaders, assetTypeAPI,
+		responseAssetType = TestHelper.getResponseObjForCreate(requestAssetType, microservice, environment, apiRequestHelper, assetTypeAPI,
 				AssetType.class);
 		String assetTypeId = TestHelper.getElementId(responseAssetType.get_links().getSelfLink().getHref());
 		idsForAllCreatedElements.add(assetTypeId);
 
 		List<AssetTypeAttribute> committedAssetTypeAttributes = TestHelper.getListResponseObjForRetrieve(microservice, environment, assetTypeId,
-				apiRequestHeaders, assetTypeAttributeAPI, AssetTypeAttribute.class);
+				apiRequestHelper, assetTypeAttributeAPI, AssetTypeAttribute.class);
 
 		Collections.sort(committedAssetTypeAttributes);
 		Collections.sort(responseAssetType.getAttributes());
@@ -125,7 +125,7 @@ public class GetAssetTypeAttributesTest extends BaseTestSetupAndTearDown {
 			IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException, IOException {
 
 		requestAssetType = assetTypeHelper.getAssetTypeWithAllAttributes();
-		responseAssetType = TestHelper.getResponseObjForCreate(requestAssetType, microservice, environment, apiRequestHeaders, assetTypeAPI,
+		responseAssetType = TestHelper.getResponseObjForCreate(requestAssetType, microservice, environment, apiRequestHelper, assetTypeAPI,
 				AssetType.class);
 		String assetTypeId = TestHelper.getElementId(responseAssetType.get_links().getSelfLink().getHref());
 		idsForAllCreatedElements.add(assetTypeId);
@@ -133,7 +133,7 @@ public class GetAssetTypeAttributesTest extends BaseTestSetupAndTearDown {
 		for (AssetTypeAttribute responseAssetTypeAttribute : responseAssetType.getAttributes()) {
 			String createdAttributeId = TestHelper.getElementId(responseAssetTypeAttribute.get_links().getSelfLink().getHref());
 			AssetTypeAttribute committedAssetTypeAttribute = TestHelper.getResponseObjForRetrieve(microservice, environment, assetTypeId,
-					createdAttributeId, apiRequestHeaders, assetTypeAttributeAPI, AssetTypeAttribute.class);
+					createdAttributeId, apiRequestHelper, assetTypeAttributeAPI, AssetTypeAttribute.class);
 			CustomAssertions.assertRequestAndResponseObj(responseAssetTypeAttribute, committedAssetTypeAttribute);
 		}
 	}
@@ -145,13 +145,13 @@ public class GetAssetTypeAttributesTest extends BaseTestSetupAndTearDown {
 			SecurityException, IOException {
 
 		requestAssetType = assetTypeHelper.getAssetTypeWithNoAttributesAndParameters();
-		responseAssetType = TestHelper.getResponseObjForCreate(requestAssetType, microservice, environment, apiRequestHeaders, assetTypeAPI,
+		responseAssetType = TestHelper.getResponseObjForCreate(requestAssetType, microservice, environment, apiRequestHelper, assetTypeAPI,
 				AssetType.class);
 		String assetTypeId = TestHelper.getElementId(responseAssetType.get_links().getSelfLink().getHref());
 		idsForAllCreatedElements.add(assetTypeId);
 
 		List<AssetTypeAttribute> committedAssetTypeAttributes = TestHelper.getListResponseObjForRetrieve(microservice, environment, assetTypeId,
-				apiRequestHeaders, assetTypeAttributeAPI, AssetTypeAttribute.class);
+				apiRequestHelper, assetTypeAttributeAPI, AssetTypeAttribute.class);
 
 		committedAssetTypeAttributes = committedAssetTypeAttributes.size() == 0 ? null : committedAssetTypeAttributes;
 		CustomAssertions.assertRequestAndResponseObjForNullEqualityCheck(responseAssetType.getAttributes(), committedAssetTypeAttributes);

@@ -1,18 +1,19 @@
 package com.qio.lib.apiHelpers;
 
-public class APIHeaders {
+public class APIRequestHelper {
 	private String acceptType;
 	private String contentType;
 	private String userName;
 	private String password;
 	private String grant_type;
 	private String scope;
-	private String envRuntime;
+	private String oauthMicroservice;
 	private Boolean fetchNewAccessToken;
 
 	// By default, a new Access Token will be fetched whenever a new object for
 	// APIHeaders gets instantiated.
-	public APIHeaders(String acceptType, String contentType, String userName, String password, String grant_type, String scope, String envRuntime) {
+	public APIRequestHelper(String acceptType, String contentType, String userName, String password, String grant_type, String scope,
+			String oauthMicroservice) {
 		this.acceptType = acceptType;
 		this.contentType = contentType;
 		this.userName = userName;
@@ -20,19 +21,15 @@ public class APIHeaders {
 		this.grant_type = grant_type;
 		this.scope = scope;
 		this.fetchNewAccessToken = true;
-		this.envRuntime = envRuntime;
+		this.oauthMicroservice = oauthMicroservice;
 	}
 
-	public APIHeaders(String acceptType, String contentType, String userName, String password, String envRuntime) {
-		this(acceptType, contentType, userName, password, "password", "openid,profile,token", envRuntime);
+	public APIRequestHelper(String acceptType, String contentType, String userName, String password, String oauthMicroservice) {
+		this(acceptType, contentType, userName, password, "password", "openid,profile,token", oauthMicroservice);
 	}
 
-	public APIHeaders(String userName, String password, String envRuntime) {
-		this("application/json", "application/json", userName, password, envRuntime);
-	}
-
-	public APIHeaders(String userName, String password) {
-		this("application/json", "application/json", userName, password, "dev");
+	public APIRequestHelper(String userName, String password, String oauthMicroservice) {
+		this("application/json", "application/json", userName, password, oauthMicroservice);
 	}
 
 	public String getAcceptType() {
@@ -87,12 +84,12 @@ public class APIHeaders {
 		this.scope = scope;
 	}
 
-	public String getEnvRuntime() {
-		return envRuntime;
+	public String getOauthMicroservice() {
+		return oauthMicroservice;
 	}
 
-	public void setEnvRuntime(String envRuntime) {
-		this.envRuntime = envRuntime;
+	public void setOauthMicroservice(String oauthMicroservice) {
+		this.oauthMicroservice = oauthMicroservice;
 	}
 
 	public Boolean getFetchNewAccessToken() {

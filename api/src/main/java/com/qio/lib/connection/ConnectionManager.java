@@ -13,7 +13,7 @@ import org.apache.log4j.Logger;
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;
 
-import com.qio.lib.apiHelpers.APIHeaders;
+import com.qio.lib.apiHelpers.APIRequestHelper;
 import com.qio.lib.common.BaseHelper;
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
@@ -33,8 +33,7 @@ public class ConnectionManager {
 		return conManager;
 	}
 
-	public ConnectionResponse get(String URI, APIHeaders apiHeaders) {
-		initOauthAccessToken(apiHeaders);
+	public ConnectionResponse get(String URI, APIRequestHelper apiRequestHelper) {
 		ConnectionResponse conResp = new ConnectionResponse();
 		URL url;
 		try {
@@ -43,8 +42,8 @@ public class ConnectionManager {
 			con.setRequestMethod("GET");
 
 			// add request header
-			con.setRequestProperty("Accept", apiHeaders.getAcceptType());
-			con.setRequestProperty("Content-Type", apiHeaders.getContentType());
+			con.setRequestProperty("Accept", apiRequestHelper.getAcceptType());
+			con.setRequestProperty("Content-Type", apiRequestHelper.getContentType());
 			con.setRequestProperty("Authorization", oauthValidationResponse.getToken_type() + " " + oauthValidationResponse.getAccess_token());
 
 			logger.debug("Sending 'GET' request to URL : " + URI);
@@ -78,8 +77,7 @@ public class ConnectionManager {
 		return conResp;
 	}
 
-	public ConnectionResponse post(String URI, String payload, APIHeaders apiHeaders) {
-		initOauthAccessToken(apiHeaders);
+	public ConnectionResponse post(String URI, String payload, APIRequestHelper apiRequestHelper) {
 		ConnectionResponse conResp = new ConnectionResponse();
 		URL url;
 		try {
@@ -88,8 +86,8 @@ public class ConnectionManager {
 			con.setRequestMethod("POST");
 
 			// add request header
-			con.setRequestProperty("Accept", apiHeaders.getAcceptType());
-			con.setRequestProperty("Content-Type", apiHeaders.getContentType());
+			con.setRequestProperty("Accept", apiRequestHelper.getAcceptType());
+			con.setRequestProperty("Content-Type", apiRequestHelper.getContentType());
 			con.setRequestProperty("Authorization", oauthValidationResponse.getToken_type() + " " + oauthValidationResponse.getAccess_token());
 
 			// Send post request
@@ -131,8 +129,7 @@ public class ConnectionManager {
 		return conResp;
 	}
 
-	public ConnectionResponse put(String URI, String payload, APIHeaders apiHeaders) {
-		initOauthAccessToken(apiHeaders);
+	public ConnectionResponse put(String URI, String payload, APIRequestHelper apiRequestHelper) {
 		ConnectionResponse conResp = new ConnectionResponse();
 		URL url;
 		try {
@@ -141,8 +138,8 @@ public class ConnectionManager {
 			con.setRequestMethod("PUT");
 
 			// add request header
-			con.setRequestProperty("Accept", apiHeaders.getAcceptType());
-			con.setRequestProperty("Content-Type", apiHeaders.getContentType());
+			con.setRequestProperty("Accept", apiRequestHelper.getAcceptType());
+			con.setRequestProperty("Content-Type", apiRequestHelper.getContentType());
 			con.setRequestProperty("Authorization", oauthValidationResponse.getToken_type() + " " + oauthValidationResponse.getAccess_token());
 
 			// Send put request
@@ -184,8 +181,7 @@ public class ConnectionManager {
 		return conResp;
 	}
 
-	public void delete(String URI, APIHeaders apiHeaders) {
-		initOauthAccessToken(apiHeaders);
+	public void delete(String URI, APIRequestHelper apiRequestHelper) {
 		ConnectionResponse conResp = new ConnectionResponse();
 		URL url;
 		try {
@@ -194,8 +190,8 @@ public class ConnectionManager {
 			con.setRequestMethod("DELETE");
 
 			// add request header
-			con.setRequestProperty("Accept", apiHeaders.getAcceptType());
-			con.setRequestProperty("Content-Type", apiHeaders.getContentType());
+			con.setRequestProperty("Accept", apiRequestHelper.getAcceptType());
+			con.setRequestProperty("Content-Type", apiRequestHelper.getContentType());
 			con.setRequestProperty("Authorization", oauthValidationResponse.getToken_type() + " " + oauthValidationResponse.getAccess_token());
 
 			// Send delete request
@@ -213,7 +209,7 @@ public class ConnectionManager {
 		}
 	}
 
-	private void initOauthAccessToken(APIHeaders apiHeaders) {
+	public void initOauthAccessToken(String URI, APIRequestHelper apiRequestHelper) {
 		/*
 		 * Fetching new access token under the following scenarios: 1. if this is the first time we are going to fetch the access token. 2. if a new
 		 * object for APIHeaders has been instantiated, or its user/password has been changed(upon which the flag fetchNewAccessToken will be set to
@@ -223,15 +219,15 @@ public class ConnectionManager {
 		 * tests take longer to run then there can be a problem.
 		 */
 		try {
-			if (oauthValidationResponse == null || apiHeaders.getFetchNewAccessToken()) {
+			if (oauthValidationResponse == null || apiRequestHelper.getFetchNewAccessToken()) {
 				Config applicationUserConfig = ConfigFactory.load("application_user_creds.conf");
 				String basicAuthStr = "Basic " + Base64.getEncoder().encodeToString((applicationUserConfig.getString("application_user.username")
 						+ ":" + applicationUserConfig.getString("application_user.password")).getBytes());
 
-				ConnectionResponse conResp = getOauthValidationResponse(basicAuthStr, apiHeaders);
+				ConnectionResponse conResp = getOauthValidationResponse(URI, basicAuthStr, apiRequestHelper);
 
 				oauthValidationResponse = BaseHelper.toClassObject(conResp.getRespBody(), OauthValidationResponse.class);
-				apiHeaders.setFetchNewAccessToken(false);
+				apiRequestHelper.setFetchNewAccessToken(false);
 			}
 		} catch (JsonGenerationException e) {
 			// TODO Auto-generated catch block
@@ -245,24 +241,19 @@ public class ConnectionManager {
 		}
 	}
 
-	private ConnectionResponse getOauthValidationResponse(String basicAuthStr, APIHeaders apiHeaders) {
+	private ConnectionResponse getOauthValidationResponse(String URI, String basicAuthStr, APIRequestHelper apiRequestHelper) {
 		ConnectionResponse conResp = new ConnectionResponse();
 		URL url;
 		try {
-			Config oauthURIConfig = ConfigFactory.load("oauth_uri.conf");
-			// For now we are hardcoding to fetch the oauth access token against
-			// the DEV env only. However, in the future this needs to be
-			// parametrized.
-			String oauthURI = oauthURIConfig.getString("oauth_uri." + apiHeaders.getEnvRuntime());
-			url = new URL(oauthURI);
+			url = new URL(URI);
 			HttpURLConnection con = (HttpURLConnection) url.openConnection();
 			con.setRequestMethod("POST");
 
 			StringBuilder postParams = new StringBuilder();
-			postParams.append("username=" + apiHeaders.getUserName());
-			postParams.append("&password=" + apiHeaders.getPassword());
-			postParams.append("&grant_type=" + apiHeaders.getGrant_type());
-			postParams.append("&scope=" + apiHeaders.getScope());
+			postParams.append("username=" + apiRequestHelper.getUserName());
+			postParams.append("&password=" + apiRequestHelper.getPassword());
+			postParams.append("&grant_type=" + apiRequestHelper.getGrant_type());
+			postParams.append("&scope=" + apiRequestHelper.getScope());
 
 			byte[] postData = postParams.toString().getBytes(StandardCharsets.UTF_8);
 
@@ -280,7 +271,7 @@ public class ConnectionManager {
 			wr.flush();
 			wr.close();
 
-			logger.debug("Sending 'POST' request to URL : " + oauthURI);
+			logger.debug("Sending 'POST' request to URL : " + URI);
 
 			int responseCode = con.getResponseCode();
 			conResp.setRespCode(responseCode);
