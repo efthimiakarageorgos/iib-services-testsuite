@@ -10,11 +10,11 @@ public class MAssetAPIHelper extends MBaseAPIHelper {
 	private final String getOrDeleteSingleAssetEndpointAbstract = "/assets/{assetId}";
 	private final String getAllAssetsEndpoint = "/assets";
 	
-	public ConnectionResponse create(String microservice, String environment, String payload, APIHeaders apiRequestHeaders){
+	public ConnectionResponse create(String microservice, String environment, String payload, APIRequestHelper apiRequestHeaders){
 		return super.create(microservice, environment, createOrUpdateAssetEndpoint, payload, apiRequestHeaders);
 	}
 	
-	public void delete(String microservice, String environment, String assetId, APIHeaders apiRequestHeaders) {
+	public void delete(String microservice, String environment, String assetId, APIRequestHelper apiRequestHeaders) {
 		super.delete(microservice, environment, replaceAssetIdInSingleAssetEndpoint(assetId), apiRequestHeaders);
 	}
 
@@ -23,11 +23,11 @@ public class MAssetAPIHelper extends MBaseAPIHelper {
 		return null;
 	}
 	
-	public ConnectionResponse retrieve(String microservice, String environment, APIHeaders apiRequestHeaders) {
+	public ConnectionResponse retrieve(String microservice, String environment, APIRequestHelper apiRequestHeaders) {
 		return super.retrieve(microservice, environment, getAllAssetsEndpoint, apiRequestHeaders);
 	}
 	
-	public ConnectionResponse retrieve(String microservice, String environment, String assetId, APIHeaders apiRequestHeaders) {
+	public ConnectionResponse retrieve(String microservice, String environment, String assetId, APIRequestHelper apiRequestHeaders) {
 		return super.retrieve(microservice, environment, replaceAssetIdInSingleAssetEndpoint(assetId), apiRequestHeaders);
 	}
 	

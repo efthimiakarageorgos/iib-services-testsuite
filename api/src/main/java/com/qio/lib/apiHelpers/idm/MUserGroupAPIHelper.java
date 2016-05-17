@@ -1,6 +1,6 @@
 package com.qio.lib.apiHelpers.idm;
 
-import com.qio.lib.apiHelpers.APIHeaders;
+import com.qio.lib.apiHelpers.APIRequestHelper;
 import com.qio.lib.common.MBaseAPIHelper;
 import com.qio.lib.connection.ConnectionResponse;
 
@@ -13,23 +13,23 @@ public class MUserGroupAPIHelper extends MBaseAPIHelper {
 		return getOrDeleteSingleUserGroupEndpointAbstract;
 	}
 
-	public ConnectionResponse create(String microservice, String environment, String payload, APIHeaders apiRequestHeaders) {
+	public ConnectionResponse create(String microservice, String environment, String payload, APIRequestHelper apiRequestHeaders) {
 		return super.create(microservice, environment, createOrUpdateUserGroupEndpoint, payload, apiRequestHeaders);
 	}
 
-	public void delete(String microservice, String environment, String userGroupId, APIHeaders apiRequestHeaders) {
+	public void delete(String microservice, String environment, String userGroupId, APIRequestHelper apiRequestHeaders) {
 		super.delete(microservice, environment, replaceUserGroupIdInSingleUserGroupEndpoint(userGroupId), apiRequestHeaders);
 	}
 
-	public ConnectionResponse update(String microservice, String environment, String payload, String userGroupId, APIHeaders apiRequestHeaders) {
+	public ConnectionResponse update(String microservice, String environment, String payload, String userGroupId, APIRequestHelper apiRequestHeaders) {
 		return super.update(microservice, environment, replaceUserGroupIdInSingleUserGroupEndpoint(userGroupId), payload, apiRequestHeaders);
 	}
 
-	public ConnectionResponse retrieve(String microservice, String environment, APIHeaders apiRequestHeaders) {
+	public ConnectionResponse retrieve(String microservice, String environment, APIRequestHelper apiRequestHeaders) {
 		return super.retrieve(microservice, environment, getAllUserGroupsEndpoint, apiRequestHeaders);
 	}
 
-	public ConnectionResponse retrieve(String microservice, String environment, String userGroupId, APIHeaders apiRequestHeaders) {
+	public ConnectionResponse retrieve(String microservice, String environment, String userGroupId, APIRequestHelper apiRequestHeaders) {
 		return super.retrieve(microservice, environment, replaceUserGroupIdInSingleUserGroupEndpoint(userGroupId), apiRequestHeaders);
 	}
 

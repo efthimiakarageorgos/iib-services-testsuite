@@ -8,11 +8,11 @@ public class MTenantAPIHelper extends MBaseAPIHelper {
 	private final String getOrDeleteSingleTenantEndpointAbstract = "/tenant/{tenantId}";
 	private final String getAllTenantsEndpoint = "/tenants";
 	
-	public ConnectionResponse create(String microservice, String environment, String payload, APIHeaders apiRequestHeaders){
+	public ConnectionResponse create(String microservice, String environment, String payload, APIRequestHelper apiRequestHeaders){
 		return super.create(microservice, environment, createOrUpdateTenantEndpoint, payload, apiRequestHeaders);
 	}
 	
-	public void delete(String microservice, String environment, String tenantId, APIHeaders apiRequestHeaders) {
+	public void delete(String microservice, String environment, String tenantId, APIRequestHelper apiRequestHeaders) {
 		super.delete(microservice, environment, replaceTenantIdInSingleTenantEndpoint(tenantId), apiRequestHeaders);
 	}
 
@@ -21,11 +21,11 @@ public class MTenantAPIHelper extends MBaseAPIHelper {
 		return null;
 	}
 	
-	public ConnectionResponse retrieve(String microservice, String environment, APIHeaders apiRequestHeaders) {
+	public ConnectionResponse retrieve(String microservice, String environment, APIRequestHelper apiRequestHeaders) {
 		return super.retrieve(microservice, environment, getAllTenantsEndpoint, apiRequestHeaders);
 	}
 	
-	public ConnectionResponse retrieve(String microservice, String environment, String tenantId, APIHeaders apiRequestHeaders) {
+	public ConnectionResponse retrieve(String microservice, String environment, String tenantId, APIRequestHelper apiRequestHeaders) {
 		return super.retrieve(microservice, environment, replaceTenantIdInSingleTenantEndpoint(tenantId), apiRequestHeaders);
 	}
 	

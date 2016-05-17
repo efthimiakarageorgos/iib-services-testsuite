@@ -1,6 +1,6 @@
 package com.qio.lib.apiHelpers.assetType;
 
-import com.qio.lib.apiHelpers.APIHeaders;
+import com.qio.lib.apiHelpers.APIRequestHelper;
 import com.qio.lib.common.MBaseAPIHelper;
 import com.qio.lib.connection.ConnectionResponse;
 
@@ -13,23 +13,23 @@ public class MAssetTypeAPIHelper extends MBaseAPIHelper {
 		return getOrDeleteSingleAssetTypeEndpointAbstract;
 	}
 
-	public ConnectionResponse create(String microservice, String environment, String payload, APIHeaders apiRequestHeaders) {
+	public ConnectionResponse create(String microservice, String environment, String payload, APIRequestHelper apiRequestHeaders) {
 		return super.create(microservice, environment, createOrUpdateAssetTypeEndpoint, payload, apiRequestHeaders);
 	}
 
-	public void delete(String microservice, String environment, String assetTypeId, APIHeaders apiRequestHeaders) {
+	public void delete(String microservice, String environment, String assetTypeId, APIRequestHelper apiRequestHeaders) {
 		super.delete(microservice, environment, replaceAssetTypeIdInSingleAssetTypeEndpoint(assetTypeId), apiRequestHeaders);
 	}
 
-	public ConnectionResponse update(String microservice, String environment, String payload, String assetTypeId, APIHeaders apiRequestHeaders) {
+	public ConnectionResponse update(String microservice, String environment, String payload, String assetTypeId, APIRequestHelper apiRequestHeaders) {
 		return super.update(microservice, environment, replaceAssetTypeIdInSingleAssetTypeEndpoint(assetTypeId), payload, apiRequestHeaders);
 	}
 
-	public ConnectionResponse retrieve(String microservice, String environment, APIHeaders apiRequestHeaders) {
+	public ConnectionResponse retrieve(String microservice, String environment, APIRequestHelper apiRequestHeaders) {
 		return super.retrieve(microservice, environment, getAllAssetTypesEndpoint, apiRequestHeaders);
 	}
 
-	public ConnectionResponse retrieve(String microservice, String environment, String assetTypeId, APIHeaders apiRequestHeaders) {
+	public ConnectionResponse retrieve(String microservice, String environment, String assetTypeId, APIRequestHelper apiRequestHeaders) {
 		return super.retrieve(microservice, environment, replaceAssetTypeIdInSingleAssetTypeEndpoint(assetTypeId), apiRequestHeaders);
 	}
 
