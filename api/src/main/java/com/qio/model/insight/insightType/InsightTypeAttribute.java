@@ -1,4 +1,4 @@
-package com.qio.model.insightType;
+package com.qio.model.insight.insightType;
 
 import java.lang.reflect.Field;
 
@@ -23,7 +23,7 @@ public class InsightTypeAttribute implements Comparable {
 		this.name = "ABBRString Name";
 		this.description = "ABBRString Desc";
 		this.datatype = "String";
-		this.unit = "";
+		this.unit = "Unit";
 	}
 
 	public InsightTypeAttribute(String abbreviation, String name, String description, String unit, String datatype) {

@@ -1,4 +1,4 @@
-package com.qio.model.insightType.helper;
+package com.qio.model.insight.insightType.helper;
 
 public enum AttributeDataType {
 	Float,

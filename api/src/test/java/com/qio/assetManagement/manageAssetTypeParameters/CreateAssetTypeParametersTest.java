@@ -60,8 +60,7 @@ public class CreateAssetTypeParametersTest extends BaseTestSetupAndTearDown {
 	}
 
 	// The following test cases go here:
-	// issuetype=Test and issue in (linkedIssues("RREHM-1192")) and issue in
-	// linkedIssues("RREHM-901")
+	// issuetype=Test and issue in (linkedIssues("RREHM-1192")) and issue in linkedIssues("RREHM-901")
 
 	/*
 	 * NEGATIVE TESTS START
@@ -164,7 +163,25 @@ public class CreateAssetTypeParametersTest extends BaseTestSetupAndTearDown {
 				"Parameter BaseUom Should not be Empty or Null", serverResp);
 	}
 
-	// RREHM-905 () -- This needs to be looked into
+	// RREHM-905 ()
+	@Test
+	public void shouldNotBeAllowedToAddNewParameterWhenItHasSameAbbrAsExistingParameter() throws JsonGenerationException, JsonMappingException,
+			IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException, IOException {
+
+		List<AssetTypeParameter> existingAssetTypeParameters = requestAssetType.getParameters();
+		String abbrForExistingFirstParameter = existingAssetTypeParameters.get(FIRST_ELEMENT).getAbbreviation();
+		 existingAssetTypeParameters.get(FIRST_ELEMENT).setId(assetTypeParameterId);
+
+		AssetTypeParameter assetTypeParameterWithSameAbbr = assetTypeHelper.getAssetTypeParameterWithInputDataType(ParameterDataType.Float);
+		assetTypeParameterWithSameAbbr.setAbbreviation(abbrForExistingFirstParameter);
+		existingAssetTypeParameters.add(assetTypeParameterWithSameAbbr);
+
+		requestAssetType.setParameters(existingAssetTypeParameters);
+		serverResp = TestHelper.getResponseObjForUpdate(requestAssetType, microservice, environment, assetTypeId, apiRequestHelper, assetTypeAPI,
+				ServerResponse.class);
+		CustomAssertions.assertServerError(500, "com.qiotec.application.exceptions.InvalidInputException",
+				"Parameter Abbreviation Should not Contain Duplicate Entries", serverResp);
+	}
 
 	// RREHM-845 ()
 	@Test

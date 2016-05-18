@@ -54,7 +54,7 @@ public class AssetTypeHelper {
 
 	public AssetTypeAttribute getAssetTypeAttributeWithInputDataType(AttributeDataType attributeDataType) {
 		String attributeDataTypePrefix = "ABBR" + attributeDataType.toString();
-		return new AssetTypeAttribute(attributeDataTypePrefix, attributeDataTypePrefix + " Name", attributeDataTypePrefix + " Desc", "",
+		return new AssetTypeAttribute(attributeDataTypePrefix, attributeDataTypePrefix + " Name", attributeDataTypePrefix + " Desc", "Unit",
 				attributeDataType.toString());
 	}
 

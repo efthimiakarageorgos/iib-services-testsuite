@@ -23,7 +23,7 @@ public class AssetTypeAttribute implements Comparable {
 		this.name = "ABBRString Name";
 		this.description = "ABBRString Desc";
 		this.datatype = "String";
-		this.unit = "";
+		this.unit = "Unit";
 	}
 
 	public AssetTypeAttribute(String abbreviation, String name, String description, String unit, String datatype) {

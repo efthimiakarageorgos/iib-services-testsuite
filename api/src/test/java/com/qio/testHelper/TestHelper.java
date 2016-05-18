@@ -18,7 +18,9 @@ public class TestHelper {
 
 	public static String SPECIAL_CHARS = "~^%{&@}$#*()+=!~";
 	public static String TWOFIFTYSIX_CHARS = "256charactelong256charactelong256charactelong256charactelong256charactelong256charactelong256charactelong256charactelong256charactelong256charactelong256charactelong256charactelong256charactelong256charactelong256charactelong256charactelong256characteRlong";
+	public static String TWOFIFTYFIVE_CHARS = "255charactelong255charactelong255charactelong255charactelong255charactelong255charactelong255charactelong255charactelong255charactelong255charactelong255charactelong255charactelong255charactelong255charactelong255charactelong255charactelong255charactelong";
 	public static String FIFTYONE_CHARS = "51charlong51charlong51charlong51charlong51charSlong";
+	public static String FIFTY_CHARS = "50charlong50charlong50charlong50charlong50charlong";
 	public static int responseCodeForInputRequest;
 	private static MOauthAPIHelper oauthAPIHelper = null;
 

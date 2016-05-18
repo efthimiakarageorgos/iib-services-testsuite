@@ -2,3 +2,5 @@
 # Ignore all the class files
 *.class
 */target/**
+api/.classpath
+api/.settings/org.eclipse.core.resources.prefs
