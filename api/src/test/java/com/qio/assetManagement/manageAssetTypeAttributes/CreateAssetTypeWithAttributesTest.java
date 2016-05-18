@@ -53,8 +53,7 @@ public class CreateAssetTypeWithAttributesTest extends BaseTestSetupAndTearDown 
 	}
 
 	// This file should contain these tests
-	// issuetype = Test AND issue in (linkedIssues(RREHM-1193)) AND issue in
-	// (linkedIssues(RREHM-41))
+	// issuetype = Test AND issue in (linkedIssues(RREHM-1193)) AND issue in (linkedIssues(RREHM-41))
 
 	/*
 	 * NEGATIVE TESTS START
@@ -109,8 +108,7 @@ public class CreateAssetTypeWithAttributesTest extends BaseTestSetupAndTearDown 
 				"Attribute Abbreviation must not contain Spaces", serverResp);
 	}
 
-	// RREHM-450 (AssetType Attribute abbreviation is set to blank, i.e.
-	// abbreviation = "")
+	// RREHM-450 (AssetType Attribute abbreviation is set to blank, i.e. abbreviation = "")
 	@Test
 	public void shouldNotCreateAssetTypeWhenAttrAbbrIsBlank() throws JsonGenerationException, JsonMappingException, IOException,
 			IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
@@ -195,7 +193,7 @@ public class CreateAssetTypeWithAttributesTest extends BaseTestSetupAndTearDown 
 
 	// RREHM-458 ()
 	@Test
-	public void shouldNotCreateAssetTypeWhenDataTypeIsInvalidForOneOfTheInputAttributes() throws JsonGenerationException, JsonMappingException,
+	public void shouldNotCreateAssetTypeWhenDataTypeIsInvalidForOneOfTheAttributes() throws JsonGenerationException, JsonMappingException,
 			IOException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
 		requestAssetType = assetTypeHelper.getAssetTypeWithAllAttributes();
 		requestAssetType.getAttributes().get(FIRST_ELEMENT).setDatatype("FicticiousDataType");
@@ -205,6 +203,21 @@ public class CreateAssetTypeWithAttributesTest extends BaseTestSetupAndTearDown 
 
 		CustomAssertions.assertServerError(400, "org.springframework.http.converter.HttpMessageNotReadableException", serverResp);
 	}
+
+	// RREHM-1871 ()
+	// BUG:RREHM-928
+	// @Test
+	// public void shouldNotCreateAssetTypeWhenUnitIsEmptyForOneOfTheAttributes() throws JsonGenerationException, JsonMappingException,
+	// IOException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
+	// requestAssetType = assetTypeHelper.getAssetTypeWithOneAttribute(AttributeDataType.String);
+	// requestAssetType.getAttributes().get(FIRST_ELEMENT).setUnit("");
+	//
+	// serverResp = TestHelper.getResponseObjForCreate(requestAssetType, microservice, environment, apiRequestHelper, assetTypeAPI,
+	// ServerResponse.class);
+	//
+	// CustomAssertions.assertServerError(500, "com.qiotec.application.exceptions.InvalidInputException",
+	// "Attribute Unit should not be blank", serverResp);
+	// }
 
 	/*
 	 * NEGATIVE TESTS END
@@ -230,8 +243,8 @@ public class CreateAssetTypeWithAttributesTest extends BaseTestSetupAndTearDown 
 		String assetTypeId = TestHelper.getElementId(responseAssetType.get_links().getSelfLink().getHref());
 		idsForAllCreatedElements.add(assetTypeId);
 
-		AssetType committedAssetType = TestHelper.getResponseObjForRetrieve(microservice, environment, assetTypeId, apiRequestHelper,
-				assetTypeAPI, AssetType.class);
+		AssetType committedAssetType = TestHelper.getResponseObjForRetrieve(microservice, environment, assetTypeId, apiRequestHelper, assetTypeAPI,
+				AssetType.class);
 		CustomAssertions.assertRequestAndResponseObj(responseAssetType, committedAssetType);
 	}
 
@@ -249,8 +262,8 @@ public class CreateAssetTypeWithAttributesTest extends BaseTestSetupAndTearDown 
 		String assetTypeId = TestHelper.getElementId(responseAssetType.get_links().getSelfLink().getHref());
 		idsForAllCreatedElements.add(assetTypeId);
 
-		AssetType committedAssetType = TestHelper.getResponseObjForRetrieve(microservice, environment, assetTypeId, apiRequestHelper,
-				assetTypeAPI, AssetType.class);
+		AssetType committedAssetType = TestHelper.getResponseObjForRetrieve(microservice, environment, assetTypeId, apiRequestHelper, assetTypeAPI,
+				AssetType.class);
 		CustomAssertions.assertRequestAndResponseObj(responseAssetType, committedAssetType);
 	}
 
@@ -269,8 +282,8 @@ public class CreateAssetTypeWithAttributesTest extends BaseTestSetupAndTearDown 
 		String assetTypeId = TestHelper.getElementId(responseAssetType.get_links().getSelfLink().getHref());
 		idsForAllCreatedElements.add(assetTypeId);
 
-		AssetType committedAssetType = TestHelper.getResponseObjForRetrieve(microservice, environment, assetTypeId, apiRequestHelper,
-				assetTypeAPI, AssetType.class);
+		AssetType committedAssetType = TestHelper.getResponseObjForRetrieve(microservice, environment, assetTypeId, apiRequestHelper, assetTypeAPI,
+				AssetType.class);
 		CustomAssertions.assertRequestAndResponseObj(responseAssetType, committedAssetType);
 	}
 
@@ -291,8 +304,8 @@ public class CreateAssetTypeWithAttributesTest extends BaseTestSetupAndTearDown 
 		String assetTypeId = TestHelper.getElementId(responseAssetType.get_links().getSelfLink().getHref());
 		idsForAllCreatedElements.add(assetTypeId);
 
-		AssetType committedAssetType = TestHelper.getResponseObjForRetrieve(microservice, environment, assetTypeId, apiRequestHelper,
-				assetTypeAPI, AssetType.class);
+		AssetType committedAssetType = TestHelper.getResponseObjForRetrieve(microservice, environment, assetTypeId, apiRequestHelper, assetTypeAPI,
+				AssetType.class);
 		CustomAssertions.assertRequestAndResponseObj(responseAssetType, committedAssetType);
 	}
 

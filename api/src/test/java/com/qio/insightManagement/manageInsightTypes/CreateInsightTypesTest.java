@@ -14,8 +14,8 @@ import com.qio.common.BaseTestSetupAndTearDown;
 import com.qio.lib.apiHelpers.insights.MInsightTypeAPIHelper;
 import com.qio.lib.assertions.CustomAssertions;
 import com.qio.lib.exception.ServerResponse;
-import com.qio.model.insightType.InsightType;
-import com.qio.model.insightType.helper.InsightTypeHelper;
+import com.qio.model.insight.insightType.InsightType;
+import com.qio.model.insight.insightType.helper.InsightTypeHelper;
 import com.qio.testHelper.TestHelper;
 
 public class CreateInsightTypesTest extends BaseTestSetupAndTearDown {
@@ -23,6 +23,7 @@ public class CreateInsightTypesTest extends BaseTestSetupAndTearDown {
 	private static MInsightTypeAPIHelper insightTypeAPI;
 	private InsightTypeHelper insightTypeHelper;
 	private InsightType requestInsightType;
+	private InsightType requestInsightType2;
 	private InsightType responseInsightType;
 	private ServerResponse serverResp;
 
@@ -39,20 +40,43 @@ public class CreateInsightTypesTest extends BaseTestSetupAndTearDown {
 		// Initializing a new set of objects before each test case.
 		insightTypeHelper = new InsightTypeHelper();
 		requestInsightType = new InsightType();
+		requestInsightType2 = new InsightType();
 		responseInsightType = new InsightType();
 		serverResp = new ServerResponse();
 
-		requestInsightType = insightTypeHelper.getAssetTypeWithNoAttributes();
+		requestInsightType = insightTypeHelper.getInsightTypeWithNoAttributes();
 	}
 
 	// The following test cases go here:
-	// issuetype=Test and issue in (linkedIssues("RREHM-1235")) and issue in linkedIssues("RREHM-41")
+	// issuetype=Test and issue in (linkedIssues("RREHM-1235")) and issue in linkedIssues("RREHM-XXX")
+	// None of the test are marked as automated as they need to be cleaned up
 
 	/*
 	 * NEGATIVE TESTS START
 	 */
 
-	// RREHM-XXX (InsightType abbreviation contains spaces)
+	// RREHM-511 (NEED feedback from Kunaal on validity of test case)
+
+	// RREHM-516 (InsightType has non unique abbreviation)
+	@Test
+	public void shouldNotCreateInsightTypeWhenAbbrIsNotUnique() throws JsonGenerationException, JsonMappingException, IOException,
+			IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
+		String abbr = requestInsightType.getAbbreviation();
+
+		responseInsightType = TestHelper.getResponseObjForCreate(requestInsightType, microservice, environment, apiRequestHelper, insightTypeAPI,
+				InsightType.class);
+
+		requestInsightType2 = new InsightType();
+		requestInsightType2 = insightTypeHelper.getInsightTypeWithNoAttributes();
+		requestInsightType2.setAbbreviation(abbr);
+
+		serverResp = TestHelper.getResponseObjForCreate(requestInsightType2, microservice, environment, apiRequestHelper, insightTypeAPI,
+				ServerResponse.class);
+
+		CustomAssertions.assertServerError(409, null, "Insight type creation failed as another insight type has same abbreviation.", serverResp);
+	}
+
+	// RREHM-519 (InsightType abbreviation contains spaces)
 	@Test
 	public void shouldNotCreateInsightTypeWhenAbbrContainsSpaces() throws JsonGenerationException, JsonMappingException, IOException,
 			IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
@@ -144,6 +168,18 @@ public class CreateInsightTypesTest extends BaseTestSetupAndTearDown {
 		CustomAssertions.assertServerError(400, null, "Insight name is required, should be less than 255 char", serverResp);
 	}
 
+	// RREHM-790 (InsightType description is blank)
+	@Test
+	public void shouldNotCreateInsightTypeWhenDescriptionIsBlank() throws JsonGenerationException, JsonMappingException, IOException,
+			IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
+		requestInsightType.setDescription("");
+
+		serverResp = TestHelper.getResponseObjForCreate(requestInsightType, microservice, environment, apiRequestHelper, insightTypeAPI,
+				ServerResponse.class);
+
+		CustomAssertions.assertServerError(400, null, "Description is mandatory, should be of reasonable length.", serverResp);
+	}
+
 	// RREHM-521 (InsightType name is longer than 255 chars)
 	@Test
 	public void shouldNotCreateInsightTypeWhenNameIsLongerThan50Chars() throws JsonGenerationException, JsonMappingException, IOException,
@@ -165,4 +201,10 @@ public class CreateInsightTypesTest extends BaseTestSetupAndTearDown {
 	 */
 
 	// RREHM-522
+	// RREHM-523
+	// RREHM-524
+	// RREHM-520
+	// RREHM-518
+	// RREHM-515
+	// RREHM-510
 }

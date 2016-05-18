@@ -51,12 +51,14 @@ public class CreateAssetTypeWithParametersTest extends BaseTestSetupAndTearDown 
 		baseCleanUpAfterAllTests(assetTypeAPI);
 	}
 
+	// The following test cases go here:
+	// issuetype=Test and issue in (linkedIssues("RREHM-1192")) and issue in linkedIssues("RREHM-41")
+
 	/*
 	 * NEGATIVE TESTS START
 	 */
 
-	// RREHM-1626 (AssetType Parameter abbreviation is set to blank, i.e.
-	// abbreviation = "")
+	// RREHM-1626 (AssetType Parameter abbreviation is set to blank, i.e. abbreviation = "")
 	@Test
 	public void shouldNotCreateAssetTypeWhenParAbbrIsBlank() throws JsonGenerationException, JsonMappingException, IOException,
 			IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
@@ -152,8 +154,8 @@ public class CreateAssetTypeWithParametersTest extends BaseTestSetupAndTearDown 
 		String assetTypeId = TestHelper.getElementId(responseAssetType.get_links().getSelfLink().getHref());
 		idsForAllCreatedElements.add(assetTypeId);
 
-		AssetType committedAssetType = TestHelper.getResponseObjForRetrieve(microservice, environment, assetTypeId, apiRequestHelper,
-				assetTypeAPI, AssetType.class);
+		AssetType committedAssetType = TestHelper.getResponseObjForRetrieve(microservice, environment, assetTypeId, apiRequestHelper, assetTypeAPI,
+				AssetType.class);
 
 		// RV2: comparing CommittedObject with CreatedObject, without the
 		// response codes.
@@ -174,8 +176,8 @@ public class CreateAssetTypeWithParametersTest extends BaseTestSetupAndTearDown 
 		String assetTypeId = TestHelper.getElementId(responseAssetType.get_links().getSelfLink().getHref());
 		idsForAllCreatedElements.add(assetTypeId);
 
-		AssetType committedAssetType = TestHelper.getResponseObjForRetrieve(microservice, environment, assetTypeId, apiRequestHelper,
-				assetTypeAPI, AssetType.class);
+		AssetType committedAssetType = TestHelper.getResponseObjForRetrieve(microservice, environment, assetTypeId, apiRequestHelper, assetTypeAPI,
+				AssetType.class);
 		CustomAssertions.assertRequestAndResponseObj(responseAssetType, committedAssetType);
 	}
 
@@ -218,8 +220,8 @@ public class CreateAssetTypeWithParametersTest extends BaseTestSetupAndTearDown 
 		String assetTypeId = TestHelper.getElementId(responseAssetType.get_links().getSelfLink().getHref());
 		idsForAllCreatedElements.add(assetTypeId);
 
-		AssetType committedAssetType = TestHelper.getResponseObjForRetrieve(microservice, environment, assetTypeId, apiRequestHelper,
-				assetTypeAPI, AssetType.class);
+		AssetType committedAssetType = TestHelper.getResponseObjForRetrieve(microservice, environment, assetTypeId, apiRequestHelper, assetTypeAPI,
+				AssetType.class);
 		CustomAssertions.assertRequestAndResponseObj(responseAssetType, committedAssetType);
 	}
 

@@ -51,6 +51,8 @@ public class CreateAssetTypesTest extends BaseTestSetupAndTearDown {
 	/*
 	 * NEGATIVE TESTS START
 	 */
+	
+	// RREHM-383 (AssetType abbreviation is not unique) -- I will re-implement this, following some refactoring.
 
 	// RREHM-435 (AssetType abbreviation contains spaces)
 	@Test

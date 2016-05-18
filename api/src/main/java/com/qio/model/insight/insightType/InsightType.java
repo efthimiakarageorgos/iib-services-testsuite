@@ -1,4 +1,4 @@
-package com.qio.model.insightType;
+package com.qio.model.insight.insightType;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;

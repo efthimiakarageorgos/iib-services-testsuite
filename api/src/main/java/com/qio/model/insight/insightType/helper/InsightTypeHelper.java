@@ -1,10 +1,10 @@
-package com.qio.model.insightType.helper;
+package com.qio.model.insight.insightType.helper;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import com.qio.model.insightType.InsightType;
-import com.qio.model.insightType.InsightTypeAttribute;
+import com.qio.model.insight.insightType.InsightType;
+import com.qio.model.insight.insightType.InsightTypeAttribute;
 
 
 public class InsightTypeHelper {
@@ -20,7 +20,7 @@ public class InsightTypeHelper {
 	}
 
 
-	public InsightType getAssetTypeWithNoAttributes() {
+	public InsightType getInsightTypeWithNoAttributes() {
 		initDefaultInsightType();
 		insightType.setAttributes(null);
 		return insightType;
@@ -37,7 +37,7 @@ public class InsightTypeHelper {
 		return insightType;
 	}
 
-	public InsightType getAssetTypeWithAllAttributes() {
+	public InsightType getInsightTypeWithAllAttributes() {
 		List<InsightTypeAttribute> insightTypeAttributeAll = new ArrayList<InsightTypeAttribute>();
 		for (AttributeDataType dataType : AttributeDataType.values()) {
 			insightTypeAttributeAll.add(getInsightTypeAttributeWithInputDataType(dataType));
@@ -49,7 +49,7 @@ public class InsightTypeHelper {
 
 	public InsightTypeAttribute getInsightTypeAttributeWithInputDataType(AttributeDataType attributeDataType) {
 		String attributeDataTypePrefix = "ABBR" + attributeDataType.toString();
-		return new InsightTypeAttribute(attributeDataTypePrefix, attributeDataTypePrefix + " Name", attributeDataTypePrefix + " Desc", "",
+		return new InsightTypeAttribute(attributeDataTypePrefix, attributeDataTypePrefix + " Name", attributeDataTypePrefix + " Desc", "Unit",
 				attributeDataType.toString());
 	}
 

@@ -5,5 +5,5 @@ public enum AttributeDataType {
 	Integer,
 	String,
 	Date,
-	Boolean,
+	Boolean
 }
