@@ -6,6 +6,7 @@ import java.lang.reflect.InvocationTargetException;
 
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;
+import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -23,7 +24,6 @@ public class CreateInsightTypesTest extends BaseTestSetupAndTearDown {
 	private static MInsightTypeAPIHelper insightTypeAPI;
 	private InsightTypeHelper insightTypeHelper;
 	private InsightType requestInsightType;
-	private InsightType requestInsightType2;
 	private InsightType responseInsightType;
 	private ServerResponse serverResp;
 
@@ -39,12 +39,15 @@ public class CreateInsightTypesTest extends BaseTestSetupAndTearDown {
 	public void initSetupBeforeEceryTest() {
 		// Initializing a new set of objects before each test case.
 		insightTypeHelper = new InsightTypeHelper();
-		requestInsightType = new InsightType();
-		requestInsightType2 = new InsightType();
+		requestInsightType = insightTypeHelper.getInsightTypeWithNoAttributes();
 		responseInsightType = new InsightType();
 		serverResp = new ServerResponse();
-
-		requestInsightType = insightTypeHelper.getInsightTypeWithNoAttributes();
+	}
+	
+	@AfterClass
+	public static void cleanUpAfterAllTests() throws JsonGenerationException, JsonMappingException, IllegalAccessException, IllegalArgumentException,
+			InvocationTargetException, NoSuchMethodException, SecurityException, IOException {
+		baseCleanUpAfterAllTests(insightTypeAPI);
 	}
 
 	// The following test cases go here:
@@ -61,16 +64,14 @@ public class CreateInsightTypesTest extends BaseTestSetupAndTearDown {
 	@Test
 	public void shouldNotCreateInsightTypeWhenAbbrIsNotUnique() throws JsonGenerationException, JsonMappingException, IOException,
 			IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
-		String abbr = requestInsightType.getAbbreviation();
-
 		responseInsightType = TestHelper.getResponseObjForCreate(requestInsightType, microservice, environment, apiRequestHelper, insightTypeAPI,
 				InsightType.class);
+		String insightTypeId = TestHelper.getElementId(responseInsightType.get_links().getSelfLink().getHref());
+		idsForAllCreatedElements.add(insightTypeId);
 
-		requestInsightType2 = new InsightType();
-		requestInsightType2 = insightTypeHelper.getInsightTypeWithNoAttributes();
-		requestInsightType2.setAbbreviation(abbr);
-
-		serverResp = TestHelper.getResponseObjForCreate(requestInsightType2, microservice, environment, apiRequestHelper, insightTypeAPI,
+		InsightType requestInsightTypeWithSameAbbr = insightTypeHelper.getInsightTypeWithNoAttributes();
+		requestInsightTypeWithSameAbbr.setAbbreviation(requestInsightType.getAbbreviation());
+		serverResp = TestHelper.getResponseObjForCreate(requestInsightTypeWithSameAbbr, microservice, environment, apiRequestHelper, insightTypeAPI,
 				ServerResponse.class);
 
 		CustomAssertions.assertServerError(409, null, "Insight type creation failed as another insight type has same abbreviation.", serverResp);
