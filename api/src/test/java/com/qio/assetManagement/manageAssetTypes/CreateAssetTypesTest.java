@@ -6,6 +6,7 @@ import java.lang.reflect.InvocationTargetException;
 
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;
+import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -38,11 +39,15 @@ public class CreateAssetTypesTest extends BaseTestSetupAndTearDown {
 	public void initSetupBeforeEceryTest() {
 		// Initializing a new set of objects before each test case.
 		assetTypeHelper = new AssetTypeHelper();
-		requestAssetType = new AssetType();
+		requestAssetType = assetTypeHelper.getAssetTypeWithNoAttributesAndParameters();
 		responseAssetType = new AssetType();
 		serverResp = new ServerResponse();
-
-		requestAssetType = assetTypeHelper.getAssetTypeWithNoAttributesAndParameters();
+	}
+	
+	@AfterClass
+	public static void cleanUpAfterAllTests() throws JsonGenerationException, JsonMappingException, IllegalAccessException, IllegalArgumentException,
+			InvocationTargetException, NoSuchMethodException, SecurityException, IOException {
+		baseCleanUpAfterAllTests(assetTypeAPI);
 	}
 
 	// The following test cases go here:
@@ -51,8 +56,23 @@ public class CreateAssetTypesTest extends BaseTestSetupAndTearDown {
 	/*
 	 * NEGATIVE TESTS START
 	 */
-	
-	// RREHM-383 (AssetType abbreviation is not unique) -- I will re-implement this, following some refactoring.
+
+	// RREHM-383 (AssetType abbreviation is not unique)
+	@Test
+	public void shouldNotCreateAssetTypeWhenAbbrIsNotUnique() throws JsonGenerationException, JsonMappingException, IOException,
+			IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
+		responseAssetType = TestHelper.getResponseObjForCreate(requestAssetType, microservice, environment, apiRequestHelper, assetTypeAPI,
+				AssetType.class);
+		String assetTypeId = TestHelper.getElementId(responseAssetType.get_links().getSelfLink().getHref());
+		idsForAllCreatedElements.add(assetTypeId);
+
+		AssetType requestAssetTypeWithSameAbbr = assetTypeHelper.getAssetTypeWithNoAttributesAndParameters();
+		requestAssetTypeWithSameAbbr.setAbbreviation(requestAssetType.getAbbreviation());
+		serverResp = TestHelper.getResponseObjForCreate(requestAssetTypeWithSameAbbr, microservice, environment, apiRequestHelper, assetTypeAPI,
+				ServerResponse.class);
+
+		CustomAssertions.assertServerError(500, "org.springframework.dao.DuplicateKeyException", serverResp);
+	}
 
 	// RREHM-435 (AssetType abbreviation contains spaces)
 	@Test
