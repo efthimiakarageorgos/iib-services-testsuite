@@ -104,7 +104,8 @@ public class ConnectionManager {
 			conResp.setRespCode(responseCode);
 
 			BufferedReader in;
-			if (responseCode != 201)
+			// NEED TO TALK TO DEVELOPERS - WHY DOES THE POST return 200 for ActivityType
+			if (responseCode != 201 && responseCode != 200)
 				in = new BufferedReader(new InputStreamReader(con.getErrorStream()));
 			else
 				in = new BufferedReader(new InputStreamReader(con.getInputStream()));

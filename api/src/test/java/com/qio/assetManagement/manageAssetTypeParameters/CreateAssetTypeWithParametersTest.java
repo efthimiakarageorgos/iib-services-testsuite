@@ -131,6 +131,9 @@ public class CreateAssetTypeWithParametersTest extends BaseTestSetupAndTearDown 
 		CustomAssertions.assertServerError(400, "org.springframework.http.converter.HttpMessageNotReadableException", serverResp);
 	}
 
+	// RREHM-929 ()
+	// RREHM-930 ()
+	
 	/*
 	 * NEGATIVE TESTS END
 	 */
