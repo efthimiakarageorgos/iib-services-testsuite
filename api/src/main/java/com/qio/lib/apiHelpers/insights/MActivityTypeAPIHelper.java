@@ -35,7 +35,7 @@ public class MActivityTypeAPIHelper extends MBaseAPIHelper {
 	}
 
 	protected String replaceActivityTypeIdInSingleActivityTypeEndpoint(String ActivityTypeId) {
-		String singleActivityTypeEndpoint = getOrDeleteSingleActivityTypeEndpointAbstract.replace("{ActivityTypeId}", ActivityTypeId);
+		String singleActivityTypeEndpoint = getOrDeleteSingleActivityTypeEndpointAbstract.replace("{activityTypeId}", ActivityTypeId);
 		return singleActivityTypeEndpoint;
 	}
 }
