@@ -132,8 +132,47 @@ public class CreateAssetTypeWithParametersTest extends BaseTestSetupAndTearDown 
 	}
 
 	// RREHM-929 ()
+	@Test
+	public void shouldNotCreateAssetTypeWhenTwoParametersHaveSameAbbr() throws JsonGenerationException, JsonMappingException, IOException,
+			IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
+		requestAssetType = assetTypeHelper.getAssetTypeWithAllParameters();
+		requestAssetType.getParameters().get(FIRST_ELEMENT).setAbbreviation("ABBRInteger");
+		requestAssetType.getParameters().get(FIRST_ELEMENT + 1).setAbbreviation("ABBRInteger");
+
+		serverResp = TestHelper.getResponseObjForCreate(requestAssetType, microservice, environment, apiRequestHelper, assetTypeAPI,
+				ServerResponse.class);
+
+		CustomAssertions.assertServerError(500, "com.qiotec.application.exceptions.InvalidInputException",
+				"Parameter Abbreviation Should not Contain Duplicate Entries", serverResp);
+	}
+
 	// RREHM-930 ()
-	
+	@Test
+	public void shouldNotCreateAssetTypeWhenParameterBaseuomIsBlank() throws JsonGenerationException, JsonMappingException, IOException,
+			IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
+		requestAssetType = assetTypeHelper.getAssetTypeWithAllParameters();
+		requestAssetType.getParameters().get(FIRST_ELEMENT).setBaseuom("");
+
+		serverResp = TestHelper.getResponseObjForCreate(requestAssetType, microservice, environment, apiRequestHelper, assetTypeAPI,
+				ServerResponse.class);
+
+		CustomAssertions.assertServerError(500, "com.qiotec.application.exceptions.InvalidInputException",
+				"Parameter BaseUom Should not be Empty or Null", serverResp);
+	}
+
+	@Test
+	public void shouldNotCreateAssetTypeWhenParameterBaseuomIsNull() throws JsonGenerationException, JsonMappingException, IOException,
+			IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
+		requestAssetType = assetTypeHelper.getAssetTypeWithAllParameters();
+		requestAssetType.getParameters().get(FIRST_ELEMENT).setBaseuom(null);
+
+		serverResp = TestHelper.getResponseObjForCreate(requestAssetType, microservice, environment, apiRequestHelper, assetTypeAPI,
+				ServerResponse.class);
+
+		CustomAssertions.assertServerError(500, "com.qiotec.application.exceptions.InvalidInputException",
+				"Parameter BaseUom Should not be Empty or Null", serverResp);
+	}
+
 	/*
 	 * NEGATIVE TESTS END
 	 */

@@ -48,9 +48,15 @@ public class BaseTestSetupAndTearDown {
 
 	public static void baseCleanUpAfterAllTests(Object apiHelperObj) throws JsonGenerationException, JsonMappingException, IllegalAccessException,
 			IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException, IOException {
-		for (String assetTypeId : idsForAllCreatedElements) {
-			TestHelper.deleteRequestObj(microservice, environment, assetTypeId, apiRequestHelper, apiHelperObj);
+		for (String elementId : idsForAllCreatedElements) {
+			TestHelper.deleteRequestObj(microservice, environment, elementId, apiRequestHelper, apiHelperObj);
 		}
+	}
 
+	public static void baseCleanUpAfterAllTests(ArrayList<String> idsForAllCreatedElements, Object apiHelperObj) throws JsonGenerationException, JsonMappingException, IllegalAccessException,
+			IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException, IOException {
+		for (String elementId : idsForAllCreatedElements) {
+			TestHelper.deleteRequestObj(microservice, environment, elementId, apiRequestHelper, apiHelperObj);
+		}
 	}
 }
