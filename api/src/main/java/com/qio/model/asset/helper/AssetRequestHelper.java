@@ -3,65 +3,27 @@ package com.qio.model.asset.helper;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 
-import org.apache.log4j.Logger;
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;
 
 import com.qio.model.asset.AssetRequest;
 import com.qio.model.assetType.AssetType;
+import com.qio.model.assetType.helper.AttributeDataType;
+import com.qio.model.assetType.helper.ParameterDataType;
 import com.qio.model.tenant.Tenant;
-//import com.qio.testHelper.AssetTypeTestHelper;
-//import com.qio.testHelper.TenantTestHelper;
-
-
-//import com.qio.testHelper.AssetTypeTestHelper;
-//import com.qio.testHelper.TenantTestHelper;
-
+import com.qio.util.common.APITestUtil;
+import com.qio.util.common.AssetTypeUtil;
+import com.qio.util.common.TenantUtil;
 
 public class AssetRequestHelper {
-	AssetRequest asset;
-	
-	//putting back
-	// private AssetTypeTestHelper assetTypeTestHelper;
-	private AssetType responseAssetType;
-	private String assetTypeId;
-	
-	//putting back
-	// private TenantTestHelper tenantTestHelper;
-	private Tenant responseTenant;
-	private String tenantId;
-	
-	final static Logger logger = Logger.getRootLogger();
+	AssetRequest asset = null;
+	AssetTypeUtil assetTypeUtil = null;
+	TenantUtil tenantUtil = null;
 
-	// creates an asset that links to an assetType and tenant.
 	private void initDefaultAsset() {
-		assetTypeId="";
-		tenantId="";
-		
-		java.util.Date date= new java.util.Date();
+		java.util.Date date = new java.util.Date();
 		String timestamp = Long.toString(date.getTime());
-		asset = new AssetRequest(timestamp, assetTypeId, tenantId);
-	}
-
-	public AssetRequest getAssetCreateDependencies(String assetTypeFlavor)throws JsonGenerationException, JsonMappingException, IOException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
-		//Create Asset Type
-		responseAssetType = new AssetType();	
-		// responseAssetType =
-		// assetTypeTestHelper.createAssetType(assetTypeFlavor);
-		
-		String[] assetTypeHrefLinkSplitArray = (responseAssetType.get_links().getSelfLink().getHref()).split("/");
-		assetTypeId = assetTypeHrefLinkSplitArray[assetTypeHrefLinkSplitArray.length - 1];
-					
-		//Create Tenant
-		responseTenant = new Tenant();
-		// responseTenant = tenantTestHelper.createTenant();
-		
-		initDefaultAsset();
-		asset.setAssetType(assetTypeId);
-		asset.setTenant(responseTenant.getTenantId());
-		
-		logger.info("assetTypeId "+assetTypeId + " tenantId " + responseTenant.getTenantId());
-		return asset;
+		asset = new AssetRequest(timestamp, "", "");
 	}
 
 	public AssetRequest getAssetWithPredefinedAssetTypeAndTenant(String assetTypeId, String tenantId) {
@@ -69,5 +31,19 @@ public class AssetRequestHelper {
 		asset.setAssetType(assetTypeId);
 		asset.setTenant(tenantId);
 		return asset;
+	}
+
+	public AssetRequest getAssetWithCreatingAssetTypeAndTenant(String assetTypeFlavor, AttributeDataType attributeDataType, ParameterDataType parameterDataType) throws JsonGenerationException,
+			JsonMappingException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException, IOException {
+		assetTypeUtil = new AssetTypeUtil();
+		tenantUtil = new TenantUtil();
+
+		AssetType assetType = assetTypeUtil.createAssetType(assetTypeFlavor, attributeDataType, parameterDataType);
+		String assetTypeId = APITestUtil.getElementId(assetType.get_links().getSelfLink().getHref());
+
+		Tenant tenant = tenantUtil.createTenant();
+		String tenantId = tenant.getTenantId();
+
+		return getAssetWithPredefinedAssetTypeAndTenant(assetTypeId, tenantId);
 	}
 }

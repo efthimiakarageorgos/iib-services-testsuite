@@ -17,7 +17,7 @@ import com.qio.lib.assertions.CustomAssertions;
 import com.qio.lib.exception.ServerResponse;
 import com.qio.model.insight.insightType.InsightType;
 import com.qio.model.insight.insightType.helper.InsightTypeHelper;
-import com.qio.testHelper.TestHelper;
+import com.qio.util.common.APITestUtil;
 
 public class CreateInsightTypesTest extends BaseTestSetupAndTearDown {
 
@@ -64,14 +64,14 @@ public class CreateInsightTypesTest extends BaseTestSetupAndTearDown {
 	@Test
 	public void shouldNotCreateInsightTypeWhenAbbrIsNotUnique() throws JsonGenerationException, JsonMappingException, IOException,
 			IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
-		responseInsightType = TestHelper.getResponseObjForCreate(requestInsightType, microservice, environment, apiRequestHelper, insightTypeAPI,
+		responseInsightType = APITestUtil.getResponseObjForCreate(requestInsightType, microservice, environment, apiRequestHelper, insightTypeAPI,
 				InsightType.class);
-		String insightTypeId = TestHelper.getElementId(responseInsightType.get_links().getSelfLink().getHref());
+		String insightTypeId = APITestUtil.getElementId(responseInsightType.get_links().getSelfLink().getHref());
 		idsForAllCreatedElements.add(insightTypeId);
 
 		InsightType requestInsightTypeWithSameAbbr = insightTypeHelper.getInsightTypeWithNoAttributes();
 		requestInsightTypeWithSameAbbr.setAbbreviation(requestInsightType.getAbbreviation());
-		serverResp = TestHelper.getResponseObjForCreate(requestInsightTypeWithSameAbbr, microservice, environment, apiRequestHelper, insightTypeAPI,
+		serverResp = APITestUtil.getResponseObjForCreate(requestInsightTypeWithSameAbbr, microservice, environment, apiRequestHelper, insightTypeAPI,
 				ServerResponse.class);
 
 		CustomAssertions.assertServerError(409, null, "Insight type creation failed as another insight type has same abbreviation.", serverResp);
@@ -84,7 +84,7 @@ public class CreateInsightTypesTest extends BaseTestSetupAndTearDown {
 		String abbr = requestInsightType.getAbbreviation();
 		requestInsightType.setAbbreviation("Abrr has a space" + abbr);
 
-		serverResp = TestHelper.getResponseObjForCreate(requestInsightType, microservice, environment, apiRequestHelper, insightTypeAPI,
+		serverResp = APITestUtil.getResponseObjForCreate(requestInsightType, microservice, environment, apiRequestHelper, insightTypeAPI,
 				ServerResponse.class);
 
 		CustomAssertions.assertServerError(400, null, "Abbreviation should not have Space or Tab", serverResp);
@@ -94,9 +94,9 @@ public class CreateInsightTypesTest extends BaseTestSetupAndTearDown {
 	@Test
 	public void shouldNotCreateInsightTypeWhenAbbreviationIsLongerThan50Chars() throws JsonGenerationException, JsonMappingException, IOException,
 			IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
-		requestInsightType.setAbbreviation(TestHelper.FIFTYONE_CHARS);
+		requestInsightType.setAbbreviation(APITestUtil.FIFTYONE_CHARS);
 
-		serverResp = TestHelper.getResponseObjForCreate(requestInsightType, microservice, environment, apiRequestHelper, insightTypeAPI,
+		serverResp = APITestUtil.getResponseObjForCreate(requestInsightType, microservice, environment, apiRequestHelper, insightTypeAPI,
 				ServerResponse.class);
 
 		CustomAssertions.assertServerError(400, null, "Abbreviation should be less than 50 characters", serverResp);
@@ -108,7 +108,7 @@ public class CreateInsightTypesTest extends BaseTestSetupAndTearDown {
 			IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
 		requestInsightType.setAbbreviation("");
 
-		serverResp = TestHelper.getResponseObjForCreate(requestInsightType, microservice, environment, apiRequestHelper, insightTypeAPI,
+		serverResp = APITestUtil.getResponseObjForCreate(requestInsightType, microservice, environment, apiRequestHelper, insightTypeAPI,
 				ServerResponse.class);
 
 		CustomAssertions.assertServerError(400, null,
@@ -121,7 +121,7 @@ public class CreateInsightTypesTest extends BaseTestSetupAndTearDown {
 			IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
 		requestInsightType.setAbbreviation(null);
 
-		serverResp = TestHelper.getResponseObjForCreate(requestInsightType, microservice, environment, apiRequestHelper, insightTypeAPI,
+		serverResp = APITestUtil.getResponseObjForCreate(requestInsightType, microservice, environment, apiRequestHelper, insightTypeAPI,
 				ServerResponse.class);
 
 		CustomAssertions.assertServerError(400, null,
@@ -133,12 +133,12 @@ public class CreateInsightTypesTest extends BaseTestSetupAndTearDown {
 	public void shouldNotCreateInsightTypeWhenAbbrContainsSpecialChars() throws JsonGenerationException, JsonMappingException, IOException,
 			IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
 		String defaultAbbr = requestInsightType.getAbbreviation();
-		int count = TestHelper.SPECIAL_CHARS.length();
+		int count = APITestUtil.SPECIAL_CHARS.length();
 
 		for (int i = 0; i < count; i++) {
-			requestInsightType.setAbbreviation(TestHelper.SPECIAL_CHARS.charAt(i) + defaultAbbr);
+			requestInsightType.setAbbreviation(APITestUtil.SPECIAL_CHARS.charAt(i) + defaultAbbr);
 
-			serverResp = TestHelper.getResponseObjForCreate(requestInsightType, microservice, environment, apiRequestHelper, insightTypeAPI,
+			serverResp = APITestUtil.getResponseObjForCreate(requestInsightType, microservice, environment, apiRequestHelper, insightTypeAPI,
 					ServerResponse.class);
 
 			CustomAssertions.assertServerError(400, null, "Abbreviation should not have special character except '.', '-', '_' ", serverResp);
@@ -151,7 +151,7 @@ public class CreateInsightTypesTest extends BaseTestSetupAndTearDown {
 			IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
 		requestInsightType.setName("");
 
-		serverResp = TestHelper.getResponseObjForCreate(requestInsightType, microservice, environment, apiRequestHelper, insightTypeAPI,
+		serverResp = APITestUtil.getResponseObjForCreate(requestInsightType, microservice, environment, apiRequestHelper, insightTypeAPI,
 				ServerResponse.class);
 
 		CustomAssertions.assertServerError(400, null, "Insight name is required, should be less than 255 char", serverResp);
@@ -163,7 +163,7 @@ public class CreateInsightTypesTest extends BaseTestSetupAndTearDown {
 			IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
 		requestInsightType.setName(null);
 
-		serverResp = TestHelper.getResponseObjForCreate(requestInsightType, microservice, environment, apiRequestHelper, insightTypeAPI,
+		serverResp = APITestUtil.getResponseObjForCreate(requestInsightType, microservice, environment, apiRequestHelper, insightTypeAPI,
 				ServerResponse.class);
 
 		CustomAssertions.assertServerError(400, null, "Insight name is required, should be less than 255 char", serverResp);
@@ -175,7 +175,7 @@ public class CreateInsightTypesTest extends BaseTestSetupAndTearDown {
 			IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
 		requestInsightType.setDescription("");
 
-		serverResp = TestHelper.getResponseObjForCreate(requestInsightType, microservice, environment, apiRequestHelper, insightTypeAPI,
+		serverResp = APITestUtil.getResponseObjForCreate(requestInsightType, microservice, environment, apiRequestHelper, insightTypeAPI,
 				ServerResponse.class);
 
 		CustomAssertions.assertServerError(400, null, "Description is mandatory, should be of reasonable length.", serverResp);
@@ -185,9 +185,9 @@ public class CreateInsightTypesTest extends BaseTestSetupAndTearDown {
 	@Test
 	public void shouldNotCreateInsightTypeWhenNameIsLongerThan50Chars() throws JsonGenerationException, JsonMappingException, IOException,
 			IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
-		requestInsightType.setName(TestHelper.TWOFIFTYSIX_CHARS);
+		requestInsightType.setName(APITestUtil.TWOFIFTYSIX_CHARS);
 
-		serverResp = TestHelper.getResponseObjForCreate(requestInsightType, microservice, environment, apiRequestHelper, insightTypeAPI,
+		serverResp = APITestUtil.getResponseObjForCreate(requestInsightType, microservice, environment, apiRequestHelper, insightTypeAPI,
 				ServerResponse.class);
 
 		CustomAssertions.assertServerError(400, null, "Insight name should be less than 255 characters", serverResp);

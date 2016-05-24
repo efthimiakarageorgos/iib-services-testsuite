@@ -5,7 +5,6 @@ import org.junit.BeforeClass;
 
 import com.qio.common.BaseTestSetupAndTearDown;
 import com.qio.lib.apiHelpers.assetType.MAssetTypeAPIHelper;
-import com.qio.lib.common.Microservice;
 import com.qio.lib.exception.ServerResponse;
 import com.qio.model.assetType.AssetType;
 import com.qio.model.assetType.helper.AssetTypeHelper;

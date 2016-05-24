@@ -8,7 +8,7 @@ import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;
 
 import com.qio.lib.apiHelpers.APIRequestHelper;
-import com.qio.testHelper.TestHelper;
+import com.qio.util.common.APITestUtil;
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
 
@@ -49,14 +49,14 @@ public class BaseTestSetupAndTearDown {
 	public static void baseCleanUpAfterAllTests(Object apiHelperObj) throws JsonGenerationException, JsonMappingException, IllegalAccessException,
 			IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException, IOException {
 		for (String elementId : idsForAllCreatedElements) {
-			TestHelper.deleteRequestObj(microservice, environment, elementId, apiRequestHelper, apiHelperObj);
+			APITestUtil.deleteRequestObj(microservice, environment, elementId, apiRequestHelper, apiHelperObj);
 		}
 	}
 
 	public static void baseCleanUpAfterAllTests(ArrayList<String> idsForAllCreatedElements, Object apiHelperObj) throws JsonGenerationException, JsonMappingException, IllegalAccessException,
 			IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException, IOException {
 		for (String elementId : idsForAllCreatedElements) {
-			TestHelper.deleteRequestObj(microservice, environment, elementId, apiRequestHelper, apiHelperObj);
+			APITestUtil.deleteRequestObj(microservice, environment, elementId, apiRequestHelper, apiHelperObj);
 		}
 	}
 }

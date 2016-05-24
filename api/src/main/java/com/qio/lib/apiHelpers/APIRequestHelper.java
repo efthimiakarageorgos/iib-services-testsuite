@@ -1,5 +1,7 @@
 package com.qio.lib.apiHelpers;
 
+import com.qio.model.assetType.AssetType;
+
 public class APIRequestHelper {
 	private String acceptType;
 	private String contentType;
@@ -30,6 +32,11 @@ public class APIRequestHelper {
 
 	public APIRequestHelper(String userName, String password, String oauthMicroservice) {
 		this("application/json", "application/json", userName, password, oauthMicroservice);
+	}
+
+	public APIRequestHelper(APIRequestHelper apiRequestHelper) {
+		this(apiRequestHelper.getAcceptType(), apiRequestHelper.getContentType(), apiRequestHelper.getUserName(), apiRequestHelper.getPassword(),
+				apiRequestHelper.getGrant_type(), apiRequestHelper.getScope(), apiRequestHelper.getOauthMicroservice());
 	}
 
 	public String getAcceptType() {

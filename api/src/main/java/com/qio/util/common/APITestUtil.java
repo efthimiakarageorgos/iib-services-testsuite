@@ -1,4 +1,4 @@
-package com.qio.testHelper;
+package com.qio.util.common;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -14,7 +14,7 @@ import com.qio.lib.apiHelpers.idm.MOauthAPIHelper;
 import com.qio.lib.common.BaseHelper;
 import com.qio.lib.connection.ConnectionResponse;
 
-public class TestHelper {
+public class APITestUtil {
 
 	public static String SPECIAL_CHARS = "~^%{&@}$#*()+=!~";
 	public static String TWOFIFTYSIX_CHARS = "256charactelong256charactelong256charactelong256charactelong256charactelong256charactelong256charactelong256charactelong256charactelong256charactelong256charactelong256charactelong256charactelong256charactelong256charactelong256charactelong256characteRlong";
@@ -26,9 +26,8 @@ public class TestHelper {
 
 	final static Logger logger = Logger.getRootLogger();
 
-	public static <T> T getResponseObjForCreate(Object requestObject, String microservice, String environment, APIRequestHelper apiRequestHelper,
-			Object apiHelperObj, Class<T> classType) throws JsonGenerationException, JsonMappingException, IOException, IllegalAccessException,
-					IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
+	public static <T> T getResponseObjForCreate(Object requestObject, String microservice, String environment, APIRequestHelper apiRequestHelper, Object apiHelperObj, Class<T> classType)
+			throws JsonGenerationException, JsonMappingException, IOException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
 
 		initOauthAuthentication(environment, apiRequestHelper);
 
@@ -46,9 +45,8 @@ public class TestHelper {
 	/**
 	 * elementId - refers the unique GUID identifier for AssetType, AssetTypeAttribute etc.
 	 */
-	public static <T> T getResponseObjForRetrieve(String microservice, String environment, String elementId, APIRequestHelper apiRequestHelper,
-			Object apiHelperObj, Class<T> classType) throws JsonGenerationException, JsonMappingException, IOException, IllegalAccessException,
-					IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
+	public static <T> T getResponseObjForRetrieve(String microservice, String environment, String elementId, APIRequestHelper apiRequestHelper, Object apiHelperObj, Class<T> classType)
+			throws JsonGenerationException, JsonMappingException, IOException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
 
 		initOauthAuthentication(environment, apiRequestHelper);
 
@@ -57,16 +55,13 @@ public class TestHelper {
 		methodArgs[3] = APIRequestHelper.class;
 		Method retrieveMethod = apiHelperObj.getClass().getMethod("retrieve", methodArgs);
 
-		ConnectionResponse conRespGet = (ConnectionResponse) retrieveMethod.invoke(apiHelperObj, microservice, environment, elementId,
-				apiRequestHelper);
+		ConnectionResponse conRespGet = (ConnectionResponse) retrieveMethod.invoke(apiHelperObj, microservice, environment, elementId, apiRequestHelper);
 		responseCodeForInputRequest = conRespGet.getRespCode();
 		return (T) BaseHelper.toClassObject(conRespGet.getRespBody(), classType);
 	}
 
-	public static <T> List<T> getListResponseObjForRetrieve(String microservice, String environment, String elementId,
-			APIRequestHelper apiRequestHelper, Object apiHelperObj, Class<T> classType) throws JsonGenerationException, JsonMappingException,
-					IOException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException,
-					SecurityException {
+	public static <T> List<T> getListResponseObjForRetrieve(String microservice, String environment, String elementId, APIRequestHelper apiRequestHelper, Object apiHelperObj, Class<T> classType)
+			throws JsonGenerationException, JsonMappingException, IOException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
 
 		initOauthAuthentication(environment, apiRequestHelper);
 
@@ -75,15 +70,13 @@ public class TestHelper {
 		methodArgs[3] = APIRequestHelper.class;
 		Method retrieveMethod = apiHelperObj.getClass().getMethod("retrieve", methodArgs);
 
-		ConnectionResponse conRespGet = (ConnectionResponse) retrieveMethod.invoke(apiHelperObj, microservice, environment, elementId,
-				apiRequestHelper);
+		ConnectionResponse conRespGet = (ConnectionResponse) retrieveMethod.invoke(apiHelperObj, microservice, environment, elementId, apiRequestHelper);
 		responseCodeForInputRequest = conRespGet.getRespCode();
 		return (List<T>) BaseHelper.toClassObjectList(conRespGet.getRespBody(), classType);
 	}
 
-	public static <T> T getResponseObjForRetrieve(String microservice, String environment, String elementId, String subElementId,
-			APIRequestHelper apiRequestHelper, Object apiHelperObj, Class<T> classType) throws JsonGenerationException, JsonMappingException,
-					IOException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException,
+	public static <T> T getResponseObjForRetrieve(String microservice, String environment, String elementId, String subElementId, APIRequestHelper apiRequestHelper, Object apiHelperObj,
+			Class<T> classType) throws JsonGenerationException, JsonMappingException, IOException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException,
 					SecurityException {
 
 		initOauthAuthentication(environment, apiRequestHelper);
@@ -93,15 +86,13 @@ public class TestHelper {
 		methodArgs[4] = APIRequestHelper.class;
 		Method retrieveMethod = apiHelperObj.getClass().getMethod("retrieve", methodArgs);
 
-		ConnectionResponse conRespGet = (ConnectionResponse) retrieveMethod.invoke(apiHelperObj, microservice, environment, elementId, subElementId,
-				apiRequestHelper);
+		ConnectionResponse conRespGet = (ConnectionResponse) retrieveMethod.invoke(apiHelperObj, microservice, environment, elementId, subElementId, apiRequestHelper);
 		responseCodeForInputRequest = conRespGet.getRespCode();
 		return (T) BaseHelper.toClassObject(conRespGet.getRespBody(), classType);
 	}
 
-	public static <T> T getResponseObjForRetrieveAll(String microservice, String environment, APIRequestHelper apiRequestHelper, Object apiHelperObj,
-			Class<T> classType) throws JsonGenerationException, JsonMappingException, IOException, IllegalAccessException, IllegalArgumentException,
-					InvocationTargetException, NoSuchMethodException, SecurityException {
+	public static <T> T getResponseObjForRetrieveAll(String microservice, String environment, APIRequestHelper apiRequestHelper, Object apiHelperObj, Class<T> classType)
+			throws JsonGenerationException, JsonMappingException, IOException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
 
 		initOauthAuthentication(environment, apiRequestHelper);
 
@@ -115,9 +106,8 @@ public class TestHelper {
 		return (T) BaseHelper.toClassObject(conRespGet.getRespBody(), classType);
 	}
 
-	public static <T> void deleteRequestObj(String microservice, String environment, String elementId, APIRequestHelper apiRequestHelper,
-			Object apiHelperObj) throws JsonGenerationException, JsonMappingException, IOException, IllegalAccessException, IllegalArgumentException,
-					InvocationTargetException, NoSuchMethodException, SecurityException {
+	public static <T> void deleteRequestObj(String microservice, String environment, String elementId, APIRequestHelper apiRequestHelper, Object apiHelperObj) throws JsonGenerationException,
+			JsonMappingException, IOException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
 
 		initOauthAuthentication(environment, apiRequestHelper);
 
@@ -126,14 +116,12 @@ public class TestHelper {
 		methodArgs[3] = APIRequestHelper.class;
 		Method deleteMethod = apiHelperObj.getClass().getMethod("delete", methodArgs);
 
-		ConnectionResponse conRespDelete = (ConnectionResponse) deleteMethod.invoke(apiHelperObj, microservice, environment, elementId,
-				apiRequestHelper);
+		ConnectionResponse conRespDelete = (ConnectionResponse) deleteMethod.invoke(apiHelperObj, microservice, environment, elementId, apiRequestHelper);
 		// responseCodeForInputRequest = conRespDelete.getRespCode();
 	}
 
-	public static <T> T getResponseObjForUpdate(Object requestObject, String microservice, String environment, String elementId,
-			APIRequestHelper apiRequestHelper, Object apiHelperObj, Class<T> classType) throws JsonGenerationException, JsonMappingException,
-					IOException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException,
+	public static <T> T getResponseObjForUpdate(Object requestObject, String microservice, String environment, String elementId, APIRequestHelper apiRequestHelper, Object apiHelperObj,
+			Class<T> classType) throws JsonGenerationException, JsonMappingException, IOException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException,
 					SecurityException {
 
 		initOauthAuthentication(environment, apiRequestHelper);
@@ -144,8 +132,7 @@ public class TestHelper {
 		Method updateMethod = apiHelperObj.getClass().getMethod("update", methodArgs);
 
 		String payload = BaseHelper.toJSONString(requestObject);
-		ConnectionResponse conRespPut = (ConnectionResponse) updateMethod.invoke(apiHelperObj, microservice, environment, payload, elementId,
-				apiRequestHelper);
+		ConnectionResponse conRespPut = (ConnectionResponse) updateMethod.invoke(apiHelperObj, microservice, environment, payload, elementId, apiRequestHelper);
 		responseCodeForInputRequest = conRespPut.getRespCode();
 		return (T) BaseHelper.toClassObject(conRespPut.getRespBody(), classType);
 	}
@@ -167,8 +154,8 @@ public class TestHelper {
 	}
 
 	/*
-	 * Although this method is called before making any of the get, delete, put and post requests, but the oauth tokens are fetched only once, based
-	 * on the logic abstracted inside the Connection Manager class.
+	 * Although this method is called before making any of the get, delete, put and post requests, but the oauth tokens are fetched only once, based on the logic abstracted inside the Connection
+	 * Manager class.
 	 */
 	private static void initOauthAuthentication(String environment, APIRequestHelper apiRequestHelper) {
 		oauthAPIHelper = oauthAPIHelper == null ? new MOauthAPIHelper() : oauthAPIHelper;
