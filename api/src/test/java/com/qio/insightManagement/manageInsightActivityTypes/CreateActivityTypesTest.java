@@ -60,143 +60,143 @@ public class CreateActivityTypesTest extends BaseTestSetupAndTearDown {
 	 * NEGATIVE TESTS START
 	 */
 
-//	// RREHM-762 (ActivityType abbreviation is not unique)
-//	@Test
-//	public void shouldNotCreateActivityTypeWhenAbbrIsNotUnique() throws JsonGenerationException, JsonMappingException, IOException,
-//			IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
-//		String defaultAbbr = requestActivityType.getAbbreviation();
-//
-//		responseActivityType = TestHelper.getResponseObjForCreate(requestActivityType, microservice, environment, apiRequestHelper, activityTypeAPI,
-//				ActivityType.class);
-//		String activityTypeId = responseActivityType.getActivityTypeId();
-//		idsForAllCreatedElements.add(activityTypeId);
-//		
-//		ActivityType requestActivityTypeNonUnique;
-//		requestActivityTypeNonUnique = activityTypeHelper.getActivityType();
-//		requestActivityTypeNonUnique.setAbbreviation(defaultAbbr);
-//
-//		serverResp = TestHelper.getResponseObjForCreate(requestActivityTypeNonUnique, microservice, environment, apiRequestHelper, activityTypeAPI,
-//				ServerResponse.class);
-//		CustomAssertions.assertServerError(409, null,
-//			"Creating Activity Type failed as another activity has same abbreviation.", serverResp);
-//	}
-//
-//	// RREHM-768 (ActivityType abbreviation contains spaces)
-//	@Test
-//	public void shouldNotCreateActivityTypeWhenAbbrContainsSpaces() throws JsonGenerationException, JsonMappingException, IOException,
-//			IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
-//		String abbr = requestActivityType.getAbbreviation();
-//		requestActivityType.setAbbreviation("Abrr has a space" + abbr);
-//
-//		serverResp = TestHelper.getResponseObjForCreate(requestActivityType, microservice, environment, apiRequestHelper, activityTypeAPI,
-//				ServerResponse.class);
-//
-//		CustomAssertions.assertServerError(400, null, "Abbreviation should not have Space or Tab", serverResp);
-//	}
-//
-//	// RREHM-763 (ActivityType abbreviation is longer than 50 chars)
-//	@Test
-//	public void shouldNotCreateActivityTypeWhenAbbreviationIsLongerThan50Chars() throws JsonGenerationException, JsonMappingException, IOException,
-//			IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
-//		requestActivityType.setAbbreviation(TestHelper.FIFTYONE_CHARS);
-//
-//		serverResp = TestHelper.getResponseObjForCreate(requestActivityType, microservice, environment, apiRequestHelper, activityTypeAPI,
-//				ServerResponse.class);
-//
-//		CustomAssertions.assertServerError(400, null, "Abbreviation should be less than 50 characters", serverResp);
-//	}
-//
-//	// RREHM-769 (ActivityType abbreviation is blank)
-//	@Test
-//	public void shouldNotCreateActivityTypeWhenAbbreviationIsBlank() throws JsonGenerationException, JsonMappingException, IOException,
-//			IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
-//		requestActivityType.setAbbreviation("");
-//
-//		serverResp = TestHelper.getResponseObjForCreate(requestActivityType, microservice, environment, apiRequestHelper, activityTypeAPI,
-//				ServerResponse.class);
-//
-//		CustomAssertions.assertServerError(400, null,
-//				"Abbreviation is mandatory, should be less than 50 characters and no special characters are allowed.", serverResp);
-//	}
-//
-//	// RREHM-769 (ActivityType abbreviation is null - missing)
-//	@Test
-//	public void shouldNotCreateActivityTypeWhenAbbreviationIsNull() throws JsonGenerationException, JsonMappingException, IOException,
-//			IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
-//		requestActivityType.setAbbreviation(null);
-//
-//		serverResp = TestHelper.getResponseObjForCreate(requestActivityType, microservice, environment, apiRequestHelper, activityTypeAPI,
-//				ServerResponse.class);
-//
-//		CustomAssertions.assertServerError(400, null,
-//				"Abbreviation is mandatory, should be less than 50 characters and no special characters are allowed.", serverResp);
-//	}
-//
-//	// RREHM-767 (ActivityType abbreviation contains special chars)
-//	@Test
-//	public void shouldNotCreateActivityTypeWhenAbbrContainsSpecialChars() throws JsonGenerationException, JsonMappingException, IOException,
-//			IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
-//		int count = TestHelper.SPECIAL_CHARS.length();
-//
-//		for (int i = 0; i < count; i++) {
-//			requestActivityType = activityTypeHelper.getActivityType();
-//			String defaultAbbr = requestActivityType.getAbbreviation();
-//			requestActivityType.setAbbreviation(TestHelper.SPECIAL_CHARS.charAt(i) + defaultAbbr);
-//
-//			serverResp = TestHelper.getResponseObjForCreate(requestActivityType, microservice, environment, apiRequestHelper, activityTypeAPI,
-//					ServerResponse.class);
-//
-//			CustomAssertions.assertServerError(400, null, "Abbreviation should not have special character except '.', '-', '_' ", serverResp);
-//		}
-//	}
-//
-//	// RREHM-773 (ActivityType name is blank)
-//	@Test
-//	public void shouldNotCreateActivityTypeWhenNameIsBlank() throws JsonGenerationException, JsonMappingException, IOException,
-//			IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
-//		requestActivityType.setActivityName("");
-//
-//		serverResp = TestHelper.getResponseObjForCreate(requestActivityType, microservice, environment, apiRequestHelper, activityTypeAPI,
-//				ServerResponse.class);
-//
-//		CustomAssertions.assertServerError(400, null, "Name is mandatory, should be less than 255 characters.", serverResp);
-//	}
-//
-//	// RREHM-773 (ActivityType Name is null - missing)
-//	@Test
-//	public void shouldNotCreateActivityTypeWhenNameIsNull() throws JsonGenerationException, JsonMappingException, IOException, IllegalAccessException,
-//			IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
-//		requestActivityType.setActivityName(null);
-//
-//		serverResp = TestHelper.getResponseObjForCreate(requestActivityType, microservice, environment, apiRequestHelper, activityTypeAPI,
-//				ServerResponse.class);
-//
-//		CustomAssertions.assertServerError(400, null, "Name is mandatory, should be less than 255 characters.", serverResp);
-//	}
-//
-//	// RREHM-770 (ActivityType name is longer than 255 chars)
-//	@Test
-//	public void shouldNotCreateActivityTypeWhenNameIsLongerThan255Chars() throws JsonGenerationException, JsonMappingException, IOException,
-//			IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
-//		requestActivityType.setActivityName(TestHelper.TWOFIFTYSIX_CHARS);
-//
-//		serverResp = TestHelper.getResponseObjForCreate(requestActivityType, microservice, environment, apiRequestHelper, activityTypeAPI,
-//				ServerResponse.class);
-//
-//		CustomAssertions.assertServerError(400, null, "Name should be less than 255 characters", serverResp);
-//	}
-//
-//	// RREHM-777 (ActivityType Description is null - missing)
-//	@Test
-//	public void shouldNotCreateActivityTypeWhenDescIsNull() throws JsonGenerationException, JsonMappingException, IOException, IllegalAccessException,
-//			IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
-//		requestActivityType.setActivityDescription(null);
-//
-//		serverResp = TestHelper.getResponseObjForCreate(requestActivityType, microservice, environment, apiRequestHelper, activityTypeAPI,
-//				ServerResponse.class);
-//
-//		CustomAssertions.assertServerError(400, null, "Description is mandatory, should be of reasonable length.", serverResp);
-//	}
+	// RREHM-762 (ActivityType abbreviation is not unique)
+	@Test
+	public void shouldNotCreateActivityTypeWhenAbbrIsNotUnique() throws JsonGenerationException, JsonMappingException, IOException,
+			IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
+		String defaultAbbr = requestActivityType.getAbbreviation();
+
+		responseActivityType = TestHelper.getResponseObjForCreate(requestActivityType, microservice, environment, apiRequestHelper, activityTypeAPI,
+				ActivityType.class);
+		String activityTypeId = responseActivityType.getActivityTypeId();
+		idsForAllCreatedElements.add(activityTypeId);
+		
+		ActivityType requestActivityTypeNonUnique;
+		requestActivityTypeNonUnique = activityTypeHelper.getActivityType();
+		requestActivityTypeNonUnique.setAbbreviation(defaultAbbr);
+
+		serverResp = TestHelper.getResponseObjForCreate(requestActivityTypeNonUnique, microservice, environment, apiRequestHelper, activityTypeAPI,
+				ServerResponse.class);
+		CustomAssertions.assertServerError(409, null,
+			"Creating Activity Type failed as another activity has same abbreviation.", serverResp);
+	}
+
+	// RREHM-768 (ActivityType abbreviation contains spaces)
+	@Test
+	public void shouldNotCreateActivityTypeWhenAbbrContainsSpaces() throws JsonGenerationException, JsonMappingException, IOException,
+			IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
+		String abbr = requestActivityType.getAbbreviation();
+		requestActivityType.setAbbreviation("Abrr has a space" + abbr);
+
+		serverResp = TestHelper.getResponseObjForCreate(requestActivityType, microservice, environment, apiRequestHelper, activityTypeAPI,
+				ServerResponse.class);
+
+		CustomAssertions.assertServerError(400, null, "Abbreviation should not have Space or Tab", serverResp);
+	}
+
+	// RREHM-763 (ActivityType abbreviation is longer than 50 chars)
+	@Test
+	public void shouldNotCreateActivityTypeWhenAbbreviationIsLongerThan50Chars() throws JsonGenerationException, JsonMappingException, IOException,
+			IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
+		requestActivityType.setAbbreviation(TestHelper.FIFTYONE_CHARS);
+
+		serverResp = TestHelper.getResponseObjForCreate(requestActivityType, microservice, environment, apiRequestHelper, activityTypeAPI,
+				ServerResponse.class);
+
+		CustomAssertions.assertServerError(400, null, "Abbreviation should be less than 50 characters", serverResp);
+	}
+
+	// RREHM-769 (ActivityType abbreviation is blank)
+	@Test
+	public void shouldNotCreateActivityTypeWhenAbbreviationIsBlank() throws JsonGenerationException, JsonMappingException, IOException,
+			IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
+		requestActivityType.setAbbreviation("");
+
+		serverResp = TestHelper.getResponseObjForCreate(requestActivityType, microservice, environment, apiRequestHelper, activityTypeAPI,
+				ServerResponse.class);
+
+		CustomAssertions.assertServerError(400, null,
+				"Abbreviation is mandatory, should be less than 50 characters and no special characters are allowed.", serverResp);
+	}
+
+	// RREHM-769 (ActivityType abbreviation is null - missing)
+	@Test
+	public void shouldNotCreateActivityTypeWhenAbbreviationIsNull() throws JsonGenerationException, JsonMappingException, IOException,
+			IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
+		requestActivityType.setAbbreviation(null);
+
+		serverResp = TestHelper.getResponseObjForCreate(requestActivityType, microservice, environment, apiRequestHelper, activityTypeAPI,
+				ServerResponse.class);
+
+		CustomAssertions.assertServerError(400, null,
+				"Abbreviation is mandatory, should be less than 50 characters and no special characters are allowed.", serverResp);
+	}
+
+	// RREHM-767 (ActivityType abbreviation contains special chars)
+	@Test
+	public void shouldNotCreateActivityTypeWhenAbbrContainsSpecialChars() throws JsonGenerationException, JsonMappingException, IOException,
+			IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
+		int count = TestHelper.SPECIAL_CHARS.length();
+
+		for (int i = 0; i < count; i++) {
+			requestActivityType = activityTypeHelper.getActivityType();
+			String defaultAbbr = requestActivityType.getAbbreviation();
+			requestActivityType.setAbbreviation(TestHelper.SPECIAL_CHARS.charAt(i) + defaultAbbr);
+
+			serverResp = TestHelper.getResponseObjForCreate(requestActivityType, microservice, environment, apiRequestHelper, activityTypeAPI,
+					ServerResponse.class);
+
+			CustomAssertions.assertServerError(400, null, "Abbreviation should not have special character except '.', '-', '_' ", serverResp);
+		}
+	}
+
+	// RREHM-773 (ActivityType name is blank)
+	@Test
+	public void shouldNotCreateActivityTypeWhenNameIsBlank() throws JsonGenerationException, JsonMappingException, IOException,
+			IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
+		requestActivityType.setActivityName("");
+
+		serverResp = TestHelper.getResponseObjForCreate(requestActivityType, microservice, environment, apiRequestHelper, activityTypeAPI,
+				ServerResponse.class);
+
+		CustomAssertions.assertServerError(400, null, "Name is mandatory, should be less than 255 characters.", serverResp);
+	}
+
+	// RREHM-773 (ActivityType Name is null - missing)
+	@Test
+	public void shouldNotCreateActivityTypeWhenNameIsNull() throws JsonGenerationException, JsonMappingException, IOException, IllegalAccessException,
+			IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
+		requestActivityType.setActivityName(null);
+
+		serverResp = TestHelper.getResponseObjForCreate(requestActivityType, microservice, environment, apiRequestHelper, activityTypeAPI,
+				ServerResponse.class);
+
+		CustomAssertions.assertServerError(400, null, "Name is mandatory, should be less than 255 characters.", serverResp);
+	}
+
+	// RREHM-770 (ActivityType name is longer than 255 chars)
+	@Test
+	public void shouldNotCreateActivityTypeWhenNameIsLongerThan255Chars() throws JsonGenerationException, JsonMappingException, IOException,
+			IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
+		requestActivityType.setActivityName(TestHelper.TWOFIFTYSIX_CHARS);
+
+		serverResp = TestHelper.getResponseObjForCreate(requestActivityType, microservice, environment, apiRequestHelper, activityTypeAPI,
+				ServerResponse.class);
+
+		CustomAssertions.assertServerError(400, null, "Name should be less than 255 characters", serverResp);
+	}
+
+	// RREHM-777 (ActivityType Description is null - missing)
+	@Test
+	public void shouldNotCreateActivityTypeWhenDescIsNull() throws JsonGenerationException, JsonMappingException, IOException, IllegalAccessException,
+			IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
+		requestActivityType.setActivityDescription(null);
+
+		serverResp = TestHelper.getResponseObjForCreate(requestActivityType, microservice, environment, apiRequestHelper, activityTypeAPI,
+				ServerResponse.class);
+
+		CustomAssertions.assertServerError(400, null, "Description is mandatory, should be of reasonable length.", serverResp);
+	}
 
 	/*
 	 * NEGATIVE TESTS END
@@ -206,7 +206,7 @@ public class CreateActivityTypesTest extends BaseTestSetupAndTearDown {
 	 * POSITIVE TESTS START
 	 */
 	// Custom Assertion requirements - to do:
-	// Need to confrim that every time we create an activity type, it gets the following element set: 
+	// Need to confirm that every time we create an activity type, it gets the following element set: 
 	// "systemDefined" : false
 	
 	
@@ -298,13 +298,73 @@ public class CreateActivityTypesTest extends BaseTestSetupAndTearDown {
 		CustomAssertions.assertRequestAndResponseObj(responseActivityType, committedActivityType);
 	}
 	
-	// RREHM-892
 	// RREHM-775
-	// RREHM-774
+	@Test
+	public void shouldCreateActivityTypeWithUniqueAbbrWhenDescContainsSpecialChars() throws JsonGenerationException, JsonMappingException,
+		IOException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
+		
+		requestActivityType.setActivityDescription(TestHelper.SPECIAL_CHARS);
+		responseActivityType = TestHelper.getResponseObjForCreate(requestActivityType, microservice, environment, apiRequestHelper, activityTypeAPI,
+			ActivityType.class);
+		
+		String activityTypeId = responseActivityType.getActivityTypeId();
+		idsForAllCreatedElements.add(activityTypeId);
+					
+		ActivityType committedActivityType = TestHelper.getResponseObjForRetrieve(microservice, environment, activityTypeId, apiRequestHelper, activityTypeAPI,
+				ActivityType.class);
+		CustomAssertions.assertRequestAndResponseObj(responseActivityType, committedActivityType);
+	}
+	
+	
 	// RREHM-772
-	// RREHM-765
-	// RREHM-766
+	@Test
+	public void shouldCreateActivityTypeWithUniqueAbbrWhenNameIsNotUnique() throws JsonGenerationException, JsonMappingException,
+		IOException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
+		
+		ActivityType responseActivityTypeNonUniqueName;
+		ActivityType requestActivityTypeNonUniqueName;
+		
+		String defaultName = requestActivityType.getActivityName();
+		responseActivityType = TestHelper.getResponseObjForCreate(requestActivityType, microservice, environment, apiRequestHelper, activityTypeAPI,
+				ActivityType.class);
+		String activityTypeId = responseActivityType.getActivityTypeId();
+		idsForAllCreatedElements.add(activityTypeId);
+		
+		
+		requestActivityTypeNonUniqueName = activityTypeHelper.getActivityType();
+		requestActivityTypeNonUniqueName.setActivityName(defaultName);
+		
+		responseActivityTypeNonUniqueName = TestHelper.getResponseObjForCreate(requestActivityTypeNonUniqueName, microservice, environment, apiRequestHelper, activityTypeAPI,
+			ActivityType.class);
+		
+		String activityTypeNonUniqueNameId = responseActivityTypeNonUniqueName.getActivityTypeId();
+		idsForAllCreatedElements.add(activityTypeNonUniqueNameId);
+		
+		ActivityType committedActivityType = TestHelper.getResponseObjForRetrieve(microservice, environment, activityTypeNonUniqueNameId, apiRequestHelper, activityTypeAPI,
+		ActivityType.class);
+		
+		CustomAssertions.assertRequestAndResponseObj(responseActivityTypeNonUniqueName, committedActivityType);
+	}
+	
 	// RREHM-761
+	@Test
+	public void shouldCreateActivityTypeWithUniqueAbbr() throws JsonGenerationException, JsonMappingException,
+		IOException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
+		
+		responseActivityType = TestHelper.getResponseObjForCreate(requestActivityType, microservice, environment, apiRequestHelper, activityTypeAPI,
+			ActivityType.class);
+		
+		String activityTypeId = responseActivityType.getActivityTypeId();
+		idsForAllCreatedElements.add(activityTypeId);
+					
+		ActivityType committedActivityType = TestHelper.getResponseObjForRetrieve(microservice, environment, activityTypeId, apiRequestHelper, activityTypeAPI,
+				ActivityType.class);
+		CustomAssertions.assertRequestAndResponseObj(responseActivityType, committedActivityType);
+	}
+	
+	// RREHM-774
+	// RREHM-765 --> This is a delete test case. Currently no deletes area allowed at all. Should be used in the future.
+	
 	/*
 	 * POSITIVE TESTS END
 	 */

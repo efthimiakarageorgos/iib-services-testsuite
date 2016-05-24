@@ -207,30 +207,30 @@ public class CreateAssetsTest extends BaseTestSetupAndTearDown {
 	/*
 	 * POSITIVE TESTS START
 	 */
-	// RREHM-628 (Asset Abbreviation contains dash, underscore, dot chars)
-	// @Test
-	// public void shouldCreateAssetWithUniqueAbbrWithWhenAbbrContainsDashUnderscoreDot() throws JsonGenerationException, JsonMappingException,
-	// IOException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException{
-	// requestAsset = assetHelper.getAssetWithPredefinedAssetTypeAndTenant(assetTypeId, tenantId);
-	//
-	// String abbr = requestAsset.getAbbreviation();
-	// requestAsset.setAbbreviation(abbr+"_-.");
-	//
-	// responseAsset = TestHelper.getResponseObjForCreate(requestAsset, microservice, environment, apiRequestHeaders,
-	// assetAPI, AssetResponse.class);
-	//
-	// // RV1: comparing CreatedObject with CreateRequest, along with response codes.
-	// CustomAssertions.assertRequestAndResponseObj(201, TestHelper.responseCodeForInputRequest, requestAsset, responseAsset);
-	//
-	// String assetId = TestHelper.getElementId(responseAsset.get_links().getSelfLink().getHref());
-	// //idsForAllCreatedAssets.add(assetId);
-	//
-	// AssetResponse committedAsset = TestHelper.getResponseObjForRetrieve(microservice, environment, assetId,
-	// apiRequestHeaders, assetAPI, AssetResponse.class);
-	// // RV2: comparing CommittedObject with CreatedObject, without the response codes.
-	// CustomAssertions.assertRequestAndResponseObj(responseAsset, committedAsset);
-	//
-	// }
+	 //RREHM-628 (Asset Abbreviation contains dash, underscore, dot chars)
+//	 @Test
+//	 public void shouldCreateAssetWithUniqueAbbrWithWhenAbbrContainsDashUnderscoreDot() throws JsonGenerationException, JsonMappingException,
+//	 IOException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException{
+//	 requestAsset = assetHelper.getAssetWithPredefinedAssetTypeAndTenant(assetTypeId, tenantId);
+//	
+//	 String abbr = requestAsset.getAbbreviation();
+//	 requestAsset.setAbbreviation(abbr+"_-.");
+//	
+//	 responseAsset = TestHelper.getResponseObjForCreate(requestAsset, microservice, environment, apiRequestHeaders,
+//	 assetAPI, AssetResponse.class);
+//	
+//	 // RV1: comparing CreatedObject with CreateRequest, along with response codes.
+//	 CustomAssertions.assertRequestAndResponseObj(201, TestHelper.responseCodeForInputRequest, requestAsset, responseAsset);
+//	
+//	 String assetId = TestHelper.getElementId(responseAsset.get_links().getSelfLink().getHref());
+//	 //idsForAllCreatedAssets.add(assetId);
+//	
+//	 AssetResponse committedAsset = TestHelper.getResponseObjForRetrieve(microservice, environment, assetId,
+//	 apiRequestHeaders, assetAPI, AssetResponse.class);
+//	 // RV2: comparing CommittedObject with CreatedObject, without the response codes.
+//	 CustomAssertions.assertRequestAndResponseObj(responseAsset, committedAsset);
+//	
+//	 }
 	/*
 	 * POSITIVE TESTS END
 	 */
