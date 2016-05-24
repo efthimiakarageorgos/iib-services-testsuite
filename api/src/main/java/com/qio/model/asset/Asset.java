@@ -52,7 +52,7 @@ public abstract class Asset {
 	public void setStatus(String status) {
 		this.status = status;
 	}
-	
+
 	public String getTenant() {
 		return tenant;
 	}
@@ -60,7 +60,7 @@ public abstract class Asset {
 	public void setTenant(String tenant) {
 		this.tenant = tenant;
 	}
-	
+
 	public String getName() {
 		return name;
 	}
@@ -87,9 +87,7 @@ public abstract class Asset {
 
 	// TODO:
 	/*
-	 * If two objects do not match, then its simply going to print out their
-	 * string representations in the logger message. I need to figure out a
-	 * better way for this.
+	 * If two objects do not match, then its simply going to print out their string representations in the logger message. I need to figure out a better way for this.
 	 */
 	@Override
 	public boolean equals(Object responseObj) {
@@ -101,13 +99,18 @@ public abstract class Asset {
 
 			Field[] fields = Asset.class.getDeclaredFields();
 			for (Field field : fields) {
+				// Checking for the format of the Date Field.
+				if (field.getName().equals("createdDate")) {
+					if (!(isDateCorrectlyFormatted((String) field.get(this)) && isDateCorrectlyFormatted((String) field.get(responseObj))))
+						return false;
+				}
+
 				Object requestVal = field.get(this);
 				Object responseVal = field.get(responseObj);
 				if (requestVal != null)
 					if (!requestVal.equals(responseVal)) {
 						equalityCheckFlag = false;
-						logger.error("Class Name: " + this.getClass().getName() + " --> Match failed on property: "
-								+ field.getName() + ", Request Value: " + requestVal + ", Response Value: "
+						logger.error("Class Name: " + this.getClass().getName() + " --> Match failed on property: " + field.getName() + ", Request Value: " + requestVal + ", Response Value: "
 								+ responseVal);
 						break;
 					}
@@ -118,5 +121,17 @@ public abstract class Asset {
 			logger.error(e.getMessage());
 		}
 		return equalityCheckFlag;
+	}
+
+	public boolean isDateCorrectlyFormatted(String inputDate) {
+		Logger logger = Logger.getRootLogger();
+		Boolean dateFormatCheckerFlag = true;
+		String dateFormatCheckerRegex = "^\\d\\d\\d\\d-(0?[1-9]|1[0-2])-(0?[1-9]|[12][0-9]|3[01])T(00|[0-9]|1[0-9]|2[0-3]):([0-9]|[0-5][0-9]):([0-9]|[0-5][0-9])Z$";
+
+		if (!inputDate.matches(dateFormatCheckerRegex)) {
+			dateFormatCheckerFlag = false;
+			logger.error("Incorrectly formatted Date: " + inputDate);
+		}
+		return dateFormatCheckerFlag;
 	}
 }
