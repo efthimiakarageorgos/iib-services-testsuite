@@ -1,7 +1,5 @@
 package com.qio.lib.apiHelpers;
 
-import com.qio.model.assetType.AssetType;
-
 public class APIRequestHelper {
 	private String acceptType;
 	private String contentType;

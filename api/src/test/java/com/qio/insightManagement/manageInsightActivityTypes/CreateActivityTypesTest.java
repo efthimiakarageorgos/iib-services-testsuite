@@ -9,6 +9,7 @@ import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.AfterClass;
 import org.junit.Test;
 
 import com.qio.common.BaseTestSetupAndTearDown;
@@ -45,12 +46,11 @@ public class CreateActivityTypesTest extends BaseTestSetupAndTearDown {
 	}
 
 	// Currently the deletion of activity types is not allowed; therefore we are commenting out this method.
-	// @AfterClass
-	// public static void cleanUpAfterAllTests() throws JsonGenerationException, JsonMappingException, IllegalAccessException,
-	// IllegalArgumentException,
-	// InvocationTargetException, NoSuchMethodException, SecurityException, IOException {
-	// baseCleanUpAfterAllTests(activityTypeAPI);
-	// }
+	 @AfterClass
+	 public static void cleanUpAfterAllTests() throws JsonGenerationException, JsonMappingException, IllegalAccessException,
+	 	IllegalArgumentException,InvocationTargetException, NoSuchMethodException, SecurityException, IOException {
+		 baseCleanUpAfterAllTests(activityTypeAPI);
+	 }
 
 	// The following test cases go here:
 	// issuetype=Test and issue in (linkedIssues("RREHM-1237")) and issue in linkedIssues("RREHM-63")

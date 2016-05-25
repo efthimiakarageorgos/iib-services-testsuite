@@ -115,7 +115,6 @@ public class APITestUtil {
 		methodArgs[0] = methodArgs[1] = methodArgs[2] = String.class;
 		methodArgs[3] = APIRequestHelper.class;
 		Method deleteMethod = apiHelperObj.getClass().getMethod("delete", methodArgs);
-
 		ConnectionResponse conRespDelete = (ConnectionResponse) deleteMethod.invoke(apiHelperObj, microservice, environment, elementId, apiRequestHelper);
 		// responseCodeForInputRequest = conRespDelete.getRespCode();
 	}

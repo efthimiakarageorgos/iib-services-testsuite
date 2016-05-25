@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 
+import org.apache.log4j.Logger;
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;
 
@@ -28,6 +29,7 @@ public class BaseTestSetupAndTearDown {
 	protected static Config microserviceConfig;
 
 	protected static ArrayList<String> idsForAllCreatedElements;
+	final static Logger logger = Logger.getRootLogger();
 
 	public static void baseInitSetupBeforeAllTests(String microserviceName) {
 		userConfig = ConfigFactory.load("user_creds.conf");
