@@ -5,7 +5,7 @@ import com.qio.lib.connection.ConnectionResponse;
 
 public class MTenantAPIHelper extends MBaseAPIHelper {
 	private final String createOrUpdateTenantEndpoint = "/tenants";
-	private final String getOrDeleteSingleTenantEndpointAbstract = "/tenant/{tenantId}";
+	private final String getOrDeleteSingleTenantEndpointAbstract = "/tenants/{tenantId}";
 	private final String getAllTenantsEndpoint = "/tenants";
 	
 	public ConnectionResponse create(String microservice, String environment, String payload, APIRequestHelper apiRequestHeaders){

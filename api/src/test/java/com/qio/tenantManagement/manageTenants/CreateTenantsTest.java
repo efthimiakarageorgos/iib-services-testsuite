@@ -2,33 +2,42 @@ package com.qio.tenantManagement.manageTenants;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 
 import org.apache.log4j.Logger;
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;
+import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 
 import com.qio.common.BaseTestSetupAndTearDown;
-import com.qio.lib.apiHelpers.MTenantAPIHelper;
+import com.qio.util.common.APITestUtil;
 import com.qio.lib.assertions.CustomAssertions;
 import com.qio.lib.exception.ServerResponse;
+import com.qio.lib.apiHelpers.MTenantAPIHelper;
 import com.qio.model.tenant.Tenant;
 import com.qio.model.tenant.helper.TenantHelper;
-import com.qio.util.common.APITestUtil;
+
+import com.qio.lib.apiHelpers.idm.MUserGroupAPIHelper;
+import com.qio.model.userGroup.UserGroup;
+import com.qio.model.userGroup.helper.UserGroupHelper;
+
+
 
 public class CreateTenantsTest extends BaseTestSetupAndTearDown {
 
 	private static MTenantAPIHelper tenantAPI;
+	private static MUserGroupAPIHelper groupAPI;
 	private TenantHelper tenantHelper;
 	private Tenant requestTenant;
 	private Tenant responseTenant;
 	private Tenant requestTenant2;
 	private ServerResponse serverResp;
-	private String adminUsername;
-	private String adminPassword;
+	
+	//private UserGroupHelper groupHelper;
 	final static Logger logger = Logger.getRootLogger();
 
 	@BeforeClass
@@ -39,17 +48,28 @@ public class CreateTenantsTest extends BaseTestSetupAndTearDown {
 		apiRequestHelper.setUserName(username);
 		apiRequestHelper.setPassword(password);
 		tenantAPI = new MTenantAPIHelper();
+		groupAPI = new MUserGroupAPIHelper();
 	}
 
 	@Before
 	public void initSetupBeforeEceryTest() {
-		// Initializing a new set of objects before each test case.
 		tenantHelper = new TenantHelper();
 		requestTenant = new Tenant();
+		requestTenant = tenantHelper.getTenant();
 		responseTenant = new Tenant();
 		serverResp = new ServerResponse();
 	}
 
+	@AfterClass
+	public static void cleanUpAfterAllTests() throws JsonGenerationException, JsonMappingException, IllegalAccessException,
+		 IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException, IOException {
+		 
+		 //Currently no user is allowed to delete a tenant
+		 baseCleanUpAfterAllTests(tenantAPI);
+		 // JEET : THIS DOES NOT WORK as it uses the asset microservice to make the call and not the idm microservice
+		 baseCleanUpAfterAllTests(idsForAllCreatedElements, groupAPI);
+	}
+	
 	// The following test cases go here:
 	// issuetype=Test and issue in (linkedIssues("RREHM-1191")) and issue in linkedIssues("RREHM-37")
 
@@ -58,13 +78,11 @@ public class CreateTenantsTest extends BaseTestSetupAndTearDown {
 	 */
 
 	// RREHM-338 (Tenant with no unique abbreviation)
-	@Ignore
+	@Test
 	public void shouldNotCreateTenantWhenAbbreviationIsNotUnique() throws JsonGenerationException, JsonMappingException, IOException,
 			IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
 		requestTenant2 = tenantHelper.getTenant();
 		serverResp = APITestUtil.getResponseObjForCreate(requestTenant2, microservice, environment, apiRequestHelper, tenantAPI, ServerResponse.class);
-
-		requestTenant = tenantHelper.getTenant();
 
 		String tenantAbbr2 = requestTenant2.getAbbreviation();
 
@@ -75,16 +93,13 @@ public class CreateTenantsTest extends BaseTestSetupAndTearDown {
 
 		CustomAssertions.assertServerError(409, null, "Creating tenant failed, as another tenant has same abbreviation.", serverResp);
 		// GetTenant should not return two tenants with the same abbreviation
-		// No OpenAM group should be created for the tenant that was added second
+		// No IDM group should be created for the tenant that was added second
 	}
 
 	// RREHM-352 (Tenant abbreviation contains spaces)
 	@Test
 	public void shouldNotCreateTenantWhenAbbrContainsSpaces() throws JsonGenerationException, JsonMappingException, IOException,
 			IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
-		requestTenant = tenantHelper.getTenant();
-
-		// Setting Tenant abbreviation to contain spaces
 		String defaultAbbr = requestTenant.getAbbreviation();
 		requestTenant.setAbbreviation("Abrr has a space" + defaultAbbr);
 
@@ -92,14 +107,13 @@ public class CreateTenantsTest extends BaseTestSetupAndTearDown {
 
 		CustomAssertions.assertServerError(400, null, "Abbreviation should not have Space or Tab.", serverResp);
 		// GetTenant should not return a tenant with Abbreviation as specified above
-		// No OpenAM group should be created
+		// No IDM group should be created
 	}
 
 	// RREHM-334 (Tenant abbreviation is null - missing)
 	@Test
 	public void shouldNotCreateTenantWhenAbbreviationIsNull() throws JsonGenerationException, JsonMappingException, IOException,
 			IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
-		requestTenant = tenantHelper.getTenant();
 		String defaultAbbr = requestTenant.getAbbreviation();
 
 		// Setting Tenant abbreviation to null
@@ -110,15 +124,14 @@ public class CreateTenantsTest extends BaseTestSetupAndTearDown {
 
 		CustomAssertions.assertServerError(400, null, "Abbreviation is required, should be less than 50 characters.", serverResp);
 		// GetTenant should not return a tenant with Name as specified above
-		// No OpenAM group should be created
+		// No IDM group should be created
 	}
 
 	// RREHM-334 (Tenant abbreviation is empty)
 	@Test
 	public void shouldNotCreateTenantWhenAbbreviationIsEmpty() throws JsonGenerationException, JsonMappingException, IOException,
 			IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
-		requestTenant = tenantHelper.getTenant();
-
+		
 		String defaultAbbr = requestTenant.getAbbreviation();
 		requestTenant.setAbbreviation("");
 		requestTenant.setName("ThisTenantShouldNotGetCreated" + defaultAbbr);
@@ -127,31 +140,30 @@ public class CreateTenantsTest extends BaseTestSetupAndTearDown {
 
 		CustomAssertions.assertServerError(400, null, "Abbreviation is required, should be less than 50 characters.", serverResp);
 		// GetTenant should not return a tenant with Name as specified above.
-		// No OpenAM group should be created
+		// No IDM group should be created
 	}
 
 	// RREHM-984 (Tenant abbreviation is longer than 50 chars)
 	@Test
 	public void shouldNotCreateTenantWhenAbbrIsLongerThan50Chars() throws JsonGenerationException, JsonMappingException, IOException,
 			IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
-		requestTenant = tenantHelper.getTenant();
-
+		
+		String defaultAbbr = requestTenant.getAbbreviation();
 		requestTenant.setAbbreviation(APITestUtil.FIFTYONE_CHARS);
-
+		requestTenant.setName("ThisTenantShouldNotGetCreated" + defaultAbbr);
+		
 		serverResp = APITestUtil.getResponseObjForCreate(requestTenant, microservice, environment, apiRequestHelper, tenantAPI, ServerResponse.class);
 
 		CustomAssertions.assertServerError(400, null, "Abbreviation should be less than 50 characters.", serverResp);
 		// GetTenant should not return a tenant with abbr as specified above.
-		// No OpenAM group should be created
+		// No IDM group should be created
 	}
 
 	// RREHM-833 (Tenant name is blank)
 	@Test
 	public void shouldNotCreateTenantWhenNameIsBlank() throws JsonGenerationException, JsonMappingException, IOException, IllegalAccessException,
 			IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
-		requestTenant = tenantHelper.getTenant();
-
-		// Setting tenant name to empty
+		
 		requestTenant.setName("");
 
 		serverResp = APITestUtil.getResponseObjForCreate(requestTenant, microservice, environment, apiRequestHelper, tenantAPI, ServerResponse.class);
@@ -164,9 +176,7 @@ public class CreateTenantsTest extends BaseTestSetupAndTearDown {
 	@Test
 	public void shouldNotCreateTenantWhenNameIsNull() throws JsonGenerationException, JsonMappingException, IOException, IllegalAccessException,
 			IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
-		requestTenant = tenantHelper.getTenant();
-
-		// Setting Tenant name to null
+		
 		requestTenant.setName("");
 
 		serverResp = APITestUtil.getResponseObjForCreate(requestTenant, microservice, environment, apiRequestHelper, tenantAPI, ServerResponse.class);
@@ -180,9 +190,7 @@ public class CreateTenantsTest extends BaseTestSetupAndTearDown {
 	@Test
 	public void shouldNotCreateTenantWhenNameIsLongerThan255Chars() throws JsonGenerationException, JsonMappingException, IOException,
 			IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
-		requestTenant = tenantHelper.getTenant();
-
-		// Setting tenant name to be longer than 255 chars
+		
 		requestTenant.setName(APITestUtil.TWOFIFTYSIX_CHARS);
 
 		serverResp = APITestUtil.getResponseObjForCreate(requestTenant, microservice, environment, apiRequestHelper, tenantAPI, ServerResponse.class);
@@ -197,9 +205,37 @@ public class CreateTenantsTest extends BaseTestSetupAndTearDown {
 	/*
 	 * POSITIVE TESTS START
 	 */
+	
+	//
+	//MORE ASSERTIONS NEEDED
+	//system generated elements: There should be a ReferenceId element with unique value that is an increment of the previously created tenant
+	// Need to asset that a group got created - idm service - see attempt below
+	//
+	
 	// RREHM-336
-	// RREHM-982
+	@Test
+	public void shouldCreateTenantWithUniqueAbbr() throws JsonGenerationException, JsonMappingException, IOException, IllegalAccessException, IllegalArgumentException, InvocationTargetException,
+		NoSuchMethodException, SecurityException {
 
+		responseTenant = APITestUtil.getResponseObjForCreate(requestTenant, microservice, environment, apiRequestHelper, tenantAPI, Tenant.class);
+		String tenantId = responseTenant.getTenantId();
+		idsForAllCreatedElements.add(tenantId);
+		Tenant committedTenant = APITestUtil.getResponseObjForRetrieve(microservice, environment, tenantId, apiRequestHelper, tenantAPI, Tenant.class);
+		CustomAssertions.assertRequestAndResponseObj(responseTenant, committedTenant);
+		
+		//JEET THIS FAILS because the groups are corrupted on DEV... RREHM-2198
+		//UserGroup committedGroup = APITestUtil.getResponseObjForRetrieve(oauthMicroservice, environment, tenantId, apiRequestHelper, groupAPI, UserGroup.class);
+	}
+	
+	// RREHM-982
+	
+	// MOVE this to DeleteAssetTest file
+	// RREHM-354
+	// MOVE these two to AuthenticationAssetTest file
+	// RREHM-343
+	// RREHM-342
+
+	
 	/*
 	 * POSITIVE TESTS END
 	 */
