@@ -18,6 +18,8 @@ public class AnalyticAssetMap {
 	private Date lifetimeStart;
 	private Boolean enabled;
 	private String comment;
+	private String asset;
+	private String analytic;
 
 	// returned in the response of a POST request
 	@JsonProperty("analyticassetmapid")
@@ -36,9 +38,11 @@ public class AnalyticAssetMap {
 	}
 
 	@SuppressWarnings("serial")
-	public AnalyticAssetMap(String timeStamp, Date date) {
+	public AnalyticAssetMap(String timeStamp, Date date, String asset, String analytic) {
 		this.lifetimeStart = date;
 		this.enabled = true;
+		this.asset = asset;
+		this.analytic = analytic;
 		this.comment = "AAM" + timeStamp + "Desc";
 		this.assetTemplateModelAttributes = new ArrayList<AssetTemplateModelAttribute>() {
 			{
@@ -52,16 +56,18 @@ public class AnalyticAssetMap {
 		};
 	}
 
-	public AnalyticAssetMap(Date lifetimeStart, Boolean enabled, String comment, List<AssetTemplateModelAttribute> assetTemplateModelAttributes, List<AnalyticInputParameter> parameters) {
+	public AnalyticAssetMap(Date lifetimeStart, String asset, String analytic, Boolean enabled, String comment, List<AssetTemplateModelAttribute> assetTemplateModelAttributes, List<AnalyticInputParameter> parameters) {
 		this.lifetimeStart = lifetimeStart;
 		this.enabled = enabled;
 		this.comment = comment;
+		this.asset = asset;
+		this.analytic = analytic;
 		this.assetTemplateModelAttributes = assetTemplateModelAttributes;
 		this.analyticInputParameters = parameters;
 	}
 
 	public AnalyticAssetMap(AnalyticAssetMap analyticAssetMap) {
-		this(analyticAssetMap.getLifetimeStart(), analyticAssetMap.getEnablded(), analyticAssetMap.getComment(), analyticAssetMap.getAssetTemplateModelAttributes(), analyticAssetMap.getAnalyticInputParameters());
+		this(analyticAssetMap.getLifetimeStart(), analyticAssetMap.getAsset(), analyticAssetMap.getAnalytic(), analyticAssetMap.getEnablded(), analyticAssetMap.getComment(), analyticAssetMap.getAssetTemplateModelAttributes(), analyticAssetMap.getAnalyticInputParameters());
 	}
 
 	public String getAnalyticAssetMap() {
@@ -96,6 +102,21 @@ public class AnalyticAssetMap {
 		this.comment = comment;
 	}
 
+	public String getAsset() {
+		return asset;
+	}
+
+	public void setAsset(String asset) {
+		this.asset = asset;
+	}
+	
+	public String getAnalytic() {
+		return analytic;
+	}
+
+	public void setAnalytic(String analytic) {
+		this.analytic = analytic;
+	}
 	public List<AssetTemplateModelAttribute> getAssetTemplateModelAttributes() {
 		return assetTemplateModelAttributes;
 	}

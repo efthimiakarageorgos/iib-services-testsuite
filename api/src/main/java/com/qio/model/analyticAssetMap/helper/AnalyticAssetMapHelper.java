@@ -16,7 +16,7 @@ public class AnalyticAssetMapHelper {
 	private void initDefaultAnalyticAssetMap() {
 		java.util.Date date = new java.util.Date();
 		String timestamp = Long.toString(date.getTime());
-		analyticAssetMap = new AnalyticAssetMap(timestamp, date);
+		analyticAssetMap = new AnalyticAssetMap(timestamp, date, "assetId", "analyticId");
 	}
 
 	@SuppressWarnings("serial")
