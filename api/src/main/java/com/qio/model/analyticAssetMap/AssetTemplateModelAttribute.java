@@ -20,7 +20,7 @@ public class AssetTemplateModelAttribute implements Comparable {
 	public AssetTemplateModelAttribute() {
 		this.analyticAttribute = "";
 		this.assetTypeAttribute = "";
-		this.value = "ABBRString Desc";
+		this.value = "";
 	}
 
 	public AssetTemplateModelAttribute(String analyticAttribute, String assetTypeAttribute, String value) {
@@ -53,7 +53,7 @@ public class AssetTemplateModelAttribute implements Comparable {
 		return value;
 	}
 
-	public void setDescription(String value) {
+	public void setValue(String value) {
 		this.value = value;
 	}
 

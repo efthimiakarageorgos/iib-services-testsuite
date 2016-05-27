@@ -15,7 +15,8 @@ import com.qio.model.analyticAssetMap.AnalyticInputParameter;
 import com.qio.model.common.Links;
 
 public class AnalyticAssetMap {
-	private Date lifetimeStart;
+	private String lifetimeStart;
+	private Date lifetimeEnd;
 	private Boolean enabled;
 	private String comment;
 	private String asset;
@@ -38,11 +39,12 @@ public class AnalyticAssetMap {
 	}
 
 	@SuppressWarnings("serial")
-	public AnalyticAssetMap(String timeStamp, Date date, String asset, String analytic) {
-		this.lifetimeStart = date;
+	public AnalyticAssetMap(String timeStamp, Date date) {
+		this.lifetimeStart = "2014-01-01T06:30:01.000Z";
+		this.lifetimeEnd = null;
 		this.enabled = true;
-		this.asset = asset;
-		this.analytic = analytic;
+		this.asset = "";
+		this.analytic = "";
 		this.comment = "AAM" + timeStamp + "Desc";
 		this.assetTemplateModelAttributes = new ArrayList<AssetTemplateModelAttribute>() {
 			{
@@ -56,18 +58,18 @@ public class AnalyticAssetMap {
 		};
 	}
 
-	public AnalyticAssetMap(Date lifetimeStart, String asset, String analytic, Boolean enabled, String comment, List<AssetTemplateModelAttribute> assetTemplateModelAttributes, List<AnalyticInputParameter> parameters) {
-		this.lifetimeStart = lifetimeStart;
-		this.enabled = enabled;
-		this.comment = comment;
+	public AnalyticAssetMap(String asset, String analytic, Boolean enabled, String comment, String lifetimeStart, Date lifetimeEnd, List<AssetTemplateModelAttribute> assetTemplateModelAttributes, List<AnalyticInputParameter> parameters) {
 		this.asset = asset;
 		this.analytic = analytic;
+		this.enabled = enabled;
+		this.comment = comment;
+		this.lifetimeStart = lifetimeStart;
 		this.assetTemplateModelAttributes = assetTemplateModelAttributes;
 		this.analyticInputParameters = parameters;
 	}
 
 	public AnalyticAssetMap(AnalyticAssetMap analyticAssetMap) {
-		this(analyticAssetMap.getLifetimeStart(), analyticAssetMap.getAsset(), analyticAssetMap.getAnalytic(), analyticAssetMap.getEnablded(), analyticAssetMap.getComment(), analyticAssetMap.getAssetTemplateModelAttributes(), analyticAssetMap.getAnalyticInputParameters());
+		this(analyticAssetMap.getAsset(), analyticAssetMap.getAnalytic(), analyticAssetMap.getEnabled(), analyticAssetMap.getComment(), analyticAssetMap.getLifetimeStart(), analyticAssetMap.getLifetimeEnd(), analyticAssetMap.getAssetTemplateModelAttributes(), analyticAssetMap.getAnalyticInputParameters());
 	}
 
 	public String getAnalyticAssetMap() {
@@ -78,19 +80,27 @@ public class AnalyticAssetMap {
 		this.analyticAssetMapId = analyticAssetMapId;
 	}
 
-	public Date getLifetimeStart() {
+	public String getLifetimeStart() {
 		return lifetimeStart;
 	}
 
-	public void setAbbreviation(Date lifetimeStart) {
+	public void setLifetimeStart(String lifetimeStart) {
 		this.lifetimeStart = lifetimeStart;
 	}
 
-	public Boolean getEnablded() {
+	public Date getLifetimeEnd() {
+		return lifetimeEnd;
+	}
+
+	public void setLifetimeEnd(Date lifetimeEnd) {
+		this.lifetimeEnd = lifetimeEnd;
+	}
+	
+	public Boolean getEnabled() {
 		return enabled;
 	}
 
-	public void setEnablded(Boolean enabled) {
+	public void setEnabled(Boolean enabled) {
 		this.enabled = enabled;
 	}
 

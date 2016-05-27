@@ -104,7 +104,8 @@ public class ConnectionManager {
 			conResp.setRespCode(responseCode);
 
 			BufferedReader in;
-			if (responseCode != 201)
+			//AnalyticAssetMap POST returns 200
+			if (responseCode != 201 && responseCode != 200)
 				in = new BufferedReader(new InputStreamReader(con.getErrorStream()));
 			else
 				in = new BufferedReader(new InputStreamReader(con.getInputStream()));
