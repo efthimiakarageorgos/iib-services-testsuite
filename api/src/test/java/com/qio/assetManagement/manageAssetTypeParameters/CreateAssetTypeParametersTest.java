@@ -1,12 +1,8 @@
 package com.qio.assetManagement.manageAssetTypeParameters;
 
-import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.codehaus.jackson.JsonGenerationException;
-import org.codehaus.jackson.map.JsonMappingException;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -41,12 +37,10 @@ public class CreateAssetTypeParametersTest extends BaseTestSetupAndTearDown {
 	}
 
 	@Before
-	public void initSetupBeforeEveryTest() throws JsonGenerationException, JsonMappingException, IllegalAccessException, IllegalArgumentException,
-			InvocationTargetException, NoSuchMethodException, SecurityException, IOException {
+	public void initSetupBeforeEveryTest() {
 		assetTypeHelper = new AssetTypeHelper();
 		requestAssetType = assetTypeHelper.getAssetTypeWithOneParameter(ParameterDataType.String);
-		responseAssetType = APITestUtil.getResponseObjForCreate(requestAssetType, microservice, environment, apiRequestHelper, assetTypeAPI,
-				AssetType.class);
+		responseAssetType = APITestUtil.getResponseObjForCreate(requestAssetType, microservice, environment, apiRequestHelper, assetTypeAPI, AssetType.class);
 		assetTypeId = APITestUtil.getElementId(responseAssetType.get_links().getSelfLink().getHref());
 		assetTypeParameterId = APITestUtil.getElementId(responseAssetType.getParameters().get(FIRST_ELEMENT).get_links().getSelfLink().getHref());
 		idsForAllCreatedElements.add(assetTypeId);
@@ -54,8 +48,7 @@ public class CreateAssetTypeParametersTest extends BaseTestSetupAndTearDown {
 	}
 
 	@AfterClass
-	public static void cleanUpAfterAllTests() throws JsonGenerationException, JsonMappingException, IllegalAccessException, IllegalArgumentException,
-			InvocationTargetException, NoSuchMethodException, SecurityException, IOException {
+	public static void cleanUpAfterAllTests() {
 		baseCleanUpAfterAllTests(assetTypeAPI);
 	}
 
@@ -68,8 +61,7 @@ public class CreateAssetTypeParametersTest extends BaseTestSetupAndTearDown {
 
 	// RREHM-1099 ()
 	@Test
-	public void shouldNotBeAllowedToAddNewParameterWhenItHasAbbrSimilarToExistingParameterAbbr() throws JsonGenerationException, JsonMappingException,
-			IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException, IOException {
+	public void shouldNotBeAllowedToAddNewParameterWhenItHasAbbrSimilarToExistingParameterAbbr() {
 
 		List<AssetTypeParameter> existingAssetTypeParameters = requestAssetType.getParameters();
 		String abbrForExistingFirstParameter = existingAssetTypeParameters.get(FIRST_ELEMENT).getAbbreviation();
@@ -80,56 +72,45 @@ public class CreateAssetTypeParametersTest extends BaseTestSetupAndTearDown {
 		existingAssetTypeParameters.add(assetTypeParameterWithSameAbbr);
 
 		requestAssetType.setParameters(existingAssetTypeParameters);
-		serverResp = APITestUtil.getResponseObjForUpdate(requestAssetType, microservice, environment, assetTypeId, apiRequestHelper, assetTypeAPI,
-				ServerResponse.class);
-		CustomAssertions.assertServerError(500, "com.qiotec.application.exceptions.InvalidInputException",
-				"Parameter Abbreviation Should not Contain Duplicate Entries", serverResp);
+		serverResp = APITestUtil.getResponseObjForUpdate(requestAssetType, microservice, environment, assetTypeId, apiRequestHelper, assetTypeAPI, ServerResponse.class);
+		CustomAssertions.assertServerError(500, "com.qiotec.application.exceptions.InvalidInputException", "Parameter Abbreviation Should not Contain Duplicate Entries", serverResp);
 	}
 
 	// RREHM-1097 ()
 	@Test
-	public void shouldNotBeAllowedToAddNewParameterWhenItHasAbbrLongerThan255Chars() throws JsonGenerationException, JsonMappingException,
-			IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException, IOException {
+	public void shouldNotBeAllowedToAddNewParameterWhenItHasAbbrLongerThan255Chars() {
 
 		List<AssetTypeParameter> existingAssetTypeParameters = requestAssetType.getParameters();
 		existingAssetTypeParameters.get(FIRST_ELEMENT).setId(assetTypeParameterId);
 
-		AssetTypeParameter assetTypeParameterWithAbbrLongerThan255Chars = assetTypeHelper.getAssetTypeParameterWithInputDataType(
-				ParameterDataType.Float);
+		AssetTypeParameter assetTypeParameterWithAbbrLongerThan255Chars = assetTypeHelper.getAssetTypeParameterWithInputDataType(ParameterDataType.Float);
 		assetTypeParameterWithAbbrLongerThan255Chars.setAbbreviation(APITestUtil.TWOFIFTYSIX_CHARS);
 		existingAssetTypeParameters.add(assetTypeParameterWithAbbrLongerThan255Chars);
 
 		requestAssetType.setParameters(existingAssetTypeParameters);
-		serverResp = APITestUtil.getResponseObjForUpdate(requestAssetType, microservice, environment, assetTypeId, apiRequestHelper, assetTypeAPI,
-				ServerResponse.class);
-		CustomAssertions.assertServerError(500, "com.qiotec.application.exceptions.InvalidInputException",
-				"Parameter Abbreviation Should Less Than 255 Character", serverResp);
+		serverResp = APITestUtil.getResponseObjForUpdate(requestAssetType, microservice, environment, assetTypeId, apiRequestHelper, assetTypeAPI, ServerResponse.class);
+		CustomAssertions.assertServerError(500, "com.qiotec.application.exceptions.InvalidInputException", "Parameter Abbreviation Should Less Than 255 Character", serverResp);
 	}
 
 	// RREHM-1095 ()
 	@Test
-	public void shouldNotBeAllowedToAddNewParameterWhenItsAbbrHasSpaces() throws JsonGenerationException, JsonMappingException, IOException,
-			IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
+	public void shouldNotBeAllowedToAddNewParameterWhenItsAbbrHasSpaces() {
 
 		List<AssetTypeParameter> existingAssetTypeParameters = requestAssetType.getParameters();
 		existingAssetTypeParameters.get(FIRST_ELEMENT).setId(assetTypeParameterId);
 
-		AssetTypeParameter assetTypeParameterWithAbbrContainingSpaces = assetTypeHelper.getAssetTypeParameterWithInputDataType(
-				ParameterDataType.Float);
+		AssetTypeParameter assetTypeParameterWithAbbrContainingSpaces = assetTypeHelper.getAssetTypeParameterWithInputDataType(ParameterDataType.Float);
 		assetTypeParameterWithAbbrContainingSpaces.setAbbreviation("Abrr has a space");
 		existingAssetTypeParameters.add(assetTypeParameterWithAbbrContainingSpaces);
 
 		requestAssetType.setParameters(existingAssetTypeParameters);
-		serverResp = APITestUtil.getResponseObjForUpdate(requestAssetType, microservice, environment, assetTypeId, apiRequestHelper, assetTypeAPI,
-				ServerResponse.class);
-		CustomAssertions.assertServerError(500, "com.qiotec.application.exceptions.InvalidInputException",
-				"Parameter Abbreviation must not contain Spaces", serverResp);
+		serverResp = APITestUtil.getResponseObjForUpdate(requestAssetType, microservice, environment, assetTypeId, apiRequestHelper, assetTypeAPI, ServerResponse.class);
+		CustomAssertions.assertServerError(500, "com.qiotec.application.exceptions.InvalidInputException", "Parameter Abbreviation must not contain Spaces", serverResp);
 	}
 
 	// RREHM-932 ()
 	@Test
-	public void shouldNotBeAllowedToAddNewParameterWhenItsBaseuomIsBlank() throws JsonGenerationException, JsonMappingException, IOException,
-			IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
+	public void shouldNotBeAllowedToAddNewParameterWhenItsBaseuomIsBlank() {
 
 		List<AssetTypeParameter> existingAssetTypeParameters = requestAssetType.getParameters();
 		existingAssetTypeParameters.get(FIRST_ELEMENT).setId(assetTypeParameterId);
@@ -139,15 +120,12 @@ public class CreateAssetTypeParametersTest extends BaseTestSetupAndTearDown {
 		existingAssetTypeParameters.add(assetTypeParameterWithBlankBaseuom);
 
 		requestAssetType.setParameters(existingAssetTypeParameters);
-		serverResp = APITestUtil.getResponseObjForUpdate(requestAssetType, microservice, environment, assetTypeId, apiRequestHelper, assetTypeAPI,
-				ServerResponse.class);
-		CustomAssertions.assertServerError(500, "com.qiotec.application.exceptions.InvalidInputException",
-				"Parameter BaseUom Should not be Empty or Null", serverResp);
+		serverResp = APITestUtil.getResponseObjForUpdate(requestAssetType, microservice, environment, assetTypeId, apiRequestHelper, assetTypeAPI, ServerResponse.class);
+		CustomAssertions.assertServerError(500, "com.qiotec.application.exceptions.InvalidInputException", "Parameter BaseUom Should not be Empty or Null", serverResp);
 	}
 
 	@Test
-	public void shouldNotBeAllowedToAddNewParameterWhenItsBaseuomIsNull() throws JsonGenerationException, JsonMappingException, IOException,
-			IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
+	public void shouldNotBeAllowedToAddNewParameterWhenItsBaseuomIsNull() {
 
 		List<AssetTypeParameter> existingAssetTypeParameters = requestAssetType.getParameters();
 		existingAssetTypeParameters.get(FIRST_ELEMENT).setId(assetTypeParameterId);
@@ -157,36 +135,30 @@ public class CreateAssetTypeParametersTest extends BaseTestSetupAndTearDown {
 		existingAssetTypeParameters.add(assetTypeParameterWithNullBaseuom);
 
 		requestAssetType.setParameters(existingAssetTypeParameters);
-		serverResp = APITestUtil.getResponseObjForUpdate(requestAssetType, microservice, environment, assetTypeId, apiRequestHelper, assetTypeAPI,
-				ServerResponse.class);
-		CustomAssertions.assertServerError(500, "com.qiotec.application.exceptions.InvalidInputException",
-				"Parameter BaseUom Should not be Empty or Null", serverResp);
+		serverResp = APITestUtil.getResponseObjForUpdate(requestAssetType, microservice, environment, assetTypeId, apiRequestHelper, assetTypeAPI, ServerResponse.class);
+		CustomAssertions.assertServerError(500, "com.qiotec.application.exceptions.InvalidInputException", "Parameter BaseUom Should not be Empty or Null", serverResp);
 	}
 
 	// RREHM-905 ()
 	@Test
-	public void shouldNotBeAllowedToAddNewParameterWhenItHasSameAbbrAsExistingParameter() throws JsonGenerationException, JsonMappingException,
-			IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException, IOException {
+	public void shouldNotBeAllowedToAddNewParameterWhenItHasSameAbbrAsExistingParameter() {
 
 		List<AssetTypeParameter> existingAssetTypeParameters = requestAssetType.getParameters();
 		String abbrForExistingFirstParameter = existingAssetTypeParameters.get(FIRST_ELEMENT).getAbbreviation();
-		 existingAssetTypeParameters.get(FIRST_ELEMENT).setId(assetTypeParameterId);
+		existingAssetTypeParameters.get(FIRST_ELEMENT).setId(assetTypeParameterId);
 
 		AssetTypeParameter assetTypeParameterWithSameAbbr = assetTypeHelper.getAssetTypeParameterWithInputDataType(ParameterDataType.Float);
 		assetTypeParameterWithSameAbbr.setAbbreviation(abbrForExistingFirstParameter);
 		existingAssetTypeParameters.add(assetTypeParameterWithSameAbbr);
 
 		requestAssetType.setParameters(existingAssetTypeParameters);
-		serverResp = APITestUtil.getResponseObjForUpdate(requestAssetType, microservice, environment, assetTypeId, apiRequestHelper, assetTypeAPI,
-				ServerResponse.class);
-		CustomAssertions.assertServerError(500, "com.qiotec.application.exceptions.InvalidInputException",
-				"Parameter Abbreviation Should not Contain Duplicate Entries", serverResp);
+		serverResp = APITestUtil.getResponseObjForUpdate(requestAssetType, microservice, environment, assetTypeId, apiRequestHelper, assetTypeAPI, ServerResponse.class);
+		CustomAssertions.assertServerError(500, "com.qiotec.application.exceptions.InvalidInputException", "Parameter Abbreviation Should not Contain Duplicate Entries", serverResp);
 	}
 
 	// RREHM-845 ()
 	@Test
-	public void shouldNotBeAllowedToAddNewParameterWhenItsAbbrIsBlank() throws JsonGenerationException, JsonMappingException, IOException,
-			IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
+	public void shouldNotBeAllowedToAddNewParameterWhenItsAbbrIsBlank() {
 
 		List<AssetTypeParameter> existingAssetTypeParameters = requestAssetType.getParameters();
 		existingAssetTypeParameters.get(FIRST_ELEMENT).setId(assetTypeParameterId);
@@ -196,15 +168,12 @@ public class CreateAssetTypeParametersTest extends BaseTestSetupAndTearDown {
 		existingAssetTypeParameters.add(assetTypeParameterWithBlankAbbr);
 
 		requestAssetType.setParameters(existingAssetTypeParameters);
-		serverResp = APITestUtil.getResponseObjForUpdate(requestAssetType, microservice, environment, assetTypeId, apiRequestHelper, assetTypeAPI,
-				ServerResponse.class);
-		CustomAssertions.assertServerError(500, "com.qiotec.application.exceptions.InvalidInputException",
-				"Parameter Abbreviation Should not be Empty or Null", serverResp);
+		serverResp = APITestUtil.getResponseObjForUpdate(requestAssetType, microservice, environment, assetTypeId, apiRequestHelper, assetTypeAPI, ServerResponse.class);
+		CustomAssertions.assertServerError(500, "com.qiotec.application.exceptions.InvalidInputException", "Parameter Abbreviation Should not be Empty or Null", serverResp);
 	}
 
 	@Test
-	public void shouldNotBeAllowedToAddNewParameterWhenItsAbbrIsNull() throws JsonGenerationException, JsonMappingException, IOException,
-			IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
+	public void shouldNotBeAllowedToAddNewParameterWhenItsAbbrIsNull() {
 
 		List<AssetTypeParameter> existingAssetTypeParameters = requestAssetType.getParameters();
 		existingAssetTypeParameters.get(FIRST_ELEMENT).setId(assetTypeParameterId);
@@ -214,15 +183,13 @@ public class CreateAssetTypeParametersTest extends BaseTestSetupAndTearDown {
 		existingAssetTypeParameters.add(assetTypeParameterWithNullAbbr);
 
 		requestAssetType.setParameters(existingAssetTypeParameters);
-		serverResp = APITestUtil.getResponseObjForUpdate(requestAssetType, microservice, environment, assetTypeId, apiRequestHelper, assetTypeAPI,
-				ServerResponse.class);
+		serverResp = APITestUtil.getResponseObjForUpdate(requestAssetType, microservice, environment, assetTypeId, apiRequestHelper, assetTypeAPI, ServerResponse.class);
 		CustomAssertions.assertServerError(500, "java.lang.NullPointerException", "No message available", serverResp);
 	}
 
 	// RREHM-1098 ()
 	@Test
-	public void shouldNotBeAllowedToAddNewParameterWhenItsDatatypeIsInvalid() throws JsonGenerationException, JsonMappingException, IOException,
-			IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
+	public void shouldNotBeAllowedToAddNewParameterWhenItsDatatypeIsInvalid() {
 
 		List<AssetTypeParameter> existingAssetTypeParameters = requestAssetType.getParameters();
 		existingAssetTypeParameters.get(FIRST_ELEMENT).setId(assetTypeParameterId);
@@ -232,14 +199,12 @@ public class CreateAssetTypeParametersTest extends BaseTestSetupAndTearDown {
 		existingAssetTypeParameters.add(assetTypeParameterWithInvalidDatatype);
 
 		requestAssetType.setParameters(existingAssetTypeParameters);
-		serverResp = APITestUtil.getResponseObjForUpdate(requestAssetType, microservice, environment, assetTypeId, apiRequestHelper, assetTypeAPI,
-				ServerResponse.class);
+		serverResp = APITestUtil.getResponseObjForUpdate(requestAssetType, microservice, environment, assetTypeId, apiRequestHelper, assetTypeAPI, ServerResponse.class);
 		CustomAssertions.assertServerError(400, "org.springframework.http.converter.HttpMessageNotReadableException", serverResp);
 	}
 
 	@Test
-	public void shouldNotBeAllowedToAddNewParameterWhenItsDatatypeIsBlank() throws JsonGenerationException, JsonMappingException, IOException,
-			IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
+	public void shouldNotBeAllowedToAddNewParameterWhenItsDatatypeIsBlank() {
 
 		List<AssetTypeParameter> existingAssetTypeParameters = requestAssetType.getParameters();
 		existingAssetTypeParameters.get(FIRST_ELEMENT).setId(assetTypeParameterId);
@@ -249,8 +214,7 @@ public class CreateAssetTypeParametersTest extends BaseTestSetupAndTearDown {
 		existingAssetTypeParameters.add(assetTypeParameterWithBlankDatatype);
 
 		requestAssetType.setParameters(existingAssetTypeParameters);
-		serverResp = APITestUtil.getResponseObjForUpdate(requestAssetType, microservice, environment, assetTypeId, apiRequestHelper, assetTypeAPI,
-				ServerResponse.class);
+		serverResp = APITestUtil.getResponseObjForUpdate(requestAssetType, microservice, environment, assetTypeId, apiRequestHelper, assetTypeAPI, ServerResponse.class);
 		CustomAssertions.assertServerError(400, "org.springframework.http.converter.HttpMessageNotReadableException", serverResp);
 	}
 
@@ -315,8 +279,7 @@ public class CreateAssetTypeParametersTest extends BaseTestSetupAndTearDown {
 
 	// RREHM-1100 ()
 	@Test
-	public void shouldBeAllowedToAddNewParameterWithinTheSameAssetTypeWhenItsAbbrIsUnique() throws JsonGenerationException, JsonMappingException,
-			IOException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
+	public void shouldBeAllowedToAddNewParameterWithinTheSameAssetTypeWhenItsAbbrIsUnique() {
 
 		AssetTypeParameter existingFirstAssetTypeParameter = requestAssetType.getParameters().get(FIRST_ELEMENT);
 		String abbrForExistingFirstParameter = existingFirstAssetTypeParameter.getAbbreviation();
@@ -333,19 +296,16 @@ public class CreateAssetTypeParametersTest extends BaseTestSetupAndTearDown {
 			}
 		});
 
-		responseAssetType = APITestUtil.getResponseObjForUpdate(requestAssetType, microservice, environment, assetTypeId, apiRequestHelper,
-				assetTypeAPI, AssetType.class);
+		responseAssetType = APITestUtil.getResponseObjForUpdate(requestAssetType, microservice, environment, assetTypeId, apiRequestHelper, assetTypeAPI, AssetType.class);
 		CustomAssertions.assertRequestAndResponseObj(200, APITestUtil.responseCodeForInputRequest, requestAssetType, responseAssetType);
 
-		AssetType updatedAssetType = APITestUtil.getResponseObjForRetrieve(microservice, environment, assetTypeId, apiRequestHelper, assetTypeAPI,
-				AssetType.class);
+		AssetType updatedAssetType = APITestUtil.getResponseObjForRetrieve(microservice, environment, assetTypeId, apiRequestHelper, assetTypeAPI, AssetType.class);
 		CustomAssertions.assertRequestAndResponseObj(responseAssetType, updatedAssetType);
 	}
 
 	// RREHM-1075 ()
 	@Test
-	public void shouldBeAllowedToAddNewParameterWithSpecialCharsInItsAbbr() throws JsonGenerationException, JsonMappingException, IOException,
-			IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
+	public void shouldBeAllowedToAddNewParameterWithSpecialCharsInItsAbbr() {
 
 		for (char specialChar : APITestUtil.SPECIAL_CHARS.toCharArray()) {
 			initSetupBeforeEveryTest();
@@ -365,20 +325,17 @@ public class CreateAssetTypeParametersTest extends BaseTestSetupAndTearDown {
 				}
 			});
 
-			responseAssetType = APITestUtil.getResponseObjForUpdate(requestAssetType, microservice, environment, assetTypeId, apiRequestHelper,
-					assetTypeAPI, AssetType.class);
+			responseAssetType = APITestUtil.getResponseObjForUpdate(requestAssetType, microservice, environment, assetTypeId, apiRequestHelper, assetTypeAPI, AssetType.class);
 			CustomAssertions.assertRequestAndResponseObj(200, APITestUtil.responseCodeForInputRequest, requestAssetType, responseAssetType);
 
-			AssetType updatedAssetType = APITestUtil.getResponseObjForRetrieve(microservice, environment, assetTypeId, apiRequestHelper, assetTypeAPI,
-					AssetType.class);
+			AssetType updatedAssetType = APITestUtil.getResponseObjForRetrieve(microservice, environment, assetTypeId, apiRequestHelper, assetTypeAPI, AssetType.class);
 			CustomAssertions.assertRequestAndResponseObj(responseAssetType, updatedAssetType);
 		}
 	}
 
 	// RREHM-1616 ()
 	@Test
-	public void shouldBeAllowedToAddNewParameterWithBlankDescription() throws JsonGenerationException, JsonMappingException, IOException,
-			IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
+	public void shouldBeAllowedToAddNewParameterWithBlankDescription() {
 
 		List<AssetTypeParameter> existingAssetTypeParameters = requestAssetType.getParameters();
 		String abbrForExistingFirstParameter = existingAssetTypeParameters.get(FIRST_ELEMENT).getAbbreviation();
@@ -390,12 +347,10 @@ public class CreateAssetTypeParametersTest extends BaseTestSetupAndTearDown {
 		assetTypeParameterWithSpecialCharsAbbr.setDescription("");
 		existingAssetTypeParameters.add(assetTypeParameterWithSpecialCharsAbbr);
 
-		responseAssetType = APITestUtil.getResponseObjForUpdate(requestAssetType, microservice, environment, assetTypeId, apiRequestHelper,
-				assetTypeAPI, AssetType.class);
+		responseAssetType = APITestUtil.getResponseObjForUpdate(requestAssetType, microservice, environment, assetTypeId, apiRequestHelper, assetTypeAPI, AssetType.class);
 		CustomAssertions.assertRequestAndResponseObj(200, APITestUtil.responseCodeForInputRequest, requestAssetType, responseAssetType);
 
-		AssetType updatedAssetType = APITestUtil.getResponseObjForRetrieve(microservice, environment, assetTypeId, apiRequestHelper, assetTypeAPI,
-				AssetType.class);
+		AssetType updatedAssetType = APITestUtil.getResponseObjForRetrieve(microservice, environment, assetTypeId, apiRequestHelper, assetTypeAPI, AssetType.class);
 		CustomAssertions.assertRequestAndResponseObj(responseAssetType, updatedAssetType);
 	}
 

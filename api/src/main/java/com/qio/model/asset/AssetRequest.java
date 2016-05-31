@@ -17,6 +17,10 @@ public class AssetRequest extends Asset {
 		this.assetType = assetType;
 	}
 
+	public AssetRequest(AssetRequest assetRequest) {
+		this(assetRequest.getAbbreviation(), assetRequest.getName(), assetRequest.getDescription(), assetRequest.getAssetType(), assetRequest.getTenant(), assetRequest.getStatus());
+	}
+
 	public String getAssetType() {
 		return assetType;
 	}

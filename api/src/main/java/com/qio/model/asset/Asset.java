@@ -35,6 +35,7 @@ public abstract class Asset {
 		this.name = name;
 		this.description = description;
 		this.tenant = tenant;
+		this.status = status;
 	}
 
 	public String getAbbreviation() {
@@ -85,10 +86,6 @@ public abstract class Asset {
 		this._links = _links;
 	}
 
-	// TODO:
-	/*
-	 * If two objects do not match, then its simply going to print out their string representations in the logger message. I need to figure out a better way for this.
-	 */
 	@Override
 	public boolean equals(Object responseObj) {
 		Logger logger = Logger.getRootLogger();

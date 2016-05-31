@@ -48,15 +48,13 @@ public class BaseTestSetupAndTearDown {
 		idsForAllCreatedElements = new ArrayList<String>();
 	}
 
-	public static void baseCleanUpAfterAllTests(Object apiHelperObj) throws JsonGenerationException, JsonMappingException, IllegalAccessException,
-			IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException, IOException {
+	public static void baseCleanUpAfterAllTests(Object apiHelperObj) {
 		for (String elementId : idsForAllCreatedElements) {
 			APITestUtil.deleteRequestObj(microservice, environment, elementId, apiRequestHelper, apiHelperObj);
 		}
 	}
 
-	public static void baseCleanUpAfterAllTests(ArrayList<String> idsForAllCreatedElements, Object apiHelperObj) throws JsonGenerationException, JsonMappingException, IllegalAccessException,
-			IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException, IOException {
+	public static void baseCleanUpAfterAllTests(ArrayList<String> idsForAllCreatedElements, Object apiHelperObj) {
 		for (String elementId : idsForAllCreatedElements) {
 			APITestUtil.deleteRequestObj(microservice, environment, elementId, apiRequestHelper, apiHelperObj);
 		}

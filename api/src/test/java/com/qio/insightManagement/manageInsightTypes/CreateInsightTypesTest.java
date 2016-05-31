@@ -1,11 +1,6 @@
 
 package com.qio.insightManagement.manageInsightTypes;
 
-import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
-
-import org.codehaus.jackson.JsonGenerationException;
-import org.codehaus.jackson.map.JsonMappingException;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -43,10 +38,9 @@ public class CreateInsightTypesTest extends BaseTestSetupAndTearDown {
 		responseInsightType = new InsightType();
 		serverResp = new ServerResponse();
 	}
-	
+
 	@AfterClass
-	public static void cleanUpAfterAllTests() throws JsonGenerationException, JsonMappingException, IllegalAccessException, IllegalArgumentException,
-			InvocationTargetException, NoSuchMethodException, SecurityException, IOException {
+	public static void cleanUpAfterAllTests() {
 		baseCleanUpAfterAllTests(insightTypeAPI);
 	}
 
@@ -62,84 +56,69 @@ public class CreateInsightTypesTest extends BaseTestSetupAndTearDown {
 
 	// RREHM-516 (InsightType has non unique abbreviation)
 	@Test
-	public void shouldNotCreateInsightTypeWhenAbbrIsNotUnique() throws JsonGenerationException, JsonMappingException, IOException,
-			IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
-		responseInsightType = APITestUtil.getResponseObjForCreate(requestInsightType, microservice, environment, apiRequestHelper, insightTypeAPI,
-				InsightType.class);
+	public void shouldNotCreateInsightTypeWhenAbbrIsNotUnique() {
+		responseInsightType = APITestUtil.getResponseObjForCreate(requestInsightType, microservice, environment, apiRequestHelper, insightTypeAPI, InsightType.class);
 		String insightTypeId = APITestUtil.getElementId(responseInsightType.get_links().getSelfLink().getHref());
 		idsForAllCreatedElements.add(insightTypeId);
 
 		InsightType requestInsightTypeWithSameAbbr = insightTypeHelper.getInsightTypeWithNoAttributes();
 		requestInsightTypeWithSameAbbr.setAbbreviation(requestInsightType.getAbbreviation());
-		serverResp = APITestUtil.getResponseObjForCreate(requestInsightTypeWithSameAbbr, microservice, environment, apiRequestHelper, insightTypeAPI,
-				ServerResponse.class);
+		serverResp = APITestUtil.getResponseObjForCreate(requestInsightTypeWithSameAbbr, microservice, environment, apiRequestHelper, insightTypeAPI, ServerResponse.class);
 
 		CustomAssertions.assertServerError(409, null, "Insight type creation failed as another insight type has same abbreviation.", serverResp);
 	}
 
 	// RREHM-519 (InsightType abbreviation contains spaces)
 	@Test
-	public void shouldNotCreateInsightTypeWhenAbbrContainsSpaces() throws JsonGenerationException, JsonMappingException, IOException,
-			IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
+	public void shouldNotCreateInsightTypeWhenAbbrContainsSpaces() {
 		String abbr = requestInsightType.getAbbreviation();
 		requestInsightType.setAbbreviation("Abrr has a space" + abbr);
 
-		serverResp = APITestUtil.getResponseObjForCreate(requestInsightType, microservice, environment, apiRequestHelper, insightTypeAPI,
-				ServerResponse.class);
+		serverResp = APITestUtil.getResponseObjForCreate(requestInsightType, microservice, environment, apiRequestHelper, insightTypeAPI, ServerResponse.class);
 
 		CustomAssertions.assertServerError(400, null, "Abbreviation should not have Space or Tab", serverResp);
 	}
 
 	// RREHM-517 (InsightType abbreviation is longer than 50 chars)
 	@Test
-	public void shouldNotCreateInsightTypeWhenAbbreviationIsLongerThan50Chars() throws JsonGenerationException, JsonMappingException, IOException,
-			IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
+	public void shouldNotCreateInsightTypeWhenAbbreviationIsLongerThan50Chars() {
 		requestInsightType.setAbbreviation(APITestUtil.FIFTYONE_CHARS);
 
-		serverResp = APITestUtil.getResponseObjForCreate(requestInsightType, microservice, environment, apiRequestHelper, insightTypeAPI,
-				ServerResponse.class);
+		serverResp = APITestUtil.getResponseObjForCreate(requestInsightType, microservice, environment, apiRequestHelper, insightTypeAPI, ServerResponse.class);
 
 		CustomAssertions.assertServerError(400, null, "Abbreviation should be less than 50 characters", serverResp);
 	}
 
 	// RREHM-788 (InsightType abbreviation is blank)
 	@Test
-	public void shouldNotCreateInsightTypeWhenAbbreviationIsBlank() throws JsonGenerationException, JsonMappingException, IOException,
-			IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
+	public void shouldNotCreateInsightTypeWhenAbbreviationIsBlank() {
 		requestInsightType.setAbbreviation("");
 
-		serverResp = APITestUtil.getResponseObjForCreate(requestInsightType, microservice, environment, apiRequestHelper, insightTypeAPI,
-				ServerResponse.class);
+		serverResp = APITestUtil.getResponseObjForCreate(requestInsightType, microservice, environment, apiRequestHelper, insightTypeAPI, ServerResponse.class);
 
-		CustomAssertions.assertServerError(400, null,
-				"Abbreviation is mandatory, should be less than 50 characters and no special characters are allowed.", serverResp);
+		CustomAssertions.assertServerError(400, null, "Abbreviation is mandatory, should be less than 50 characters and no special characters are allowed.", serverResp);
 	}
 
 	// RREHM-788 (InsightType abbreviation is null - missing)
 	@Test
-	public void shouldNotCreateInsightTypeWhenAbbreviationIsNull() throws JsonGenerationException, JsonMappingException, IOException,
-			IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
+	public void shouldNotCreateInsightTypeWhenAbbreviationIsNull() {
 		requestInsightType.setAbbreviation(null);
 
-		serverResp = APITestUtil.getResponseObjForCreate(requestInsightType, microservice, environment, apiRequestHelper, insightTypeAPI,
-				ServerResponse.class);
+		serverResp = APITestUtil.getResponseObjForCreate(requestInsightType, microservice, environment, apiRequestHelper, insightTypeAPI, ServerResponse.class);
 
-		CustomAssertions.assertServerError(400, null,
-				"Abbreviation is mandatory, should be less than 50 characters and no special characters are allowed.", serverResp);
+		CustomAssertions.assertServerError(400, null, "Abbreviation is mandatory, should be less than 50 characters and no special characters are allowed.", serverResp);
 	}
 
 	// RREHM-xxx (InsightType abbreviation contains special chars)
 	@Test
-	public void shouldNotCreateInsightTypeWhenAbbrContainsSpecialChars() throws JsonGenerationException, JsonMappingException, IOException,
-			IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
+	public void shouldNotCreateInsightTypeWhenAbbrContainsSpecialChars() {
 		String defaultAbbr = requestInsightType.getAbbreviation();
 		int count = APITestUtil.SPECIAL_CHARS.length();
 
 		for (int i = 0; i < count; i++) {
 			requestInsightType.setAbbreviation(APITestUtil.SPECIAL_CHARS.charAt(i) + defaultAbbr);
 
-			serverResp = APITestUtil.getResponseObjForCreate(requestInsightType, microservice, environment, apiRequestHelper, insightTypeAPI,
-					ServerResponse.class);
+			serverResp = APITestUtil.getResponseObjForCreate(requestInsightType, microservice, environment, apiRequestHelper, insightTypeAPI, ServerResponse.class);
 
 			CustomAssertions.assertServerError(400, null, "Abbreviation should not have special character except '.', '-', '_' ", serverResp);
 		}
@@ -147,48 +126,40 @@ public class CreateInsightTypesTest extends BaseTestSetupAndTearDown {
 
 	// RREHM-789 (InsightType name is blank)
 	@Test
-	public void shouldNotCreateInsightTypeWhenNameIsBlank() throws JsonGenerationException, JsonMappingException, IOException, IllegalAccessException,
-			IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
+	public void shouldNotCreateInsightTypeWhenNameIsBlank() {
 		requestInsightType.setName("");
 
-		serverResp = APITestUtil.getResponseObjForCreate(requestInsightType, microservice, environment, apiRequestHelper, insightTypeAPI,
-				ServerResponse.class);
+		serverResp = APITestUtil.getResponseObjForCreate(requestInsightType, microservice, environment, apiRequestHelper, insightTypeAPI, ServerResponse.class);
 
 		CustomAssertions.assertServerError(400, null, "Insight name is required, should be less than 255 char", serverResp);
 	}
 
 	// RREHM-789 (InsightType Name is null - missing)
 	@Test
-	public void shouldNotCreateInsightTypeWhenNameIsNull() throws JsonGenerationException, JsonMappingException, IOException, IllegalAccessException,
-			IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
+	public void shouldNotCreateInsightTypeWhenNameIsNull() {
 		requestInsightType.setName(null);
 
-		serverResp = APITestUtil.getResponseObjForCreate(requestInsightType, microservice, environment, apiRequestHelper, insightTypeAPI,
-				ServerResponse.class);
+		serverResp = APITestUtil.getResponseObjForCreate(requestInsightType, microservice, environment, apiRequestHelper, insightTypeAPI, ServerResponse.class);
 
 		CustomAssertions.assertServerError(400, null, "Insight name is required, should be less than 255 char", serverResp);
 	}
 
 	// RREHM-790 (InsightType description is blank)
 	@Test
-	public void shouldNotCreateInsightTypeWhenDescriptionIsBlank() throws JsonGenerationException, JsonMappingException, IOException,
-			IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
+	public void shouldNotCreateInsightTypeWhenDescriptionIsBlank() {
 		requestInsightType.setDescription("");
 
-		serverResp = APITestUtil.getResponseObjForCreate(requestInsightType, microservice, environment, apiRequestHelper, insightTypeAPI,
-				ServerResponse.class);
+		serverResp = APITestUtil.getResponseObjForCreate(requestInsightType, microservice, environment, apiRequestHelper, insightTypeAPI, ServerResponse.class);
 
 		CustomAssertions.assertServerError(400, null, "Description is mandatory, should be of reasonable length.", serverResp);
 	}
 
 	// RREHM-521 (InsightType name is longer than 255 chars)
 	@Test
-	public void shouldNotCreateInsightTypeWhenNameIsLongerThan50Chars() throws JsonGenerationException, JsonMappingException, IOException,
-			IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
+	public void shouldNotCreateInsightTypeWhenNameIsLongerThan50Chars() {
 		requestInsightType.setName(APITestUtil.TWOFIFTYSIX_CHARS);
 
-		serverResp = APITestUtil.getResponseObjForCreate(requestInsightType, microservice, environment, apiRequestHelper, insightTypeAPI,
-				ServerResponse.class);
+		serverResp = APITestUtil.getResponseObjForCreate(requestInsightType, microservice, environment, apiRequestHelper, insightTypeAPI, ServerResponse.class);
 
 		CustomAssertions.assertServerError(400, null, "Insight name should be less than 255 characters", serverResp);
 	}

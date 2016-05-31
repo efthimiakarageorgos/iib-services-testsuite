@@ -1,11 +1,5 @@
 package com.qio.model.asset.helper;
 
-import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
-
-import org.codehaus.jackson.JsonGenerationException;
-import org.codehaus.jackson.map.JsonMappingException;
-
 import com.qio.model.asset.AssetRequest;
 import com.qio.model.assetType.AssetType;
 import com.qio.model.assetType.helper.AttributeDataType;
@@ -33,8 +27,7 @@ public class AssetRequestHelper {
 		return asset;
 	}
 
-	public AssetRequest getAssetWithCreatingAssetTypeAndTenant(String assetTypeFlavor, AttributeDataType attributeDataType, ParameterDataType parameterDataType) throws JsonGenerationException,
-			JsonMappingException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException, IOException {
+	public AssetRequest getAssetWithCreatingAssetTypeAndTenant(String assetTypeFlavor, AttributeDataType attributeDataType, ParameterDataType parameterDataType) {
 		assetTypeUtil = new AssetTypeUtil();
 		tenantUtil = new TenantUtil();
 

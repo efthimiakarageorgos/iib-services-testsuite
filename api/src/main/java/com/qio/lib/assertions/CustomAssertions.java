@@ -12,7 +12,7 @@ public class CustomAssertions {
 
 	public static void assertServerError(int expectedRespCode, String expectedExceptionMsg, String expectedMsg, ServerResponse serverResp) {
 		assertServerError(expectedRespCode, expectedExceptionMsg, serverResp);
-		assertEquals(expectedMsg, serverResp.getMessage());
+		assertTrue(serverResp.getMessage().equals(expectedMsg) || serverResp.getMessage().contains(expectedMsg));
 	}
 
 	public static void assertServerError(int expectedRespCode, String expectedExceptionMsg, ServerResponse serverResp) {
