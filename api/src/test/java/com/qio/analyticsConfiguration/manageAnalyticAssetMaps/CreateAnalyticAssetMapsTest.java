@@ -2,7 +2,6 @@ package com.qio.analyticsConfiguration.manageAnalyticAssetMaps;
 
 import java.util.List;
 
-import org.apache.log4j.Logger;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -15,8 +14,10 @@ import com.qio.lib.exception.ServerResponse;
 import com.qio.model.analyticAssetMap.AnalyticAssetMap;
 import com.qio.model.analyticAssetMap.AssetTemplateModelAttribute;
 import com.qio.model.analyticAssetMap.helper.AnalyticAssetMapHelper;
+import com.qio.model.asset.AssetResponse;
 import com.qio.util.common.APITestUtil;
 import com.qio.util.common.AnalyticsUtil;
+import com.qio.util.common.AssetUtil;
 
 public class CreateAnalyticAssetMapsTest extends BaseTestSetupAndTearDown {
 
@@ -24,16 +25,17 @@ public class CreateAnalyticAssetMapsTest extends BaseTestSetupAndTearDown {
 	private AnalyticAssetMapHelper analyticAssetMapHelper;
 	private AnalyticAssetMap requestAnalyticAssetMap;
 	private AnalyticAssetMap responseAnalyticAssetMap;
+	private AssetResponse responseAsset;
+	private static AssetUtil assetUtil;
 	private ServerResponse serverResp;
 
 	private static String assetId;
-
-	final static Logger logger = Logger.getRootLogger();
 
 	@BeforeClass
 	public static void initSetupBeforeAllTests() {
 		baseInitSetupBeforeAllTests("analytics");
 		analyticAssetMapAPI = new MAnalyticAssetMapAPIHelper();
+		assetUtil = new AssetUtil();
 	}
 
 	@Before
@@ -42,7 +44,6 @@ public class CreateAnalyticAssetMapsTest extends BaseTestSetupAndTearDown {
 		requestAnalyticAssetMap = new AnalyticAssetMap();
 		responseAnalyticAssetMap = new AnalyticAssetMap();
 		serverResp = new ServerResponse();
-		logger.info("In Before");
 	}
 
 	@AfterClass
@@ -59,8 +60,7 @@ public class CreateAnalyticAssetMapsTest extends BaseTestSetupAndTearDown {
 
 	// RREHM-xxx (WORK IN PROGRESS)
 	// @Test
-	// public void shouldNotCreateTenantWhenAbbreviationIsNotUnique() throws JsonGenerationException, JsonMappingException, IOException,
-	// IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
+	// public void shouldNotCreateTenantWhenAbbreviationIsNotUnique() {
 	//
 	// //requestAnalyticAssetMap = analyticAssetMapHelper.getAnalyticAssetMapWithNoAssetTemplateModelAttributeAndAnalyticInputParameters();
 	// assetId="56fca9d633c5721c670641ef";
@@ -91,7 +91,8 @@ public class CreateAnalyticAssetMapsTest extends BaseTestSetupAndTearDown {
 	// RREHM-xxx ()
 	@Test
 	public void shouldCreateAnalyticAssetMapWithLinkedAndNotLinkedAttributesAndInputParameters() {
-		assetId = "56fca9d633c5721c670641ef";
+		responseAsset = assetUtil.createAssetWithCreatingAssetTypeAndTenant("WithNoAttributesAndParameters", null, null);
+		assetId = APITestUtil.getElementId(responseAsset.get_links().getSelfLink().getHref());
 
 		requestAnalyticAssetMap = analyticAssetMapHelper.getAssetTypeWithAllAttributesAndParameters(AnalyticsUtil.analyticAttributesWithoutLinks, AnalyticsUtil.analyticAttributesWithLinksMap,
 				AnalyticsUtil.analyticInputsMap);
@@ -106,7 +107,6 @@ public class CreateAnalyticAssetMapsTest extends BaseTestSetupAndTearDown {
 		responseAnalyticAssetMap = APITestUtil.getResponseObjForCreate(requestAnalyticAssetMap, microservice, environment, apiRequestHelper, analyticAssetMapAPI, AnalyticAssetMap.class);
 
 		String analyticAssetMapId = APITestUtil.getElementId(responseAnalyticAssetMap.get_links().getSelfLink().getHref());
-		logger.info(analyticAssetMapId);
 		idsForAllCreatedElements.add(analyticAssetMapId);
 
 		// GET is not working currently
