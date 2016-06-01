@@ -175,7 +175,7 @@ public class CreateAssetsTest extends BaseTestSetupAndTearDown {
 		serverResp = APITestUtil.getResponseObjForCreate(requestAsset, microservice, environment, apiRequestHelper, assetAPI, ServerResponse.class);
 
 		// The error message here needs to be updated by Devs.
-		CustomAssertions.assertServerError(500, "java.lang.Exception", "Invalid tenant id in the request", serverResp);
+		CustomAssertions.assertServerError(500, "com.qiotec.application.exceptions.InvalidInputException", "Asset name should be less than 255 characters", serverResp);
 	}
 
 	// RREHM-638
