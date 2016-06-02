@@ -1,23 +1,35 @@
+
+
 package com.qio.analyticsConfiguration.manageAnalyticAssetMaps;
 
+import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+import org.codehaus.jackson.JsonGenerationException;
+import org.codehaus.jackson.map.JsonMappingException;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import com.qio.common.BaseTestSetupAndTearDown;
-import com.qio.lib.apiHelpers.analytics.MAnalyticAssetMapAPIHelper;
-import com.qio.lib.assertions.CustomAssertions;
-import com.qio.lib.exception.ServerResponse;
-import com.qio.model.analyticAssetMap.AnalyticAssetMap;
-import com.qio.model.analyticAssetMap.AssetTemplateModelAttribute;
-import com.qio.model.analyticAssetMap.helper.AnalyticAssetMapHelper;
-import com.qio.model.asset.AssetResponse;
 import com.qio.util.common.APITestUtil;
 import com.qio.util.common.AnalyticsUtil;
+import com.qio.lib.assertions.CustomAssertions;
+import com.qio.lib.exception.ServerResponse;
+import com.qio.lib.apiHelpers.analytics.MAnalyticAssetMapAPIHelper;
+import com.qio.model.analyticAssetMap.*;
+import com.qio.model.analyticAssetMap.helper.AnalyticAssetMapHelper;
+import com.qio.model.asset.AssetResponse;
+import com.qio.model.assetType.AssetTypeParameter;
+import com.qio.model.insight.activityType.ActivityType;
 import com.qio.util.common.AssetUtil;
+
+
 
 public class CreateAnalyticAssetMapsTest extends BaseTestSetupAndTearDown {
 
@@ -28,14 +40,20 @@ public class CreateAnalyticAssetMapsTest extends BaseTestSetupAndTearDown {
 	private AssetResponse responseAsset;
 	private static AssetUtil assetUtil;
 	private ServerResponse serverResp;
-
+	
 	private static String assetId;
+	
+	
+	final static Logger logger = Logger.getRootLogger();
 
 	@BeforeClass
 	public static void initSetupBeforeAllTests() {
 		baseInitSetupBeforeAllTests("analytics");
 		analyticAssetMapAPI = new MAnalyticAssetMapAPIHelper();
-		assetUtil = new AssetUtil();
+		//TO DO
+		//WE want to create an asset here that goes against the assettype id we use for the analytic asset map 
+		//testing - BUT WE WANT TO HAVE ONLY A LINE OR TWO, NOT LOTS OF IMPORTS AND DECLARATIONS
+		assetId="56fca9d633c5721c670641ef";
 	}
 
 	@Before
@@ -47,75 +65,176 @@ public class CreateAnalyticAssetMapsTest extends BaseTestSetupAndTearDown {
 	}
 
 	@AfterClass
-	public static void cleanUpAfterAllTests() {
-		baseCleanUpAfterAllTests(analyticAssetMapAPI);
+	public static void cleanUpAfterAllTests() throws JsonGenerationException, JsonMappingException, IllegalAccessException,
+		 IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException, IOException {
+		 baseCleanUpAfterAllTests(analyticAssetMapAPI);
 	}
-
+	
 	// The following test cases go here:
-	// issuetype=Test and issue in (linkedIssues("RREHM-xxx")) and issue in linkedIssues("RREHM-yy")
+	// issuetype=Test and issue in (linkedIssues("RREHM-2202")) and issue in linkedIssues("RREHM-1832")
 
 	/*
 	 * NEGATIVE TESTS START
 	 */
+	// RREHM-xxx ()
+	@Ignore
+	public void shouldNotCreateAnalyticAssetMapWhenAssetIdIsNotExistentNonValid() throws JsonGenerationException, JsonMappingException, IOException,
+			IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
+				
+		//The line below is commented as we cannot create a AAM if it does not have attributes and pars - awaiting calrification
+		//requestAnalyticAssetMap = analyticAssetMapHelper.getAnalyticAssetMapWithNoAssetTemplateModelAttributeAndAnalyticInputParameters();
+		requestAnalyticAssetMap = analyticAssetMapHelper.getAssetTypeWithAllAttributesAndParameters(AnalyticsUtil.analyticAttributesWithoutLinks, AnalyticsUtil.analyticAttributesWithLinksMap, AnalyticsUtil.analyticInputsMap);
+			
+		requestAnalyticAssetMap.setAsset("NonExistentId"); 
+		requestAnalyticAssetMap.setAnalytic(AnalyticsUtil.analyticIdForAnalyticAssetMapTests); 
+		
+		//TODO: JEET: Response Body makes the below call fail: [{"logref":"error","message":"Invalid Asset id in the request","links":[]}]
+		//serverResp = APITestUtil.getResponseObjForCreate(requestAnalyticAssetMap, microservice, environment, apiRequestHelper, analyticAssetMapAPI, ServerResponse.class);
+		//CustomAssertions.assertServerError(404, "xxxx", "Invalid Asset id in the request", serverResp);
+	}
+		
+	// RREHM-xxx ()
+	@Test
+	public void shouldNotCreateAnalyticAssetMapWhenAssetIdIsNotExistentValid() throws JsonGenerationException, JsonMappingException, IOException,
+			IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
+			
+		//The line below is commented as we cannot create a AAM if it does not have attributes and pars - awaiting calrification
+		//requestAnalyticAssetMap = analyticAssetMapHelper.getAnalyticAssetMapWithNoAssetTemplateModelAttributeAndAnalyticInputParameters();
+		requestAnalyticAssetMap = analyticAssetMapHelper.getAssetTypeWithAllAttributesAndParameters(AnalyticsUtil.analyticAttributesWithoutLinks, AnalyticsUtil.analyticAttributesWithLinksMap, AnalyticsUtil.analyticInputsMap);
+		
+		requestAnalyticAssetMap.setAsset("572bbadb13b38458022a33e6"); //Non existent but valid id format
+		requestAnalyticAssetMap.setAnalytic("ThisIdDoesNotExist"); 
+			
+		//TO DO --- JEET: Response Body makes the below call fail:
+		//[
+//		  {
+//		  "timestamp": 1464828156482,
+//		  "status": 500,
+//		  "error": "Internal Server Error",
+//		  "exception": "java.lang.IllegalArgumentException",
+//		  "message": "invalid ObjectId [57488a65e4b0c90b07bf5d47X]",
+//		  "path": "/analyticassetmap/57488a65e4b0c90b07bf5d47X"
+//		}
+		//serverResp = APITestUtil.getResponseObjForCreate(requestAnalyticAssetMap, microservice, environment, apiRequestHelper, analyticAssetMapAPI, ServerResponse.class);
+		//CustomAssertions.assertServerError(500, "xxxx", "invalid ObjectId [ThisIdDoesNotExist]", serverResp);
+	}
+	
+	// RREHM-xxx ()
+	@Test
+	public void shouldNotCreateAnalyticAssetMapWhenAnalyticIdIsNotExistentValid() throws JsonGenerationException, JsonMappingException, IOException,
+			IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
+		
+		//The line below is commented as we cannot create a AAM if it does not have attributes and pars - awaiting calrification
+		//requestAnalyticAssetMap = analyticAssetMapHelper.getAnalyticAssetMapWithNoAssetTemplateModelAttributeAndAnalyticInputParameters();
+		requestAnalyticAssetMap = analyticAssetMapHelper.getAssetTypeWithAllAttributesAndParameters(AnalyticsUtil.analyticAttributesWithoutLinks, AnalyticsUtil.analyticAttributesWithLinksMap, AnalyticsUtil.analyticInputsMap);
+		
+		requestAnalyticAssetMap.setAsset(assetId);
+		requestAnalyticAssetMap.setAnalytic("572bbadb13b38458022a33e6"); //Non existent but valid id format
+		
+		//JEET: Response Body makes the below call fail: [{"logref":"error","message":"Analytic 572bbadb13b38458022a33e6 not found.","links":[]}]
+		//serverResp = APITestUtil.getResponseObjForCreate(requestAnalyticAssetMap, microservice, environment, apiRequestHelper, analyticAssetMapAPI, ServerResponse.class);
+		//CustomAssertions.assertServerError(404, "xxxx", "Analytic 572bbadb13b38458022a33e6 not found.", serverResp);
+	}
 
-	// RREHM-xxx (WORK IN PROGRESS)
-	// @Test
-	// public void shouldNotCreateTenantWhenAbbreviationIsNotUnique() {
-	//
-	// //requestAnalyticAssetMap = analyticAssetMapHelper.getAnalyticAssetMapWithNoAssetTemplateModelAttributeAndAnalyticInputParameters();
-	// assetId="56fca9d633c5721c670641ef";
-	//
-	// //requestAnalyticAssetMap = analyticAssetMapHelper.getAnalyticAssetMapWithAssetTemplateModelAttributes(AnalyticsUtil.analyticAttributesWithoutLinks, AnalyticsUtil.analyticAttributesWithLinks);
-	//
-	// // requestAnalyticAssetMap = analyticAssetMapHelper.getAnalyticAssetMapWithAnalyticInputParameters(AnalyticsUtil.analyticInputs, null);
-	//
-	// requestAnalyticAssetMap = analyticAssetMapHelper.getAssetTypeWithAllAttributesAndParameters(AnalyticsUtil.analyticAttributesWithoutLinks, AnalyticsUtil.analyticAttributesWithLinksMap,
-	// AnalyticsUtil.analyticInputsMap);
-	// requestAnalyticAssetMap.setAsset(assetId);
-	//
-	// requestAnalyticAssetMap.setAnalytic(AnalyticsUtil.analyticIdForAnalyticAssetMapTests);
-	//
-	// logger.info("After");
-	// serverResp = APITestUtil.getResponseObjForCreate(requestAnalyticAssetMap, microservice, environment, apiRequestHelper, analyticAssetMapAPI, ServerResponse.class);
-	//
-	// //CustomAssertions.assertServerError(409, null, "Creating tenant failed, as another tenant has same abbreviation.", serverResp);
-	// }
+	// RREHM-xxx ()
+	@Ignore
+	public void shouldNotCreateAnalyticAssetMapWhenAnalyticIdIsNotExistentNonValid() throws JsonGenerationException, JsonMappingException, IOException,
+			IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
+		
+		requestAnalyticAssetMap = analyticAssetMapHelper.getAssetTypeWithAllAttributesAndParameters(AnalyticsUtil.analyticAttributesWithoutLinks, AnalyticsUtil.analyticAttributesWithLinksMap, AnalyticsUtil.analyticInputsMap);
+		
+		requestAnalyticAssetMap.setAsset(assetId);
+		requestAnalyticAssetMap.setAnalytic("NonExistentId");
+			
+		serverResp = APITestUtil.getResponseObjForCreate(requestAnalyticAssetMap, microservice, environment, apiRequestHelper, analyticAssetMapAPI, ServerResponse.class);
 
+		CustomAssertions.assertServerError(500, "java.lang.IllegalArgumentException", "invalid ObjectId [NonExistentId]", serverResp);
+	}
+	
+	// RREHM-xxx ()
+	@Test
+	public void shouldNotCreateAnalyticAssetMapWithAnalyticInputParametersOnly() throws JsonGenerationException, JsonMappingException, IOException,
+		IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
+				
+		requestAnalyticAssetMap = analyticAssetMapHelper.getAnalyticAssetMapWithAnalyticInputParameters(AnalyticsUtil.analyticInputsMap);
+			
+		requestAnalyticAssetMap.setAsset(assetId);
+		requestAnalyticAssetMap.setAnalytic(AnalyticsUtil.analyticIdForAnalyticAssetMapTests);
+					
+		serverResp = APITestUtil.getResponseObjForCreate(requestAnalyticAssetMap, microservice, environment, apiRequestHelper, analyticAssetMapAPI, ServerResponse.class);
+
+		CustomAssertions.assertServerError(500, "java.lang.NullPointerException", "No message available", serverResp);
+	}
+	
+	// RREHM-xxx ()
+	@Test
+	public void shouldNotCreateAnalyticAssetMapWithAssetTemplateModelAttributesOnly() throws JsonGenerationException, JsonMappingException, IOException,
+			IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
+			
+		requestAnalyticAssetMap = analyticAssetMapHelper.getAnalyticAssetMapWithAssetTemplateModelAttributes(AnalyticsUtil.analyticAttributesWithoutLinks, AnalyticsUtil.analyticAttributesWithLinksMap);
+			
+		requestAnalyticAssetMap.setAsset(assetId);
+		requestAnalyticAssetMap.setAnalytic(AnalyticsUtil.analyticIdForAnalyticAssetMapTests);
+				
+		responseAnalyticAssetMap = APITestUtil.getResponseObjForCreate(requestAnalyticAssetMap, microservice, environment, apiRequestHelper, analyticAssetMapAPI, AnalyticAssetMap.class);
+		
+		serverResp = APITestUtil.getResponseObjForCreate(requestAnalyticAssetMap, microservice, environment, apiRequestHelper, analyticAssetMapAPI, ServerResponse.class);
+
+		CustomAssertions.assertServerError(500, "java.lang.NullPointerException", "No message available", serverResp);
+	}
+	
+	// RREHM-xxx ()
+	@Test
+	public void shouldNotCreateAnalyticAssetMapWithoutAssetTemplateModelAttributesAndAnalyticInputParameters() throws JsonGenerationException, JsonMappingException, IOException,
+		IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
+			
+		requestAnalyticAssetMap = analyticAssetMapHelper.getAnalyticAssetMapWithNoAssetTemplateModelAttributeAndAnalyticInputParameters();
+		requestAnalyticAssetMap.setAsset(assetId);
+		requestAnalyticAssetMap.setAnalytic(AnalyticsUtil.analyticIdForAnalyticAssetMapTests);
+			
+		responseAnalyticAssetMap = APITestUtil.getResponseObjForCreate(requestAnalyticAssetMap, microservice, environment, apiRequestHelper, analyticAssetMapAPI, AnalyticAssetMap.class);
+			
+		serverResp = APITestUtil.getResponseObjForCreate(requestAnalyticAssetMap, microservice, environment, apiRequestHelper, analyticAssetMapAPI, ServerResponse.class);
+
+		CustomAssertions.assertServerError(500, "java.lang.NullPointerException", "No message available", serverResp);
+	}
+		
 	/*
 	 * NEGATIVE TESTS END
 	 */
 
 	/*
 	 * POSITIVE TESTS START
-	 */
+	 */	
 	// RREHM-xxx ()
 	@Test
-	public void shouldCreateAnalyticAssetMapWithLinkedAndNotLinkedAttributesAndInputParameters() {
+	public void shouldCreateAnalyticAssetMapWithLinkedAndNotLinkedAttributesAndAnalyticInputParameters() throws JsonGenerationException, JsonMappingException, IOException,
+			IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
 		responseAsset = assetUtil.createAssetWithCreatingAssetTypeAndTenant("WithNoAttributesAndParameters", null, null);
-		assetId = APITestUtil.getElementId(responseAsset.get_links().getSelfLink().getHref());
-
-		requestAnalyticAssetMap = analyticAssetMapHelper.getAssetTypeWithAllAttributesAndParameters(AnalyticsUtil.analyticAttributesWithoutLinks, AnalyticsUtil.analyticAttributesWithLinksMap,
-				AnalyticsUtil.analyticInputsMap);
+		//assetId = APITestUtil.getElementId(responseAsset.get_links().getSelfLink().getHref());
+		
+		requestAnalyticAssetMap = analyticAssetMapHelper.getAssetTypeWithAllAttributesAndParameters(AnalyticsUtil.analyticAttributesWithoutLinks, AnalyticsUtil.analyticAttributesWithLinksMap, AnalyticsUtil.analyticInputsMap);
 		requestAnalyticAssetMap.setAsset(assetId);
-
+		requestAnalyticAssetMap.setAnalytic(AnalyticsUtil.analyticIdForAnalyticAssetMapTests);
+		//requestAnalyticAssetMap.setEnabled(null);
+		requestAnalyticAssetMap.setLifetimeStart("2014-03-01T14:30:01.000Z");
+		requestAnalyticAssetMap.setLifetimeEnd("2017-01-01T04:30:01.000Z");
+		
+		logger.info("AAA "+requestAnalyticAssetMap.getEnabled());
 		List<AssetTemplateModelAttribute> assetTemplateModelAttribute = requestAnalyticAssetMap.getAssetTemplateModelAttributes();
 		assetTemplateModelAttribute.get(0).setValue("0.5");
 		requestAnalyticAssetMap.setAssetTemplateModelAttributes(assetTemplateModelAttribute);
-
-		requestAnalyticAssetMap.setAnalytic(AnalyticsUtil.analyticIdForAnalyticAssetMapTests);
-
+			
 		responseAnalyticAssetMap = APITestUtil.getResponseObjForCreate(requestAnalyticAssetMap, microservice, environment, apiRequestHelper, analyticAssetMapAPI, AnalyticAssetMap.class);
-
+			
 		String analyticAssetMapId = APITestUtil.getElementId(responseAnalyticAssetMap.get_links().getSelfLink().getHref());
-		idsForAllCreatedElements.add(analyticAssetMapId);
+		//idsForAllCreatedElements.add(analyticAssetMapId);
 
-		// GET is not working currently
-		AnalyticAssetMap committedAnalyticAssetMap = APITestUtil.getResponseObjForRetrieve(microservice, environment, analyticAssetMapId, apiRequestHelper, analyticAssetMapAPI,
-				AnalyticAssetMap.class);
-		CustomAssertions.assertRequestAndResponseObj(responseAnalyticAssetMap, committedAnalyticAssetMap);
+		//AnalyticAssetMap committedAnalyticAssetMap = APITestUtil.getResponseObjForRetrieve(microservice, environment, analyticAssetMapId, apiRequestHelper, analyticAssetMapAPI, AnalyticAssetMap.class);	
+		//CustomAssertions.assertRequestAndResponseObj(responseAnalyticAssetMap, committedAnalyticAssetMap);
 	}
-
 	/*
 	 * POSITIVE TESTS END
 	 */
 }
+

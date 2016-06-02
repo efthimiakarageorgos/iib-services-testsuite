@@ -46,7 +46,7 @@ public class AnalyticAssetMapHelper {
 		return analyticAssetMap;
 	}
 
-	public AnalyticAssetMap getAnalyticAssetMapWithNoAssetTemplateModelAttributeAndAnalyticInputParameters(String assetId, String analyticId) {
+	public AnalyticAssetMap getAnalyticAssetMapWithNoAssetTemplateModelAttributeAndAnalyticInputParameters() {
 		initDefaultAnalyticAssetMap();
 		analyticAssetMap.setAnalyticInputParameters(null);
 		analyticAssetMap.setAssetTemplateModelAttributes(null);

@@ -16,7 +16,7 @@ import com.qio.model.common.Links;
 
 public class AnalyticAssetMap {
 	private String lifetimeStart;
-	private Date lifetimeEnd;
+	private String lifetimeEnd;
 	private Boolean enabled;
 	private String comment;
 	private String asset;
@@ -58,7 +58,7 @@ public class AnalyticAssetMap {
 		};
 	}
 
-	public AnalyticAssetMap(String asset, String analytic, Boolean enabled, String comment, String lifetimeStart, Date lifetimeEnd, List<AssetTemplateModelAttribute> assetTemplateModelAttributes, List<AnalyticInputParameter> parameters) {
+	public AnalyticAssetMap(String asset, String analytic, Boolean enabled, String comment, String lifetimeStart, String lifetimeEnd, List<AssetTemplateModelAttribute> assetTemplateModelAttributes, List<AnalyticInputParameter> parameters) {
 		this.asset = asset;
 		this.analytic = analytic;
 		this.enabled = enabled;
@@ -88,11 +88,11 @@ public class AnalyticAssetMap {
 		this.lifetimeStart = lifetimeStart;
 	}
 
-	public Date getLifetimeEnd() {
+	public String getLifetimeEnd() {
 		return lifetimeEnd;
 	}
 
-	public void setLifetimeEnd(Date lifetimeEnd) {
+	public void setLifetimeEnd(String lifetimeEnd) {
 		this.lifetimeEnd = lifetimeEnd;
 	}
 	
