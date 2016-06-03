@@ -3,15 +3,12 @@ package com.qio.model.analyticAssetMap;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
 import java.util.Date;
+import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.codehaus.jackson.annotate.JsonProperty;
 
-import com.qio.model.analyticAssetMap.AnalyticAssetMap;
-import com.qio.model.analyticAssetMap.AssetTemplateModelAttribute;
-import com.qio.model.analyticAssetMap.AnalyticInputParameter;
 import com.qio.model.common.Links;
 
 public class AnalyticAssetMap {
@@ -58,7 +55,8 @@ public class AnalyticAssetMap {
 		};
 	}
 
-	public AnalyticAssetMap(String asset, String analytic, Boolean enabled, String comment, String lifetimeStart, String lifetimeEnd, List<AssetTemplateModelAttribute> assetTemplateModelAttributes, List<AnalyticInputParameter> parameters) {
+	public AnalyticAssetMap(String asset, String analytic, Boolean enabled, String comment, String lifetimeStart, String lifetimeEnd, List<AssetTemplateModelAttribute> assetTemplateModelAttributes,
+			List<AnalyticInputParameter> parameters) {
 		this.asset = asset;
 		this.analytic = analytic;
 		this.enabled = enabled;
@@ -69,7 +67,8 @@ public class AnalyticAssetMap {
 	}
 
 	public AnalyticAssetMap(AnalyticAssetMap analyticAssetMap) {
-		this(analyticAssetMap.getAsset(), analyticAssetMap.getAnalytic(), analyticAssetMap.getEnabled(), analyticAssetMap.getComment(), analyticAssetMap.getLifetimeStart(), analyticAssetMap.getLifetimeEnd(), analyticAssetMap.getAssetTemplateModelAttributes(), analyticAssetMap.getAnalyticInputParameters());
+		this(analyticAssetMap.getAsset(), analyticAssetMap.getAnalytic(), analyticAssetMap.getEnabled(), analyticAssetMap.getComment(), analyticAssetMap.getLifetimeStart(), analyticAssetMap
+				.getLifetimeEnd(), analyticAssetMap.getAssetTemplateModelAttributes(), analyticAssetMap.getAnalyticInputParameters());
 	}
 
 	public String getAnalyticAssetMap() {
@@ -95,7 +94,7 @@ public class AnalyticAssetMap {
 	public void setLifetimeEnd(String lifetimeEnd) {
 		this.lifetimeEnd = lifetimeEnd;
 	}
-	
+
 	public Boolean getEnabled() {
 		return enabled;
 	}
@@ -119,7 +118,7 @@ public class AnalyticAssetMap {
 	public void setAsset(String asset) {
 		this.asset = asset;
 	}
-	
+
 	public String getAnalytic() {
 		return analytic;
 	}
@@ -127,6 +126,7 @@ public class AnalyticAssetMap {
 	public void setAnalytic(String analytic) {
 		this.analytic = analytic;
 	}
+
 	public List<AssetTemplateModelAttribute> getAssetTemplateModelAttributes() {
 		return assetTemplateModelAttributes;
 	}
@@ -153,9 +153,7 @@ public class AnalyticAssetMap {
 
 	// TODO:
 	/*
-	 * If two objects do not match, then its simply going to print out their
-	 * string representations in the logger message. I need to figure out a
-	 * better way for this.
+	 * If two objects do not match, then its simply going to print out their string representations in the logger message. I need to figure out a better way for this.
 	 */
 	@Override
 	public boolean equals(Object responseObj) {
@@ -177,8 +175,8 @@ public class AnalyticAssetMap {
 				if (requestVal != null)
 					if (!requestVal.equals(responseVal)) {
 						equalityCheckFlag = false;
-						logger.error("Class Name: " + this.getClass().getName() + " --> Match failed on property: " + field.getName()
-								+ ", Request Value: " + requestVal + ", Response Value: " + responseVal);
+						logger.error("Class Name: " + this.getClass().getName() + " --> Match failed on property: " + field.getName() + ", Request Value: " + requestVal + ", Response Value: "
+								+ responseVal);
 						break;
 					}
 			}
