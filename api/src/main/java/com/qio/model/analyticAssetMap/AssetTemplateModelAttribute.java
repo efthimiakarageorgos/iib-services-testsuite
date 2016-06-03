@@ -12,7 +12,6 @@ public class AssetTemplateModelAttribute implements Comparable {
 	private String analyticAttribute;
 	private String assetTypeAttribute;
 	private String value;
-	
 
 	@JsonProperty("_links")
 	private Links _links;
@@ -89,8 +88,8 @@ public class AssetTemplateModelAttribute implements Comparable {
 				if (requestVal != null && !field.getName().equals("id"))
 					if (!requestVal.equals(responseVal)) {
 						equalityCheckFlag = false;
-						logger.error("Class Name: " + this.getClass().getName() + " --> Match failed on property: " + field.getName()
-								+ ", Request Value: " + requestVal + ", Response Value: " + responseVal);
+						logger.error("Class Name: " + this.getClass().getName() + " --> Match failed on property: " + field.getName() + ", Request Value: " + requestVal + ", Response Value: "
+								+ responseVal);
 						break;
 					}
 			}
@@ -104,7 +103,7 @@ public class AssetTemplateModelAttribute implements Comparable {
 
 	@Override
 	//
-	//JEET THIS needs more work
+	// JEET THIS needs more work
 	//
 	public int compareTo(Object o) {
 		if (!(o instanceof AssetTemplateModelAttribute))
