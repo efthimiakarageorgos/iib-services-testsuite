@@ -1,3 +1,5 @@
+
+
 package com.qio.util.common;
 
 import java.io.IOException;
@@ -16,15 +18,16 @@ import com.qio.model.analyticAssetMap.helper.AnalyticAssetMapHelper;
 
 public class AnalyticsUtil extends BaseTestUtil {
 	// There will not be a REST API that will allows us creating and getting info from the "Analytic" collection
-	// In order to tets the analytic asset map REST API's we will use a predefined analytic 
+	// In order to test the analytic asset map REST API's we will use a predefined analytic 
 	// and we have to "hard code" its input parameters and its attributes
 	//
 	public static String analyticIdForAnalyticAssetMapTests = "572bbadb13b38458022a0be6"; //DHP_MechanicalIntegrity
 	public static String assetTypeIdForAnalyticAssetMapTests = "572bb56613b38458022725fb";
 	public String AssetMicroservice = microserviceConfig.getString("asset" + "." + envRuntime);
 
-	
+	//This has to stay here until we have a REST API to create and get an Analytic
 	public static Map<String, String> analyticAttributesAndAliasesWithLinks = new HashMap<String, String>() {{
+		//Analytic Attribute Id         Analytic Attribute Alias
 	    put("572bb56613b3845802272456", "IY01_UpperThreshold");
 	    put("572bb56613b384580227245a", "IY01_LowerThreshold");
 	    put("572bb56613b384580227245e", "TI02_UpperThreshold");
@@ -48,13 +51,14 @@ public class AnalyticsUtil extends BaseTestUtil {
 	    put("572bb56613b38458022725bb", "SI05_LowerThreshold");
 	}};
 	
-	
+	//TO DO
 	// We want to query the asset type attributes for the assettypeid we have specified above and
 	// lookup the analyticAttributesAndAliasesWithLinks based on alias to find the matching attribute
 	// then form a new map that contains the analyticAttribute and its matching asset type attribute id
 	// the map will look like this:
 	
 	public static Map<String, String> analyticAttributesWithLinksMap = new HashMap<String, String>() {{
+		//Analytic Attribute Id         Asset Type Attribute Id
 		put("572bb56613b3845802272456", "572bb56613b3845802272647");
 	    put("572bb56613b384580227245a", "572bb56613b3845802272645");
 	    put("572bb56613b384580227245e", "572bb56613b384580227260d");
@@ -78,8 +82,9 @@ public class AnalyticsUtil extends BaseTestUtil {
 	    put("572bb56613b38458022725bb", "572bb56613b3845802272643");
 	}};
 	
-	
+	//This has to stay here until we have a REST API to create and get an Analytic
 	public static ArrayList<String> analyticAttributesWithoutLinks = new ArrayList<String>() {{
+		//These will not be linked to an asset type attribute
 	    add("572bb56613b38458022724d1");
 	    add("572bb56613b38458022724cf");
 	    add("572bb56613b38458022724cc");
@@ -103,13 +108,9 @@ public class AnalyticsUtil extends BaseTestUtil {
 	    add("572bb56613b3845802272477");
 	}};
 	
-	
-	public static ArrayList<String> analyticInputs = new ArrayList<String>() {{
-	    add("572bb56613b38458022725c6");
-	    add("572bb56613b38458022725c8");
-	}};
-	
-	public static Map<String, String> analyticInputsX = new HashMap<String, String>() {{
+	//This has to stay here until we have a REST API to create and get an Analytic
+	public static Map<String, String> analyticInputs = new HashMap<String, String>() {{
+		//Analytic Input Id              Analytic Input Alias
 		put("572bb56613b38458022725c6", "LineLeg/GrdUnbalence");
 		put("572bb56613b38458022725c8", "DischargePressure");
 		put("572bb56613b38458022725ca", "FlowLinePressure");
@@ -138,12 +139,14 @@ public class AnalyticsUtil extends BaseTestUtil {
 		put("572bb56613b38458022725ea", "Speed");
 	}};
 	
+	//TO DO
 	// We want to query the asset type parameters for the assettypeid we have specified above and
 	// lookup the analyticInputs based on alias to find the matching parameter - compare to the description field (after spaces are removed)
 	// then form a new map that contains the analyticInput and its matching asset type parameter id
 	// the map will look like this:
 	
 	public static Map<String, String> analyticInputsMap = new HashMap<String, String>() {{
+		//Analytic Input Id              Asset Type Parameter Id
 		put("572bb56613b38458022725c6", "56fca9d633c5721c67060707");
 		put("572bb56613b38458022725c8", "56fca9d633c5721c67060708");
 		put("572bb56613b38458022725ca", "56fca9d633c5721c67060709");
