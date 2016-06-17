@@ -70,7 +70,7 @@ public class CreateAssetTypeAttributesTest extends BaseTestSetupAndTearDown {
 
 		requestAssetType.setAttributes(existingAssetTypeAttributes);
 		serverResp = APITestUtil.getResponseObjForUpdate(requestAssetType, microservice, environment, assetTypeId, apiRequestHelper, assetTypeAPI, ServerResponse.class);
-		CustomAssertions.assertServerError(500, "com.qiotec.application.exceptions.InvalidInputException", "Attribute Abbreviation must not contain Spaces", serverResp);
+		CustomAssertions.assertServerError(400, "com.qiotec.application.exceptions.InvalidInputException", "Attribute Abbreviation must not contain Spaces", serverResp);
 	}
 
 	// RREHM-841 ()
@@ -87,7 +87,7 @@ public class CreateAssetTypeAttributesTest extends BaseTestSetupAndTearDown {
 
 		requestAssetType.setAttributes(existingAssetTypeAttributes);
 		serverResp = APITestUtil.getResponseObjForUpdate(requestAssetType, microservice, environment, assetTypeId, apiRequestHelper, assetTypeAPI, ServerResponse.class);
-		CustomAssertions.assertServerError(500, "com.qiotec.application.exceptions.InvalidInputException", "Attribute Abbreviation Should not Contain Duplicate Entries", serverResp);
+		CustomAssertions.assertServerError(400, "com.qiotec.application.exceptions.InvalidInputException", "Attribute Abbreviation Should not Contain Duplicate Entries", serverResp);
 	}
 
 	// RREHM-842 ()
@@ -105,28 +105,26 @@ public class CreateAssetTypeAttributesTest extends BaseTestSetupAndTearDown {
 
 		requestAssetType.setAttributes(existingAssetTypeAttributes);
 		serverResp = APITestUtil.getResponseObjForUpdate(requestAssetType, microservice, environment, assetTypeId, apiRequestHelper, assetTypeAPI, ServerResponse.class);
-		CustomAssertions.assertServerError(500, "com.qiotec.application.exceptions.InvalidInputException", "Attribute Abbreviation Should not Contain Duplicate Entries", serverResp);
+		CustomAssertions.assertServerError(400, "com.qiotec.application.exceptions.InvalidInputException", "Attribute Abbreviation Should not Contain Duplicate Entries", serverResp);
 	}
 
-	// RREHM-847 ()
-	// BUG:RREHM-928
-	// @Test
-	// public void shouldNotBeAllowedToAddNewAttributeWhenUnitIsEmpty() throws JsonGenerationException, JsonMappingException,
-	// IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException, IOException {
-	//
-	// List<AssetTypeAttribute> existingAssetTypeAttributes = requestAssetType.getAttributes();
-	// existingAssetTypeAttributes.get(FIRST_ELEMENT).setId(assetTypeAttributeId);
-	//
-	// AssetTypeAttribute assetTypeAttributeWithEmptyUnit = assetTypeHelper.getAssetTypeAttributeWithInputDataType(AttributeDataType.Float);
-	// assetTypeAttributeWithEmptyUnit.setUnit("");
-	// existingAssetTypeAttributes.add(assetTypeAttributeWithEmptyUnit);
-	//
-	// requestAssetType.setAttributes(existingAssetTypeAttributes);
-	// serverResp = TestHelper.getResponseObjForUpdate(requestAssetType, microservice, environment, assetTypeId, apiRequestHeaders, assetTypeAPI,
-	// ServerResponse.class);
-	// CustomAssertions.assertServerError(500, "com.qiotec.application.exceptions.InvalidInputException",
-	// "Attribute Should not have empty unit", serverResp);
-	// }
+	 // RREHM-847 ()
+	 // BUG:RREHM-928 - FIXED!
+	 @Test
+	 public void shouldNotBeAllowedToAddNewAttributeWhenUnitIsEmpty() {
+	 
+	 List<AssetTypeAttribute> existingAssetTypeAttributes = requestAssetType.getAttributes();
+	 existingAssetTypeAttributes.get(FIRST_ELEMENT).setId(assetTypeAttributeId);
+	
+	 AssetTypeAttribute assetTypeAttributeWithEmptyUnit = assetTypeHelper.getAssetTypeAttributeWithInputDataType(AttributeDataType.Float);
+	 assetTypeAttributeWithEmptyUnit.setUnit("");
+	 existingAssetTypeAttributes.add(assetTypeAttributeWithEmptyUnit);
+	
+	 requestAssetType.setAttributes(existingAssetTypeAttributes);
+	 serverResp = APITestUtil.getResponseObjForUpdate(requestAssetType, microservice, environment, assetTypeId, apiRequestHelper, assetTypeAPI, ServerResponse.class);
+	 CustomAssertions.assertServerError(400, "com.qiotec.application.exceptions.InvalidInputException",
+	 "Attribute unit should not be null as data type is float", serverResp);
+	 }
 
 	// RREHM-849 ()
 	@Test
@@ -144,7 +142,7 @@ public class CreateAssetTypeAttributesTest extends BaseTestSetupAndTearDown {
 
 			requestAssetType.setAttributes(existingAssetTypeAttributes);
 			serverResp = APITestUtil.getResponseObjForUpdate(requestAssetType, microservice, environment, assetTypeId, apiRequestHelper, assetTypeAPI, ServerResponse.class);
-			CustomAssertions.assertServerError(500, "com.qiotec.application.exceptions.InvalidInputException", "Asset Type Attribute Abbreviation must not contain illegal characters", serverResp);
+			CustomAssertions.assertServerError(400, "com.qiotec.application.exceptions.InvalidInputException", "Asset Type Attribute Abbreviation must not contain illegal characters", serverResp);
 		}
 	}
 
@@ -179,16 +177,6 @@ public class CreateAssetTypeAttributesTest extends BaseTestSetupAndTearDown {
 		CustomAssertions.assertServerError(400, "org.springframework.http.converter.HttpMessageNotReadableException", serverResp);
 	}
 
-	/*
-	 * NEGATIVE TESTS END
-	 */
-
-	/*
-	 * POSITIVE TESTS START
-	 */
-
-	// RREHM-840 ()
-
 	// RREHM-846 ()
 	@Test
 	public void shouldNotBeAllowedToAddNewAttributeWhenItsNameIsLongerThan255Chars() {
@@ -202,7 +190,7 @@ public class CreateAssetTypeAttributesTest extends BaseTestSetupAndTearDown {
 
 		requestAssetType.setAttributes(existingAssetTypeAttributes);
 		serverResp = APITestUtil.getResponseObjForUpdate(requestAssetType, microservice, environment, assetTypeId, apiRequestHelper, assetTypeAPI, ServerResponse.class);
-		CustomAssertions.assertServerError(500, "com.qiotec.application.exceptions.InvalidInputException", "Attribute Name should be less than 255 characters", serverResp);
+		CustomAssertions.assertServerError(400, "com.qiotec.application.exceptions.InvalidInputException", "Attribute Name should be less than 255 characters", serverResp);
 	}
 
 	// RREHM-844 ()
@@ -217,9 +205,18 @@ public class CreateAssetTypeAttributesTest extends BaseTestSetupAndTearDown {
 		existingAssetTypeAttributes.add(assetTypeAttributeWithAbbrLongerThan50Chars);
 		requestAssetType.setAttributes(existingAssetTypeAttributes);
 		serverResp = APITestUtil.getResponseObjForUpdate(requestAssetType, microservice, environment, assetTypeId, apiRequestHelper, assetTypeAPI, ServerResponse.class);
-		CustomAssertions.assertServerError(500, "com.qiotec.application.exceptions.InvalidInputException", "Attribute Abbreviation Should Less Than 50 Character", serverResp);
+		CustomAssertions.assertServerError(400, "com.qiotec.application.exceptions.InvalidInputException", "Attribute Abbreviation Should Less Than 50 Character", serverResp);
 	}
+	
+	/*
+	 * NEGATIVE TESTS END
+	 */
 
+	/*
+	 * POSITIVE TESTS START
+	 */
+
+	// RREHM-840 ()
 	// RREHM-838 ()
 
 	/*

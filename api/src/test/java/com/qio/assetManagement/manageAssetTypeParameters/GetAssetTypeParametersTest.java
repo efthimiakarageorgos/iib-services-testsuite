@@ -61,7 +61,7 @@ public class GetAssetTypeParametersTest extends BaseTestSetupAndTearDown {
 
 		String invalidAssetTypeId = "ThisAssetTypeDoesNotExist";
 		serverResp = APITestUtil.getResponseObjForRetrieve(microservice, environment, invalidAssetTypeId, apiRequestHelper, assetTypeAPI, ServerResponse.class);
-		CustomAssertions.assertServerError(500, "com.qiotec.application.exceptions.InvalidParameterException", "Wrong Asset Type id in the URL", serverResp);
+		CustomAssertions.assertServerError(404, "com.qiotec.application.exceptions.InvalidParameterException", "Wrong Asset Type id in the URL", serverResp);
 	}
 
 	// RREHM-1255 ()
@@ -75,7 +75,7 @@ public class GetAssetTypeParametersTest extends BaseTestSetupAndTearDown {
 
 		String invalidAssetTypeParameterId = "ThisDoesNotExist";
 		serverResp = APITestUtil.getResponseObjForRetrieve(microservice, environment, assetTypeId, invalidAssetTypeParameterId, apiRequestHelper, assetTypeParameterAPI, ServerResponse.class);
-		CustomAssertions.assertServerError(500, "com.qiotec.application.exceptions.InvalidInputException", "No Parameters are Associated with a given Asset Type", serverResp);
+		CustomAssertions.assertServerError(400, "com.qiotec.application.exceptions.InvalidInputException", "No Parameters are Associated with a given Asset Type", serverResp);
 	}
 
 	/*

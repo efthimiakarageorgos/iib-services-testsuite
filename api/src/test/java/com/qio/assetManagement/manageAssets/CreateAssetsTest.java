@@ -7,6 +7,7 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.Ignore;
 
 import com.qio.common.BaseTestSetupAndTearDown;
 import com.qio.lib.apiHelpers.MAssetAPIHelper;
@@ -94,7 +95,7 @@ public class CreateAssetsTest extends BaseTestSetupAndTearDown {
 
 		serverResp = APITestUtil.getResponseObjForCreate(requestAsset, microservice, environment, apiRequestHelper, assetAPI, ServerResponse.class);
 
-		CustomAssertions.assertServerError(500, "com.qiotec.application.exceptions.InvalidInputException", "Asset Abbreviation must not contain Spaces", serverResp);
+		CustomAssertions.assertServerError(400, "com.qiotec.application.exceptions.InvalidInputException", "Asset Abbreviation must not contain Spaces", serverResp);
 	}
 
 	// RREHM-630 (Asset abbreviation is longer than 50 chars)
@@ -105,7 +106,7 @@ public class CreateAssetsTest extends BaseTestSetupAndTearDown {
 
 		serverResp = APITestUtil.getResponseObjForCreate(requestAsset, microservice, environment, apiRequestHelper, assetAPI, ServerResponse.class);
 
-		CustomAssertions.assertServerError(500, "com.qiotec.application.exceptions.InvalidInputException", "Asset  abbreviation Should Less Than 50 Character", serverResp);
+		CustomAssertions.assertServerError(400, "com.qiotec.application.exceptions.InvalidInputException", "Asset  abbreviation Should Less Than 50 Character", serverResp);
 	}
 
 	// RREHM-593 (Asset abbreviation is blank)
@@ -116,7 +117,7 @@ public class CreateAssetsTest extends BaseTestSetupAndTearDown {
 
 		serverResp = APITestUtil.getResponseObjForCreate(requestAsset, microservice, environment, apiRequestHelper, assetAPI, ServerResponse.class);
 
-		CustomAssertions.assertServerError(500, "com.qiotec.application.exceptions.InvalidInputException", "Asset abbreviation Should not be Empty", serverResp);
+		CustomAssertions.assertServerError(400, "com.qiotec.application.exceptions.InvalidInputException", "Asset abbreviation Should not be Empty", serverResp);
 	}
 
 	// RREHM-594 (Asset abbreviation is null - missing)
@@ -127,7 +128,7 @@ public class CreateAssetsTest extends BaseTestSetupAndTearDown {
 
 		serverResp = APITestUtil.getResponseObjForCreate(requestAsset, microservice, environment, apiRequestHelper, assetAPI, ServerResponse.class);
 
-		CustomAssertions.assertServerError(500, "com.qiotec.application.exceptions.InvalidInputException", "Asset abbreviation is a required field.", serverResp);
+		CustomAssertions.assertServerError(400, "com.qiotec.application.exceptions.InvalidInputException", "Asset abbreviation is a required field.", serverResp);
 	}
 
 	// RREHM-632 (Asset abbreviation contains special chars)
@@ -140,7 +141,7 @@ public class CreateAssetsTest extends BaseTestSetupAndTearDown {
 
 			serverResp = APITestUtil.getResponseObjForCreate(requestAsset, microservice, environment, apiRequestHelper, assetAPI, ServerResponse.class);
 
-			CustomAssertions.assertServerError(500, "com.qiotec.application.exceptions.InvalidInputException", "Asset abbreviation must not contain illegal characters", serverResp);
+			CustomAssertions.assertServerError(400, "com.qiotec.application.exceptions.InvalidInputException", "Asset abbreviation must not contain illegal characters", serverResp);
 		}
 	}
 
@@ -152,7 +153,7 @@ public class CreateAssetsTest extends BaseTestSetupAndTearDown {
 
 		serverResp = APITestUtil.getResponseObjForCreate(requestAsset, microservice, environment, apiRequestHelper, assetAPI, ServerResponse.class);
 
-		CustomAssertions.assertServerError(500, "com.qiotec.application.exceptions.InvalidInputException", "Asset name Should not Empty", serverResp);
+		CustomAssertions.assertServerError(400, "com.qiotec.application.exceptions.InvalidInputException", "Asset name Should not Empty", serverResp);
 	}
 
 	// RREHM-598 (Asset Name is null - missing)
@@ -163,7 +164,7 @@ public class CreateAssetsTest extends BaseTestSetupAndTearDown {
 
 		serverResp = APITestUtil.getResponseObjForCreate(requestAsset, microservice, environment, apiRequestHelper, assetAPI, ServerResponse.class);
 
-		CustomAssertions.assertServerError(500, "com.qiotec.application.exceptions.InvalidInputException", "Asset name is a required field.", serverResp);
+		CustomAssertions.assertServerError(400, "com.qiotec.application.exceptions.InvalidInputException", "Asset name is a required field.", serverResp);
 	}
 
 	// RREHM-631 (Asset name is longer than 255 chars)
@@ -173,9 +174,8 @@ public class CreateAssetsTest extends BaseTestSetupAndTearDown {
 		requestAsset.setName(APITestUtil.TWOFIFTYSIX_CHARS);
 
 		serverResp = APITestUtil.getResponseObjForCreate(requestAsset, microservice, environment, apiRequestHelper, assetAPI, ServerResponse.class);
-
-		// The error message here needs to be updated by Devs.
-		CustomAssertions.assertServerError(500, "com.qiotec.application.exceptions.InvalidInputException", "Asset name should be less than 255 characters", serverResp);
+		
+		CustomAssertions.assertServerError(400, "com.qiotec.application.exceptions.InvalidInputException", "Asset name should be less than 255 characters", serverResp);
 	}
 
 	// RREHM-638
@@ -185,7 +185,7 @@ public class CreateAssetsTest extends BaseTestSetupAndTearDown {
 
 		serverResp = APITestUtil.getResponseObjForCreate(requestAsset, microservice, environment, apiRequestHelper, assetAPI, ServerResponse.class);
 
-		CustomAssertions.assertServerError(500, "com.qiotec.application.exceptions.InvalidInputException", "Invalid Asset Type ID", serverResp);
+		CustomAssertions.assertServerError(400, "com.qiotec.application.exceptions.InvalidInputException", "Invalid Asset Type ID", serverResp);
 	}
 
 	// RREHM-636
@@ -210,7 +210,7 @@ public class CreateAssetsTest extends BaseTestSetupAndTearDown {
 		// requestAssetNonUnique.setAbbreviation(origAbbr);
 		serverResp = APITestUtil.getResponseObjForCreate(requestAssetNonUnique, microservice, environment, apiRequestHelper, assetAPI, ServerResponse.class);
 
-		CustomAssertions.assertServerError(500, "org.springframework.dao.DuplicateKeyException", "duplicate key error collection", serverResp);
+		CustomAssertions.assertServerError(400, "com.qiotec.application.exceptions.InvalidInputException", "Abbreviation is not unique.", serverResp);
 
 		// TODO: Jeet
 		// Confirm that there is only one asset under the tenant by submitting GET with URL:
@@ -225,7 +225,7 @@ public class CreateAssetsTest extends BaseTestSetupAndTearDown {
 
 		serverResp = APITestUtil.getResponseObjForCreate(requestAsset, microservice, environment, apiRequestHelper, assetAPI, ServerResponse.class);
 
-		CustomAssertions.assertServerError(500, "java.lang.Exception", "Invalid asset status", serverResp);
+		CustomAssertions.assertServerError(400, "com.qiotec.application.exceptions.InvalidInputException", "Invalid asset status", serverResp);
 	}
 
 	/*
@@ -269,11 +269,10 @@ public class CreateAssetsTest extends BaseTestSetupAndTearDown {
 		idsForAllCreatedAssets.add(assetId);
 
 		AssetResponse committedAsset = APITestUtil.getResponseObjForRetrieve(microservice, environment, assetId, apiRequestHelper, assetAPI, AssetResponse.class);
-		// TODO: Jeet
-		// THIS ONE FAILS when it checks the date
 		CustomAssertions.assertRequestAndResponseObj(responseAsset, committedAsset);
 	}
 
+		
 	// RREHM-778 ()
 	@Test
 	public void shouldHaveCreatedDateFieldGeneratedbySystemWhenCreatingAsset() {
@@ -286,8 +285,8 @@ public class CreateAssetsTest extends BaseTestSetupAndTearDown {
 		idsForAllCreatedAssets.add(assetId);
 
 		AssetResponse committedAsset = APITestUtil.getResponseObjForRetrieve(microservice, environment, assetId, apiRequestHelper, assetAPI, AssetResponse.class);
-		// THIS ONE FAILS when it checks the date
 		CustomAssertions.assertRequestAndResponseObj(responseAsset, committedAsset);
+	    // TODO - JEET
 		// Assert the CreatedDate field exists; has correct date format and the date is equal to the time of creation
 	}
 
@@ -305,7 +304,6 @@ public class CreateAssetsTest extends BaseTestSetupAndTearDown {
 		idsForAllCreatedAssets.add(assetId);
 
 		AssetResponse committedAsset = APITestUtil.getResponseObjForRetrieve(microservice, environment, assetId, apiRequestHelper, assetAPI, AssetResponse.class);
-		// THIS ONE FAILS when it checks the date
 		CustomAssertions.assertRequestAndResponseObj(responseAsset, committedAsset);
 	}
 
@@ -323,13 +321,12 @@ public class CreateAssetsTest extends BaseTestSetupAndTearDown {
 		idsForAllCreatedAssets.add(assetId);
 
 		AssetResponse committedAsset = APITestUtil.getResponseObjForRetrieve(microservice, environment, assetId, apiRequestHelper, assetAPI, AssetResponse.class);
-		// THIS ONE FAILS when it checks the date
 		CustomAssertions.assertRequestAndResponseObj(responseAsset, committedAsset);
 	}
 
 	// RREHM-779 ()
 	// BUG: RREHM-956
-	@Test
+	@Ignore
 	public void shouldCreateAssetWithNonUniqueAbbrWhenUniqueInTenantScope() {
 		requestAsset = assetRequestHelper.getAssetWithPredefinedAssetTypeAndTenant(assetTypeId, tenantId);
 		String origAbbr = requestAsset.getAbbreviation();
@@ -351,8 +348,6 @@ public class CreateAssetsTest extends BaseTestSetupAndTearDown {
 		CustomAssertions.assertRequestAndResponseObj(201, APITestUtil.responseCodeForInputRequest);
 
 		AssetResponse committedAsset = APITestUtil.getResponseObjForRetrieve(microservice, environment, assetId, apiRequestHelper, assetAPI, AssetResponse.class);
-		// TODO: Jeet
-		// THIS ONE FAILS when it checks the date
 		CustomAssertions.assertRequestAndResponseObj(responseAsset, committedAsset);
 	}
 
@@ -368,12 +363,47 @@ public class CreateAssetsTest extends BaseTestSetupAndTearDown {
 			idsForAllCreatedAssets.add(assetId);
 
 			AssetResponse committedAsset = APITestUtil.getResponseObjForRetrieve(microservice, environment, assetId, apiRequestHelper, assetAPI, AssetResponse.class);
-			// THIS ONE FAILS when it checks the date
-			// CustomAssertions.assertRequestAndResponseObj(responseAsset, committedAsset);
+			CustomAssertions.assertRequestAndResponseObj(responseAsset, committedAsset);
 		}
 	}
 
-	// RREHM-824
+	// RREHM-824 ()
+	@Test
+	public void shouldCreateAssetWhenStatusIsNullAndDefaultStatusValue() {
+		requestAsset = assetRequestHelper.getAssetWithPredefinedAssetTypeAndTenant(assetTypeId, tenantId);
+		requestAsset.setStatus(null);
+		
+		responseAsset = APITestUtil.getResponseObjForCreate(requestAsset, microservice, environment, apiRequestHelper, assetAPI, AssetResponse.class);
+		CustomAssertions.assertRequestAndResponseObj(201, APITestUtil.responseCodeForInputRequest);
+
+		String assetId = APITestUtil.getElementId(responseAsset.get_links().getSelfLink().getHref());
+		idsForAllCreatedAssets.add(assetId);
+			
+		AssetResponse committedAsset = APITestUtil.getResponseObjForRetrieve(microservice, environment, assetId, apiRequestHelper, assetAPI, AssetResponse.class);
+		CustomAssertions.assertRequestAndResponseObj(responseAsset, committedAsset);
+		// TODO: Jeet
+		//NEED TO add assertion for checking that asset Status value is 'AssetCreated'
+		
+	}
+	
+	// RREHM-824 ()
+	@Test
+	public void shouldCreateAssetWhenStatusIsEmptyAndDefaultStatusValue() {
+		requestAsset = assetRequestHelper.getAssetWithPredefinedAssetTypeAndTenant(assetTypeId, tenantId);
+		requestAsset.setStatus("");
+			
+		responseAsset = APITestUtil.getResponseObjForCreate(requestAsset, microservice, environment, apiRequestHelper, assetAPI, AssetResponse.class);
+		CustomAssertions.assertRequestAndResponseObj(201, APITestUtil.responseCodeForInputRequest);
+
+		String assetId = APITestUtil.getElementId(responseAsset.get_links().getSelfLink().getHref());
+		idsForAllCreatedAssets.add(assetId);
+				
+		AssetResponse committedAsset = APITestUtil.getResponseObjForRetrieve(microservice, environment, assetId, apiRequestHelper, assetAPI, AssetResponse.class);
+		CustomAssertions.assertRequestAndResponseObj(responseAsset, committedAsset);
+		// TODO: Jeet
+		//NEED TO add assertion for checking that asset Status value is 'AssetCreated'	
+	}
+	
 	// RREHM-612
 	// RREHM-610
 	// RREHM-609

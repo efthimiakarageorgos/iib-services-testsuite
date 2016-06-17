@@ -89,6 +89,7 @@ public class CreateAnalyticAssetMapsTest extends BaseTestSetupAndTearDown {
 	}
 
 	// RREHM-xxx ()
+<<<<<<< Updated upstream
 	@Test
 	public void shouldNotCreateAnalyticAssetMapWhenAssetIdIsNotExistentValid() throws JsonGenerationException, JsonMappingException, IOException, IllegalAccessException, IllegalArgumentException,
 			InvocationTargetException, NoSuchMethodException, SecurityException {
@@ -113,9 +114,35 @@ public class CreateAnalyticAssetMapsTest extends BaseTestSetupAndTearDown {
 		// }
 		// serverResp = APITestUtil.getResponseObjForCreate(requestAnalyticAssetMap, microservice, environment, apiRequestHelper, analyticAssetMapAPI, ServerResponse.class);
 		// CustomAssertions.assertServerError(500, "xxxx", "invalid ObjectId [ThisIdDoesNotExist]", serverResp);
+=======
+	@Ignore
+	public void shouldNotCreateAnalyticAssetMapWhenAssetIdIsNotExistentValid() throws JsonGenerationException, JsonMappingException, IOException,
+			IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
+			
+		//The line below is commented as we cannot create a AAM if it does not have attributes and pars - awaiting calrification
+		//requestAnalyticAssetMap = analyticAssetMapHelper.getAnalyticAssetMapWithNoAssetTemplateModelAttributeAndAnalyticInputParameters();
+		requestAnalyticAssetMap = analyticAssetMapHelper.getAssetTypeWithAllAttributesAndParameters(AnalyticsUtil.analyticAttributesWithoutLinks, AnalyticsUtil.analyticAttributesWithLinksMap, AnalyticsUtil.analyticInputsMap);
+		
+		requestAnalyticAssetMap.setAsset("572bbadb13b38458022a33e6"); //Non existent but valid id format
+		requestAnalyticAssetMap.setAnalytic("ThisIdDoesNotExist"); 
+			
+		//TO DO --- JEET: Response Body makes the below call fail:
+		//[
+//		  {
+//		  "timestamp": 1464828156482,
+//		  "status": 500,
+//		  "error": "Internal Server Error",
+//		  "exception": "java.lang.IllegalArgumentException",
+//		  "message": "invalid ObjectId [57488a65e4b0c90b07bf5d47X]",
+//		  "path": "/analyticassetmap/57488a65e4b0c90b07bf5d47X"
+//		}
+		//serverResp = APITestUtil.getResponseObjForCreate(requestAnalyticAssetMap, microservice, environment, apiRequestHelper, analyticAssetMapAPI, ServerResponse.class);
+		//CustomAssertions.assertServerError(500, "xxxx", "invalid ObjectId [ThisIdDoesNotExist]", serverResp);
+>>>>>>> Stashed changes
 	}
 
 	// RREHM-xxx ()
+<<<<<<< Updated upstream
 	@Test
 	public void shouldNotCreateAnalyticAssetMapWhenAnalyticIdIsNotExistentValid() throws JsonGenerationException, JsonMappingException, IOException, IllegalAccessException, IllegalArgumentException,
 			InvocationTargetException, NoSuchMethodException, SecurityException {
@@ -125,6 +152,16 @@ public class CreateAnalyticAssetMapsTest extends BaseTestSetupAndTearDown {
 		requestAnalyticAssetMap = analyticAssetMapHelper.getAssetTypeWithAllAttributesAndParameters(AnalyticsUtil.analyticAttributesWithoutLinks, AnalyticsUtil.analyticAttributesWithLinksMap,
 				AnalyticsUtil.analyticInputsMap);
 
+=======
+	@Ignore
+	public void shouldNotCreateAnalyticAssetMapWhenAnalyticIdIsNotExistentValid() throws JsonGenerationException, JsonMappingException, IOException,
+			IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
+		
+		//The line below is commented as we cannot create a AAM if it does not have attributes and pars - awaiting calrification
+		//requestAnalyticAssetMap = analyticAssetMapHelper.getAnalyticAssetMapWithNoAssetTemplateModelAttributeAndAnalyticInputParameters();
+		requestAnalyticAssetMap = analyticAssetMapHelper.getAssetTypeWithAllAttributesAndParameters(AnalyticsUtil.analyticAttributesWithoutLinks, AnalyticsUtil.analyticAttributesWithLinksMap, AnalyticsUtil.analyticInputsMap);
+		
+>>>>>>> Stashed changes
 		requestAnalyticAssetMap.setAsset(assetId);
 		requestAnalyticAssetMap.setAnalytic("572bbadb13b38458022a33e6"); // Non existent but valid id format
 
@@ -150,10 +187,17 @@ public class CreateAnalyticAssetMapsTest extends BaseTestSetupAndTearDown {
 	}
 
 	// RREHM-xxx ()
+<<<<<<< Updated upstream
 	@Test
 	public void shouldNotCreateAnalyticAssetMapWithAnalyticInputParametersOnly() throws JsonGenerationException, JsonMappingException, IOException, IllegalAccessException, IllegalArgumentException,
 			InvocationTargetException, NoSuchMethodException, SecurityException {
 
+=======
+	@Ignore
+	public void shouldNotCreateAnalyticAssetMapWithAnalyticInputParametersOnly() throws JsonGenerationException, JsonMappingException, IOException,
+		IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
+				
+>>>>>>> Stashed changes
 		requestAnalyticAssetMap = analyticAssetMapHelper.getAnalyticAssetMapWithAnalyticInputParameters(AnalyticsUtil.analyticInputsMap);
 
 		requestAnalyticAssetMap.setAsset(assetId);
@@ -165,6 +209,7 @@ public class CreateAnalyticAssetMapsTest extends BaseTestSetupAndTearDown {
 	}
 
 	// RREHM-xxx ()
+<<<<<<< Updated upstream
 	@Test
 	public void shouldNotCreateAnalyticAssetMapWithAssetTemplateModelAttributesOnly() throws JsonGenerationException, JsonMappingException, IOException, IllegalAccessException,
 			IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
@@ -172,6 +217,14 @@ public class CreateAnalyticAssetMapsTest extends BaseTestSetupAndTearDown {
 		requestAnalyticAssetMap = analyticAssetMapHelper.getAnalyticAssetMapWithAssetTemplateModelAttributes(AnalyticsUtil.analyticAttributesWithoutLinks,
 				AnalyticsUtil.analyticAttributesWithLinksMap);
 
+=======
+	@Ignore
+	public void shouldNotCreateAnalyticAssetMapWithAssetTemplateModelAttributesOnly() throws JsonGenerationException, JsonMappingException, IOException,
+			IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
+			
+		requestAnalyticAssetMap = analyticAssetMapHelper.getAnalyticAssetMapWithAssetTemplateModelAttributes(AnalyticsUtil.analyticAttributesWithoutLinks, AnalyticsUtil.analyticAttributesWithLinksMap);
+			
+>>>>>>> Stashed changes
 		requestAnalyticAssetMap.setAsset(assetId);
 		requestAnalyticAssetMap.setAnalytic(AnalyticsUtil.analyticIdForAnalyticAssetMapTests);
 
@@ -183,7 +236,7 @@ public class CreateAnalyticAssetMapsTest extends BaseTestSetupAndTearDown {
 	}
 
 	// RREHM-xxx ()
-	@Test
+	@Ignore
 	public void shouldNotCreateAnalyticAssetMapWithoutAssetTemplateModelAttributesAndAnalyticInputParameters() throws JsonGenerationException, JsonMappingException, IOException,
 			IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
 
@@ -207,6 +260,7 @@ public class CreateAnalyticAssetMapsTest extends BaseTestSetupAndTearDown {
 	 */
 	// RREHM-xxx ()
 	@Test
+<<<<<<< Updated upstream
 	public void shouldCreateAnalyticAssetMapWithLinkedAndNotLinkedAttributesAndAnalyticInputParameters() throws JsonGenerationException, JsonMappingException, IOException, IllegalAccessException,
 			IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
 		responseAsset = assetUtil.createAssetWithCreatingAssetTypeAndTenant("WithNoAttributesAndParameters", null, null);
@@ -214,6 +268,14 @@ public class CreateAnalyticAssetMapsTest extends BaseTestSetupAndTearDown {
 
 		requestAnalyticAssetMap = analyticAssetMapHelper.getAssetTypeWithAllAttributesAndParameters(AnalyticsUtil.analyticAttributesWithoutLinks, AnalyticsUtil.analyticAttributesWithLinksMap,
 				AnalyticsUtil.analyticInputsMap);
+=======
+	public void shouldCreateAnalyticAssetMapWithLinkedAndNotLinkedAttributesAndAnalyticInputParameters() throws JsonGenerationException, JsonMappingException, IOException,
+			IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
+		//responseAsset = assetUtil.createAssetWithCreatingAssetTypeAndTenant("WithNoAttributesAndParameters", null, null);
+		//assetId = APITestUtil.getElementId(responseAsset.get_links().getSelfLink().getHref());
+		
+		requestAnalyticAssetMap = analyticAssetMapHelper.getAssetTypeWithAllAttributesAndParameters(AnalyticsUtil.analyticAttributesWithoutLinks, AnalyticsUtil.analyticAttributesWithLinksMap, AnalyticsUtil.analyticInputsMap);
+>>>>>>> Stashed changes
 		requestAnalyticAssetMap.setAsset(assetId);
 		requestAnalyticAssetMap.setAnalytic(AnalyticsUtil.analyticIdForAnalyticAssetMapTests);
 		// requestAnalyticAssetMap.setEnabled(null);

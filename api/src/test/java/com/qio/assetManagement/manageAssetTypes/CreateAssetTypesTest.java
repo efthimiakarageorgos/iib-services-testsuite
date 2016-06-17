@@ -75,7 +75,7 @@ public class CreateAssetTypesTest extends BaseTestSetupAndTearDown {
 
 		serverResp = APITestUtil.getResponseObjForCreate(requestAssetType, microservice, environment, apiRequestHelper, assetTypeAPI, ServerResponse.class);
 
-		CustomAssertions.assertServerError(500, "com.qiotec.application.exceptions.InvalidInputException", "Asset Type Abbreviation must not contain Spaces", serverResp);
+		CustomAssertions.assertServerError(400, "com.qiotec.application.exceptions.InvalidInputException", "Asset Type Abbreviation must not contain Spaces", serverResp);
 	}
 
 	// RREHM-436 (AssetType abbreviation is longer than 50 chars)
@@ -85,7 +85,7 @@ public class CreateAssetTypesTest extends BaseTestSetupAndTearDown {
 
 		serverResp = APITestUtil.getResponseObjForCreate(requestAssetType, microservice, environment, apiRequestHelper, assetTypeAPI, ServerResponse.class);
 
-		CustomAssertions.assertServerError(500, "com.qiotec.application.exceptions.InvalidInputException", "Asset Type Abbreviation Should Less Than 50 Character", serverResp);
+		CustomAssertions.assertServerError(400, "com.qiotec.application.exceptions.InvalidInputException", "Asset Type Abbreviation Should Less Than 50 Character", serverResp);
 	}
 
 	// RREHM-468 (AssetType abbreviation is blank)
@@ -95,7 +95,7 @@ public class CreateAssetTypesTest extends BaseTestSetupAndTearDown {
 
 		serverResp = APITestUtil.getResponseObjForCreate(requestAssetType, microservice, environment, apiRequestHelper, assetTypeAPI, ServerResponse.class);
 
-		CustomAssertions.assertServerError(500, "com.qiotec.application.exceptions.InvalidInputException", "Asset Type Abbreviation Should not be Empty or Null", serverResp);
+		CustomAssertions.assertServerError(400, "com.qiotec.application.exceptions.InvalidInputException", "Asset type abbreviation is a required field", serverResp);
 	}
 
 	// RREHM-385 (AssetType abbreviation is null - missing)
@@ -105,7 +105,7 @@ public class CreateAssetTypesTest extends BaseTestSetupAndTearDown {
 
 		serverResp = APITestUtil.getResponseObjForCreate(requestAssetType, microservice, environment, apiRequestHelper, assetTypeAPI, ServerResponse.class);
 
-		CustomAssertions.assertServerError(500, "java.lang.NullPointerException", "No message available", serverResp);
+		CustomAssertions.assertServerError(400, "com.qiotec.application.exceptions.InvalidInputException", "Asset type abbreviation is a required field", serverResp);
 	}
 
 	// RREHM-433 (AssetType abbreviation contains special chars)
@@ -119,7 +119,7 @@ public class CreateAssetTypesTest extends BaseTestSetupAndTearDown {
 
 			serverResp = APITestUtil.getResponseObjForCreate(requestAssetType, microservice, environment, apiRequestHelper, assetTypeAPI, ServerResponse.class);
 
-			CustomAssertions.assertServerError(500, "com.qiotec.application.exceptions.InvalidInputException", "Asset Type Abbreviation must not contain illegal characters", serverResp);
+			CustomAssertions.assertServerError(400, "com.qiotec.application.exceptions.InvalidInputException", "Asset Type Abbreviation must not contain illegal characters", serverResp);
 		}
 	}
 
@@ -130,7 +130,7 @@ public class CreateAssetTypesTest extends BaseTestSetupAndTearDown {
 
 		serverResp = APITestUtil.getResponseObjForCreate(requestAssetType, microservice, environment, apiRequestHelper, assetTypeAPI, ServerResponse.class);
 
-		CustomAssertions.assertServerError(500, "com.qiotec.application.exceptions.InvalidInputException", "Asset Type Name Should not Empty or Null", serverResp);
+		CustomAssertions.assertServerError(400, "com.qiotec.application.exceptions.InvalidInputException", "Asset Type Name Should not Empty or Null", serverResp);
 	}
 
 	// RREHM-384 (AssetType Name is null - missing)
@@ -140,7 +140,7 @@ public class CreateAssetTypesTest extends BaseTestSetupAndTearDown {
 
 		serverResp = APITestUtil.getResponseObjForCreate(requestAssetType, microservice, environment, apiRequestHelper, assetTypeAPI, ServerResponse.class);
 
-		CustomAssertions.assertServerError(500, "java.lang.NullPointerException", "No message available", serverResp);
+		CustomAssertions.assertServerError(400, "com.qiotec.application.exceptions.InvalidInputException", "No message available", serverResp);
 	}
 
 	// RREHM-437 (AssetType name is longer than 50 chars)
@@ -150,7 +150,7 @@ public class CreateAssetTypesTest extends BaseTestSetupAndTearDown {
 
 		serverResp = APITestUtil.getResponseObjForCreate(requestAssetType, microservice, environment, apiRequestHelper, assetTypeAPI, ServerResponse.class);
 
-		CustomAssertions.assertServerError(500, "com.qiotec.application.exceptions.InvalidInputException", "Asset Type Name should be less than 50 characters", serverResp);
+		CustomAssertions.assertServerError(400, "com.qiotec.application.exceptions.InvalidInputException", "Asset Type Name should be less than 50 characters", serverResp);
 	}
 
 	// RREHM-440 (AssetType description is longer than 255 chars)
@@ -160,7 +160,7 @@ public class CreateAssetTypesTest extends BaseTestSetupAndTearDown {
 
 		serverResp = APITestUtil.getResponseObjForCreate(requestAssetType, microservice, environment, apiRequestHelper, assetTypeAPI, ServerResponse.class);
 
-		CustomAssertions.assertServerError(500, "com.qiotec.application.exceptions.InvalidInputException", "Asset Type Description should be less than 255 characters", serverResp);
+		CustomAssertions.assertServerError(400, "com.qiotec.application.exceptions.InvalidInputException", "Asset Type Description should be less than 255 characters", serverResp);
 	}
 	/*
 	 * NEGATIVE TESTS END
