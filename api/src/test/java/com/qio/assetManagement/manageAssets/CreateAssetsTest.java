@@ -257,7 +257,7 @@ public class CreateAssetsTest extends BaseTestSetupAndTearDown {
 	// Therefore the above should be made in to separate methods (possibly generalized) that can be called on demand based on test case
 	//
 
-	// RREHM-357 ()
+	// RREHM-357 () -- only this one is made to specifically check for the correct date format.
 	@Test
 	public void shouldCreateAssetWithUniqueAbbrLinkingToValidTenantAndAssetTypeWithoutAttrPars() {
 		requestAsset = assetRequestHelper.getAssetWithPredefinedAssetTypeAndTenant(assetTypeId, tenantId);
@@ -270,9 +270,11 @@ public class CreateAssetsTest extends BaseTestSetupAndTearDown {
 
 		AssetResponse committedAsset = APITestUtil.getResponseObjForRetrieve(microservice, environment, assetId, apiRequestHelper, assetAPI, AssetResponse.class);
 		CustomAssertions.assertRequestAndResponseObj(responseAsset, committedAsset);
-	}
-
 		
+		// Checking for correct date format
+		CustomAssertions.assertDateFormat(responseAsset.getCreatedDate());
+	}
+	
 	// RREHM-778 ()
 	@Test
 	public void shouldHaveCreatedDateFieldGeneratedbySystemWhenCreatingAsset() {

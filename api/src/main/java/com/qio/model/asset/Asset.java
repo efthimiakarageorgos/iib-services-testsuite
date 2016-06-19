@@ -105,10 +105,10 @@ public abstract class Asset {
 			Field[] fields = Asset.class.getDeclaredFields();
 			for (Field field : fields) {
 				// Checking for the format of the Date Field.
-				if (field.getName().equals("createdDate")) {
-					if (!(isDateCorrectlyFormatted((String) field.get(this)) && isDateCorrectlyFormatted((String) field.get(responseObj))))
-						return false;
-				}
+//				if (field.getName().equals("createdDate")) {
+//					if (!(isDateCorrectlyFormatted((String) field.get(this)) && isDateCorrectlyFormatted((String) field.get(responseObj))))
+//						return false;
+//				}
 
 				Object requestVal = field.get(this);
 				Object responseVal = field.get(responseObj);
@@ -128,15 +128,15 @@ public abstract class Asset {
 		return equalityCheckFlag;
 	}
 
-	public boolean isDateCorrectlyFormatted(String inputDate) {
-		Logger logger = Logger.getRootLogger();
-		Boolean dateFormatCheckerFlag = true;
-		String dateFormatCheckerRegex = "^\\d\\d\\d\\d-(0?[1-9]|1[0-2])-(0?[1-9]|[12][0-9]|3[01])T(00|0[0-9]|1[0-9]|2[0-3]):([0-5][0-9]):([0-5][0-9])Z$";
-
-		if (!inputDate.matches(dateFormatCheckerRegex)) {
-			dateFormatCheckerFlag = false;
-			logger.error("Incorrectly formatted Date: " + inputDate);
-		}
-		return dateFormatCheckerFlag;
-	}
+//	public boolean isDateCorrectlyFormatted(String inputDate) {
+//		Logger logger = Logger.getRootLogger();
+//		Boolean dateFormatCheckerFlag = true;
+//		String dateFormatCheckerRegex = "^\\d\\d\\d\\d-(0?[1-9]|1[0-2])-(0?[1-9]|[12][0-9]|3[01])T(00|0[0-9]|1[0-9]|2[0-3]):([0-5][0-9]):([0-5][0-9])Z$";
+//
+//		if (!inputDate.matches(dateFormatCheckerRegex)) {
+//			dateFormatCheckerFlag = false;
+//			logger.error("Incorrectly formatted Date: " + inputDate);
+//		}
+//		return dateFormatCheckerFlag;
+//	}
 }
