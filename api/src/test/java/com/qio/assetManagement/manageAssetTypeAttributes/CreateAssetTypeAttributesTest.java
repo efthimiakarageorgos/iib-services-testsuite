@@ -40,7 +40,7 @@ public class CreateAssetTypeAttributesTest extends BaseTestSetupAndTearDown {
 		requestAssetType = assetTypeHelper.getAssetTypeWithOneAttribute(AttributeDataType.String);
 		responseAssetType = APITestUtil.getResponseObjForCreate(requestAssetType, microservice, environment, apiRequestHelper, assetTypeAPI, AssetType.class);
 		assetTypeId = APITestUtil.getElementId(responseAssetType.get_links().getSelfLink().getHref());
-		assetTypeAttributeId = APITestUtil.getElementId(responseAssetType.getAttributes().get(FIRST_ELEMENT).get_links().getSelfLink().getHref());
+		assetTypeAttributeId = responseAssetType.getAttributes().get(FIRST_ELEMENT).getAttributeId();
 		idsForAllCreatedElements.add(assetTypeId);
 		serverResp = new ServerResponse();
 	}

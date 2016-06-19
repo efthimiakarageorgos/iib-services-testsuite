@@ -8,7 +8,8 @@ import org.codehaus.jackson.annotate.JsonProperty;
 import com.qio.model.common.Links;
 
 public class AssetTypeAttribute implements Comparable {
-	private String id;
+	private String id; // this parameter is specifically used for the PUT requests and hence is retained.
+	private String attributeId;
 	private String abbreviation;
 	private String name;
 	private String description;
@@ -85,6 +86,14 @@ public class AssetTypeAttribute implements Comparable {
 
 	public void setId(String id) {
 		this.id = id;
+	}
+
+	public String getAttributeId() {
+		return attributeId;
+	}
+
+	public void setAttributeId(String attributeId) {
+		this.attributeId = attributeId;
 	}
 
 	public Links get_links() {
