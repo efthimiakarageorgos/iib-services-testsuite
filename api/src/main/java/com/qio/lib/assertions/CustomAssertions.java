@@ -1,7 +1,6 @@
 package com.qio.lib.assertions;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 import com.qio.lib.exception.ServerResponse;
 
@@ -47,7 +46,11 @@ public class CustomAssertions {
 	}
 	
 	public static void assertDateFormat(String inputDate, String dateFormatRegex){
+		assertNotNull("Date field does not exist", inputDate);
 		assertTrue("Incorrect date format", inputDate.matches(dateFormatRegex));
 	}
-
+	
+	public static void assertEqualityCheckOnInputFields(String expectedValue, String actualValue){
+		assertEquals(expectedValue, actualValue);
+	}
 }

@@ -6,8 +6,8 @@ import org.apache.log4j.Logger;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
-import org.junit.Test;
 import org.junit.Ignore;
+import org.junit.Test;
 
 import com.qio.common.BaseTestSetupAndTearDown;
 import com.qio.lib.apiHelpers.MAssetAPIHelper;
@@ -174,7 +174,7 @@ public class CreateAssetsTest extends BaseTestSetupAndTearDown {
 		requestAsset.setName(APITestUtil.TWOFIFTYSIX_CHARS);
 
 		serverResp = APITestUtil.getResponseObjForCreate(requestAsset, microservice, environment, apiRequestHelper, assetAPI, ServerResponse.class);
-		
+
 		CustomAssertions.assertServerError(400, "com.qiotec.application.exceptions.InvalidInputException", "Asset name should be less than 255 characters", serverResp);
 	}
 
@@ -249,15 +249,11 @@ public class CreateAssetsTest extends BaseTestSetupAndTearDown {
 	// Want to validate that if the asset type we link to has parameters and or attributes, then these parameters and attributes are part of the asset create response
 	// Want to validate that the href links for asset type and tenant are valid: aka if you make a GET request with them, you get 200 response -- should be used only in specific tc's (see reasoning
 	// below)
-	// System generated fields are created (CreatedDate field) --- we should have a TC that covers this and not have to check all the time to avoid failing all test cases if this has an issue
-	// Validate that some date fields are set to have value equal to the time of creation -- this could be validated as being the range of the tc timestamp as we cannot predict the exact second.
-	// All date fields should have right format including the system generated ones -- we should do it as part of specific test cases and not check every time to avoid failing all test cases if this
-	// has an issue
-	//
+	// Validate that some date fields are set to have value equal to the time of creation -- this could be validated as being the range of the tc timestamp as we cannot predict the exact second. -- Not sure how to do this?
 	// Therefore the above should be made in to separate methods (possibly generalized) that can be called on demand based on test case
 	//
 
-	// RREHM-357 () -- only this one is made to specifically check for the correct date format.
+	// RREHM-357 ()
 	@Test
 	public void shouldCreateAssetWithUniqueAbbrLinkingToValidTenantAndAssetTypeWithoutAttrPars() {
 		requestAsset = assetRequestHelper.getAssetWithPredefinedAssetTypeAndTenant(assetTypeId, tenantId);
@@ -270,11 +266,8 @@ public class CreateAssetsTest extends BaseTestSetupAndTearDown {
 
 		AssetResponse committedAsset = APITestUtil.getResponseObjForRetrieve(microservice, environment, assetId, apiRequestHelper, assetAPI, AssetResponse.class);
 		CustomAssertions.assertRequestAndResponseObj(responseAsset, committedAsset);
-		
-		// Checking for correct date format
-		CustomAssertions.assertDateFormat(responseAsset.getCreatedDate());
 	}
-	
+
 	// RREHM-778 ()
 	@Test
 	public void shouldHaveCreatedDateFieldGeneratedbySystemWhenCreatingAsset() {
@@ -288,8 +281,7 @@ public class CreateAssetsTest extends BaseTestSetupAndTearDown {
 
 		AssetResponse committedAsset = APITestUtil.getResponseObjForRetrieve(microservice, environment, assetId, apiRequestHelper, assetAPI, AssetResponse.class);
 		CustomAssertions.assertRequestAndResponseObj(responseAsset, committedAsset);
-	    // TODO - JEET
-		// Assert the CreatedDate field exists; has correct date format and the date is equal to the time of creation
+		CustomAssertions.assertDateFormat(responseAsset.getCreatedDate()); // Not sure how can we check the time of creation for equality?
 	}
 
 	// RREHM-628 (Asset Abbreviation contains dash, underscore, dot chars)
@@ -374,38 +366,35 @@ public class CreateAssetsTest extends BaseTestSetupAndTearDown {
 	public void shouldCreateAssetWhenStatusIsNullAndDefaultStatusValue() {
 		requestAsset = assetRequestHelper.getAssetWithPredefinedAssetTypeAndTenant(assetTypeId, tenantId);
 		requestAsset.setStatus(null);
-		
+
 		responseAsset = APITestUtil.getResponseObjForCreate(requestAsset, microservice, environment, apiRequestHelper, assetAPI, AssetResponse.class);
 		CustomAssertions.assertRequestAndResponseObj(201, APITestUtil.responseCodeForInputRequest);
 
 		String assetId = APITestUtil.getElementId(responseAsset.get_links().getSelfLink().getHref());
 		idsForAllCreatedAssets.add(assetId);
-			
+
 		AssetResponse committedAsset = APITestUtil.getResponseObjForRetrieve(microservice, environment, assetId, apiRequestHelper, assetAPI, AssetResponse.class);
 		CustomAssertions.assertRequestAndResponseObj(responseAsset, committedAsset);
-		// TODO: Jeet
-		//NEED TO add assertion for checking that asset Status value is 'AssetCreated'
-		
+		CustomAssertions.assertEqualityCheckOnInputFields(AssetStatus.CREATED.toString(), committedAsset.getStatus());
 	}
-	
+
 	// RREHM-824 ()
 	@Test
 	public void shouldCreateAssetWhenStatusIsEmptyAndDefaultStatusValue() {
 		requestAsset = assetRequestHelper.getAssetWithPredefinedAssetTypeAndTenant(assetTypeId, tenantId);
 		requestAsset.setStatus("");
-			
+
 		responseAsset = APITestUtil.getResponseObjForCreate(requestAsset, microservice, environment, apiRequestHelper, assetAPI, AssetResponse.class);
 		CustomAssertions.assertRequestAndResponseObj(201, APITestUtil.responseCodeForInputRequest);
 
 		String assetId = APITestUtil.getElementId(responseAsset.get_links().getSelfLink().getHref());
 		idsForAllCreatedAssets.add(assetId);
-				
+
 		AssetResponse committedAsset = APITestUtil.getResponseObjForRetrieve(microservice, environment, assetId, apiRequestHelper, assetAPI, AssetResponse.class);
 		CustomAssertions.assertRequestAndResponseObj(responseAsset, committedAsset);
-		// TODO: Jeet
-		//NEED TO add assertion for checking that asset Status value is 'AssetCreated'	
+		CustomAssertions.assertEqualityCheckOnInputFields(AssetStatus.CREATED.toString(), committedAsset.getStatus());
 	}
-	
+
 	// RREHM-612
 	// RREHM-610
 	// RREHM-609
