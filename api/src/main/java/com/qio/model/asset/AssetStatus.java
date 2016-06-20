@@ -8,7 +8,8 @@ public enum AssetStatus {
 	IN_SERVICE("InService"),
 	OUT_OF_SERVICE("OutOfService"),
 	DELETED("Deleted"),
-	RETIRED("Retired");
+	RETIRED("Retired"),
+	CREATED("AssetCreated");
 	
 	private String realValue;
 
