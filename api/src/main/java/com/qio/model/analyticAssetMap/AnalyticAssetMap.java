@@ -43,16 +43,8 @@ public class AnalyticAssetMap {
 		this.asset = "";
 		this.analytic = "";
 		this.comment = "AAM" + timeStamp + "Desc";
-		this.assetTemplateModelAttributes = new ArrayList<AssetTemplateModelAttribute>() {
-			{
-				add(new AssetTemplateModelAttribute());
-			}
-		};
-		this.analyticInputParameters = new ArrayList<AnalyticInputParameter>() {
-			{
-				add(new AnalyticInputParameter());
-			}
-		};
+		this.assetTemplateModelAttributes = new ArrayList<AssetTemplateModelAttribute>() {};
+		this.analyticInputParameters = new ArrayList<AnalyticInputParameter>() {};
 	}
 
 	public AnalyticAssetMap(String asset, String analytic, Boolean enabled, String comment, String lifetimeStart, String lifetimeEnd, List<AssetTemplateModelAttribute> assetTemplateModelAttributes,

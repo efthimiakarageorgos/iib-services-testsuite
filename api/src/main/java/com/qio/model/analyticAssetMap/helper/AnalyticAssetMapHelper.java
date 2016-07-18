@@ -21,28 +21,8 @@ public class AnalyticAssetMapHelper {
 		analyticAssetMap = new AnalyticAssetMap(timestamp, null);
 	}
 
-	public AnalyticAssetMap getAnalyticAssetMapWithDefaultAssetTemplateModelAttribute(String assetId, String analyticId) {
-		initDefaultAnalyticAssetMap();
-		analyticAssetMap.setAnalyticInputParameters(null);
-		return analyticAssetMap;
-	}
-
-	public AnalyticAssetMap getAnalyticAssetMapWithNoAssetTemplateModelAttribute(String assetId, String analyticId) {
-		initDefaultAnalyticAssetMap();
-		analyticAssetMap.setAssetTemplateModelAttributes(null);
-		return analyticAssetMap;
-	}
-
-	public AnalyticAssetMap getAnalyticAssetMapWithNoAnalyticInputParameters(String assetId, String analyticId) {
-		initDefaultAnalyticAssetMap();
-		analyticAssetMap.setAnalyticInputParameters(null);
-		return analyticAssetMap;
-	}
-
 	public AnalyticAssetMap getAnalyticAssetMapWithNoAssetTemplateModelAttributeAndAnalyticInputParameters() {
 		initDefaultAnalyticAssetMap();
-		analyticAssetMap.setAnalyticInputParameters(null);
-		analyticAssetMap.setAssetTemplateModelAttributes(null);
 		return analyticAssetMap;
 	}
 
@@ -70,7 +50,6 @@ public class AnalyticAssetMapHelper {
 		}
 
 		initDefaultAnalyticAssetMap();
-		analyticAssetMap.setAssetTemplateModelAttributes(null);
 		analyticAssetMap.setAnalyticInputParameters(analyticInputParameterAll);
 		return analyticAssetMap;
 	}
@@ -90,7 +69,21 @@ public class AnalyticAssetMapHelper {
 
 		initDefaultAnalyticAssetMap();
 		analyticAssetMap.setAssetTemplateModelAttributes(assetTemplateModelAttributeAll);
-		analyticAssetMap.setAnalyticInputParameters(null);
+		return analyticAssetMap;
+	}
+	
+	public AnalyticAssetMap getAnalyticAssetMapWithAssetTemplateModelAttributesWithAssetAttributeLink(Map<String, String> analyticAttributesWithLinks) {
+		List<AssetTemplateModelAttribute> assetTemplateModelAttributeAll = new ArrayList<AssetTemplateModelAttribute>();
+		
+		for (Iterator it = analyticAttributesWithLinks.entrySet().iterator(); it.hasNext();) {
+			Map.Entry entry = (Map.Entry) it.next();
+			Object key = entry.getKey();
+			Object value = entry.getValue();
+			assetTemplateModelAttributeAll.add(getAssetTemplateModelAttributeWithAssetAttributeLink(key.toString(), value.toString(), ""));
+		}
+
+		initDefaultAnalyticAssetMap();
+		analyticAssetMap.setAssetTemplateModelAttributes(assetTemplateModelAttributeAll);
 		return analyticAssetMap;
 	}
 
