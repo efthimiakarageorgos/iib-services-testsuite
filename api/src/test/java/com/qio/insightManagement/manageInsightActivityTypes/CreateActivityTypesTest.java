@@ -250,7 +250,7 @@ public class CreateActivityTypesTest extends BaseTestSetupAndTearDown {
 		CustomAssertions.assertRequestAndResponseObj(responseActivityType, committedActivityType);
 	}
 
-	// RREHM-892
+	
 	// RREHM-775
 	@Test
 	public void shouldCreateActivityTypeWithUniqueAbbrWhenDescContainsSpecialChars() {

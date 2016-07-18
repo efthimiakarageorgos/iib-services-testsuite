@@ -47,10 +47,10 @@ public class CreateAssetTypeParametersTest extends BaseTestSetupAndTearDown {
 		serverResp = new ServerResponse();
 	}
 
-	@AfterClass
-	public static void cleanUpAfterAllTests() {
-		baseCleanUpAfterAllTests(assetTypeAPI);
-	}
+//	@AfterClass
+//	public static void cleanUpAfterAllTests() {
+//		baseCleanUpAfterAllTests(assetTypeAPI);
+//	}
 
 	// The following test cases go here:
 	// issuetype=Test and issue in (linkedIssues("RREHM-1192")) and issue in linkedIssues("RREHM-901")
@@ -226,56 +226,31 @@ public class CreateAssetTypeParametersTest extends BaseTestSetupAndTearDown {
 	 * POSITIVE TESTS START
 	 */
 	// RREHM-1290 ()
-	// @Test
-	// public void
-	// shouldBeAllowedToUpdateAssetTypeWithNewParameterThatIsCopiedOverFromAnotherAssetType()
-	// throws JsonGenerationException,
-	// JsonMappingException, IOException, IllegalAccessException,
-	// IllegalArgumentException, InvocationTargetException,
-	// NoSuchMethodException,
-	// SecurityException {
-	//
-	// AssetTypeParameter existingFirstAssetTypeParameter =
-	// requestAssetType.getParameters().get(FIRST_ELEMENT);
-	// existingFirstAssetTypeParameter.setId(assetTypeParameterId);
-	//
-	// AssetType
-	// requestAssetTypeContainingSameParameterAsAnotherExistingAssetType =
-	// assetTypeHelper.getAssetTypeWithNoAttributesAndParameters();
-	// AssetType
-	// responseAssetTypeContainingSameParameterAsAnotherExistingAssetType =
-	// TestHelper.getResponseObjForCreate(baseHelper,
-	// requestAssetTypeContainingSameParameterAsAnotherExistingAssetType,
-	// microservice, oauthMicroservice, environment, apiRequestHeaders, assetTypeAPI,
-	// AssetType.class);
-	// String assetTypeIdForNewlyCreatedAssetType =
-	// TestHelper.getElementId(responseAssetTypeContainingSameParameterAsAnotherExistingAssetType
-	// .get_links().getSelfLink().getHref());
-	// idsForAllCreatedElements.add(assetTypeIdForNewlyCreatedAssetType);
-	//
-	// requestAssetTypeContainingSameParameterAsAnotherExistingAssetType.setParameters(new
-	// ArrayList<AssetTypeParameter>() {
-	// {
-	// add(existingFirstAssetTypeParameter);
-	// }
-	// });
-	//
-	// responseAssetType = TestHelper.getResponseObjForUpdate(baseHelper,
-	// requestAssetTypeContainingSameParameterAsAnotherExistingAssetType,
-	// microservice, oauthMicroservice, environment, assetTypeIdForNewlyCreatedAssetType,
-	// apiRequestHeaders, assetTypeAPI, AssetType.class);
-	// CustomAssertions.assertRequestAndResponseObj(200,
-	// TestHelper.responseCodeForInputRequest,
-	// requestAssetTypeContainingSameParameterAsAnotherExistingAssetType,
-	// responseAssetType);
-	//
-	// AssetType updatedAssetType =
-	// TestHelper.getResponseObjForRetrieve(baseHelper, microservice, oauthMicroservice,
-	// environment, assetTypeIdForNewlyCreatedAssetType,
-	// apiRequestHeaders, assetTypeAPI, AssetType.class);
-	// CustomAssertions.assertRequestAndResponseObj(responseAssetType,
-	// updatedAssetType);
-	// }
+	 @Test
+	 public void
+	 shouldBeAllowedToUpdateAssetTypeWithNewParameterThatHasAbbrEqualToParameterOfAnotherAssetType() {
+	
+		 AssetTypeParameter existingFirstAssetTypeParameter = requestAssetType.getParameters().get(FIRST_ELEMENT);
+		 //existingFirstAssetTypeParameter.setId(assetTypeParameterId);
+	
+		 AssetType requestAssetTypeContainingSameParameterAsAnotherExistingAssetType = assetTypeHelper.getAssetTypeWithNoAttributesAndParameters();
+		 AssetType responseAssetTypeContainingSameParameterAsAnotherExistingAssetType = APITestUtil.getResponseObjForCreate(requestAssetTypeContainingSameParameterAsAnotherExistingAssetType, microservice, environment, apiRequestHelper, assetTypeAPI, AssetType.class); 
+		 
+		 String assetTypeIdForNewlyCreatedAssetType = APITestUtil.getElementId(responseAssetTypeContainingSameParameterAsAnotherExistingAssetType.get_links().getSelfLink().getHref());
+		 idsForAllCreatedElements.add(assetTypeIdForNewlyCreatedAssetType);
+	
+		 requestAssetTypeContainingSameParameterAsAnotherExistingAssetType.setParameters(new ArrayList<AssetTypeParameter>() {
+			 {
+				 add(existingFirstAssetTypeParameter);
+			 }
+		 });
+	
+		 responseAssetTypeContainingSameParameterAsAnotherExistingAssetType = APITestUtil.getResponseObjForUpdate(requestAssetTypeContainingSameParameterAsAnotherExistingAssetType, microservice, environment, assetTypeIdForNewlyCreatedAssetType, apiRequestHelper, assetTypeAPI, AssetType.class);
+		 CustomAssertions.assertRequestAndResponseObj(200, APITestUtil.responseCodeForInputRequest, requestAssetType, responseAssetType);
+	
+		 AssetType updatedAssetType = APITestUtil.getResponseObjForRetrieve(microservice, environment, assetTypeIdForNewlyCreatedAssetType, apiRequestHelper, assetTypeAPI, AssetType.class);
+		 CustomAssertions.assertRequestAndResponseObj(responseAssetTypeContainingSameParameterAsAnotherExistingAssetType, updatedAssetType);
+	 }
 
 	// RREHM-1100 ()
 	@Test

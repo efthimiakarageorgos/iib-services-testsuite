@@ -9,67 +9,91 @@ public class AnalyticsUtil extends BaseTestUtil {
 	// In order to test the analytic asset map REST API's we will use a predefined analytic
 	// and we have to "hard code" its input parameters and its attributes
 	//
-	public static String analyticIdForAnalyticAssetMapTests = "572bbadb13b38458022a0be6"; // DHP_MechanicalIntegrity
-	public static String assetTypeIdForAnalyticAssetMapTests = "572bb56613b38458022725fb";
+	public static String analyticIdForAnalyticAssetMapTests = "5720c00fb38fcd4e5f2cff66"; // DHP_MechanicalIntegrity
+	public static String assetTypeIdForAnalyticAssetMapTests = "5720babbb38fcd4e5f2a197b"; //"572bb56613b38458022725fb"
 
 	// This has to stay here until we have a REST API to create and get an Analytic
 	public static Map<String, String> analyticAttributesAndAliasesWithLinks = new HashMap<String, String>() {
 		{
-			// Analytic Attribute Id Analytic Attribute Alias
-			put("572bb56613b3845802272456", "IY01_UpperThreshold");
-			put("572bb56613b384580227245a", "IY01_LowerThreshold");
-			put("572bb56613b384580227245e", "TI02_UpperThreshold");
-			put("572bb56613b3845802272462", "TI02_LowerThreshold");
-			put("572bb56613b3845802272466", "VI01_UpperThreshold");
-			put("572bb56613b384580227246a", "VI01_LowerThreshold");
-			put("572bb56613b384580227246e", "RunState_RuntimeLimit");
-			put("572bb56613b3845802272472", "RunState_MotorHertzLimit");
-			put("572bb56613b3845802272475", "RunState_Ave3PhaseCurrentLimit");
-			put("572bb56613b38458022725a6", "KQ04_Invalid");
-			put("572bb56613b38458022725a7", "SI01_Invalid");
-			put("572bb56613b38458022725b2", "SI05_Invalid");
-			put("572bb56613b38458022725b3", "IY01_Invalid");
-			put("572bb56613b38458022725b4", "TI02_Invalid");
-			put("572bb56613b38458022725b5", "VI01_Invalid");
-			put("572bb56613b38458022725b6", "KQ04_UpperThreshold");
-			put("572bb56613b38458022725b7", "KQ04_LowerThreshold");
-			put("572bb56613b38458022725b8", "SI01_UpperThreshold");
-			put("572bb56613b38458022725b9", "SI01_LowerThreshold");
-			put("572bb56613b38458022725ba", "SI05_UpperThreshold");
-			put("572bb56613b38458022725bb", "SI05_LowerThreshold");
+			// Analytic Attribute Id    -   Asset Type Attribute Name // Analytic Attribute Alias
+			put("5720babbb38fcd4e5f2a17d6", "IY01_UpperThreshold");  //Same
+			put("5720babbb38fcd4e5f2a17da", "IY01_LowerThreshold");  //Same
+			
+			put("5720babbb38fcd4e5f2a17de", "TI02_UpperThreshold");  //Same
+			put("5720babbb38fcd4e5f2a17e2", "TI02_LowerThreshold");  //Same
+			
+			put("5720babbb38fcd4e5f2a17e6", "VI01_UpperThreshold");  //Same
+			put("5720babbb38fcd4e5f2a17ea", "VI01_LowerThreshold");  //Same
+			
+			put("5720babbb38fcd4e5f2a17ee", "RunState_RuntimeLimit"); //Same
+			put("5720babbb38fcd4e5f2a17f2", "RunState_MotorHertzLimit"); //Same
+			put("5720babbb38fcd4e5f2a17f5", "RunState_Ave3PhaseCurrentLimit"); // Same
+			
+			put("5720babbb38fcd4e5f2a1926", "KQ04_Invalid");  //Same
+			put("5720babbb38fcd4e5f2a1927", "SI01_Invalid");  //Same
+			put("5720babbb38fcd4e5f2a1932", "SI05_Invalid");  //Same
+			put("5720babbb38fcd4e5f2a1933", "IY01_Invalid");  //Same
+			put("5720babbb38fcd4e5f2a1934", "TI02_Invalid");  //Same
+			put("5720babbb38fcd4e5f2a1935", "VI01_Invalid");  //Same
+			
+			put("5720babbb38fcd4e5f2a1936", "KQ04_UpperThreshold");  //Same
+			put("5720babbb38fcd4e5f2a1937", "KQ04_LowerThreshold");  //Same
+			put("5720babbb38fcd4e5f2a1938", "SI01_UpperThreshold");  //Same
+			put("5720babbb38fcd4e5f2a1939", "SI01_LowerThreshold");  //Same
+			put("5720babbb38fcd4e5f2a193a", "SI05_UpperThreshold");  //Same
+			put("5720babbb38fcd4e5f2a193b", "SI05_LowerThreshold");  //Same
+			
+			put("5720babbb38fcd4e5f2a17fe", "Pump Temperature Upper Warning Limit"); //"Temp_U1_Limit"
+			put("5720babbb38fcd4e5f2a1802", "Pump Temperature Upper Warning Hysteresis"); //"Temp_U1_Hysteresis"
+			
+			put("5720babbb38fcd4e5f2a180a", "Pump Temperature Upper Critical Limit"); //"Temp_U2_Limit"
+			put("5720babbb38fcd4e5f2a180e", "Pump Temperature Upper Critical Hysteresis "); //"Temp_U2_Hysteresis"
 		}
 	};
-
+	      
+	 
 	// TO DO
 	// We want to query the asset type attributes for the assettypeid we have specified above and
-	// lookup the analyticAttributesAndAliasesWithLinks based on alias to find the matching attribute
+	// lookup the analyticAttributesAndAliasesWithLinks based on alias to find the matching attribute 
+	// based on attribute name
 	// then form a new map that contains the analyticAttribute and its matching asset type attribute id
 	// the map will look like this:
 
 	public static Map<String, String> analyticAttributesWithLinksMap = new HashMap<String, String>() {
 		{
-			// Analytic Attribute Id Asset Type Attribute Id
-			put("572bb56613b3845802272456", "572bb56613b3845802272647");
-			put("572bb56613b384580227245a", "572bb56613b3845802272645");
-			put("572bb56613b384580227245e", "572bb56613b384580227260d");
-			put("572bb56613b3845802272462", "572bb56613b384580227261a");
-			put("572bb56613b3845802272466", "572bb56613b3845802272616");
-			put("572bb56613b384580227246a", "572bb56613b384580227264f");
-			put("572bb56613b384580227246e", "572bb56613b3845802272656");
-			put("572bb56613b3845802272472", "572bb56613b384580227262a");
-			put("572bb56613b3845802272475", "572bb56613b3845802272625");
-			put("572bb56613b38458022725a6", "572bb56613b3845802272610");
-			put("572bb56613b38458022725a7", "572bb56613b384580227260f");
-			put("572bb56613b38458022725b2", "572bb56613b384580227260b");
-			put("572bb56613b38458022725b3", "572bb56613b3845802272627");
-			put("572bb56613b38458022725b4", "572bb56613b3845802272666");
-			put("572bb56613b38458022725b5", "572bb56613b384580227265c");
-			put("572bb56613b38458022725b6", "572bb56613b3845802272604");
-			put("572bb56613b38458022725b7", "572bb56613b3845802272600");
-			put("572bb56613b38458022725b8", "572bb56613b3845802272637");
-			put("572bb56613b38458022725b9", "572bb56613b384580227262f");
-			put("572bb56613b38458022725ba", "572bb56613b384580227264c");
-			put("572bb56613b38458022725bb", "572bb56613b3845802272643");
+			// Analytic Attribute Id     -   Asset Type Attribute Id
+			put("5720babbb38fcd4e5f2a17d6", "5720babbb38fcd4e5f2a19c7");
+			put("5720babbb38fcd4e5f2a17da", "5720babbb38fcd4e5f2a19c5");
+			
+			put("5720babbb38fcd4e5f2a17de", "5720babbb38fcd4e5f2a198d");
+			put("5720babbb38fcd4e5f2a17e2", "5720babbb38fcd4e5f2a199a");
+			
+			put("5720babbb38fcd4e5f2a17e6", "5720babbb38fcd4e5f2a17e6");
+			put("5720babbb38fcd4e5f2a17ea", "5720babbb38fcd4e5f2a17ea");
+			
+			put("5720babbb38fcd4e5f2a17ee", "5720babbb38fcd4e5f2a19d6");
+			put("5720babbb38fcd4e5f2a17f2", "5720babbb38fcd4e5f2a19aa");
+			put("5720babbb38fcd4e5f2a17f5", "5720babbb38fcd4e5f2a19a5");
+			
+			put("5720babbb38fcd4e5f2a1926", "5720babbb38fcd4e5f2a1990");
+			put("5720babbb38fcd4e5f2a1927", "5720babbb38fcd4e5f2a198f");
+			put("5720babbb38fcd4e5f2a1932", "5720babbb38fcd4e5f2a198b");
+			put("5720babbb38fcd4e5f2a1933", "5720babbb38fcd4e5f2a19a7");
+			put("5720babbb38fcd4e5f2a1934", "5720babbb38fcd4e5f2a19e6");
+			put("5720babbb38fcd4e5f2a1935", "5720babbb38fcd4e5f2a19dc");
+			
+			put("5720babbb38fcd4e5f2a1936", "5720babbb38fcd4e5f2a1984");
+			put("5720babbb38fcd4e5f2a1937", "5720babbb38fcd4e5f2a1980");
+			put("5720babbb38fcd4e5f2a1938", "5720babbb38fcd4e5f2a19b7");
+			put("5720babbb38fcd4e5f2a1939", "5720babbb38fcd4e5f2a19af");
+			put("5720babbb38fcd4e5f2a193a", "5720babbb38fcd4e5f2a19cc");
+			put("5720babbb38fcd4e5f2a193b", "5720babbb38fcd4e5f2a19c3");
+			
+			put("5720babbb38fcd4e5f2a17fe", "575ee18c3386ae2ea39f3758");
+			put("5720babbb38fcd4e5f2a1802", "575ee18c3386ae2ea39f3759");
+			
+			put("5720babbb38fcd4e5f2a180a", "575ee18d3386ae2ea39f375a");
+			put("5720babbb38fcd4e5f2a180e", "575ee18d3386ae2ea39f375b");
 		}
 	};
 
@@ -77,27 +101,23 @@ public class AnalyticsUtil extends BaseTestUtil {
 	public static ArrayList<String> analyticAttributesWithoutLinks = new ArrayList<String>() {
 		{
 			// These will not be linked to an asset type attribute
-			add("572bb56613b38458022724d1");
-			add("572bb56613b38458022724cf");
-			add("572bb56613b38458022724cc");
-			add("572bb56613b38458022724c8");
-			add("572bb56613b38458022724c4");
-			add("572bb56613b38458022724c0");
-			add("572bb56613b38458022724bc");
-			add("572bb56613b38458022724b8");
-			add("572bb56613b38458022724b4");
-			add("572bb56613b38458022724b0");
-			add("572bb56613b384580227249f");
-			add("572bb56613b384580227249d");
-			add("572bb56613b384580227249a");
-			add("572bb56613b3845802272496");
-			add("572bb56613b3845802272492");
-			add("572bb56613b384580227248e");
-			add("572bb56613b384580227248a");
-			add("572bb56613b3845802272486");
-			add("572bb56613b3845802272482");
-			add("572bb56613b384580227247e");
-			add("572bb56613b3845802272477");
+			add("5720babbb38fcd4e5f2a17f7"); //MaxHistoryCount, "200"
+			add("5720babbb38fcd4e5f2a1806"); //"Temp_U1_CounterLimit", "12"
+			add("5720babbb38fcd4e5f2a1812"); //"Temp_U2_CounterLimit", "12"
+			add("5720babbb38fcd4e5f2a1816"); //"Temp_EWMA_ForgettingFactor","0.03"   
+			add("5720babbb38fcd4e5f2a181a"); // "Temp_EWMA_Weight", "0.05"
+			add("5720babbb38fcd4e5f2a181d"); // "Temp_EWMA_Threshold", "4.5"
+			add("5720babbb38fcd4e5f2a181f"); // "Temp_EWMA_MagLimit","2"
+			add("5720babbb38fcd4e5f2a1830");// "Vib_U1_Limit", "0.75"
+			add("5720babbb38fcd4e5f2a1834");// "Vib_U1_Hysteresis", "0.65"
+			add("5720babbb38fcd4e5f2a1838");// "Vib_U1_CounterLimit","6"
+			add("5720babbb38fcd4e5f2a183c");// "Vib_U2_Limit", "1"
+			add("5720babbb38fcd4e5f2a1840");// "Vib_U2_Hysteresis", "0.8"
+			add("5720babbb38fcd4e5f2a1844");// "Vib_U2_CounterLimit","6"
+			add("5720babbb38fcd4e5f2a1848");// "Vib_EWMA_ForgettingFactor","0.05"
+			add("5720babbb38fcd4e5f2a184c");// "Vib_EWMA_Weight", "0.03"
+			add("5720babbb38fcd4e5f2a184f"); // "Vib_EWMA_Threshold","4"
+			add("5720babbb38fcd4e5f2a1851"); // "Vib_EWMA_MagLimit", "0.05"
 		}
 	};
 
@@ -105,32 +125,12 @@ public class AnalyticsUtil extends BaseTestUtil {
 	public static Map<String, String> analyticInputs = new HashMap<String, String>() {
 		{
 			// Analytic Input Id Analytic Input Alias
-			put("572bb56613b38458022725c6", "LineLeg/GrdUnbalence");
-			put("572bb56613b38458022725c8", "DischargePressure");
-			put("572bb56613b38458022725ca", "FlowLinePressure");
-			put("572bb56613b38458022725cc", "WellHeadPressure");
-			put("572bb56613b38458022725ce", "InletPressure");
-			put("572bb56613b38458022725d0", "MotorHertz");
-			put("572bb56613b38458022725d2", "PumpInletTemperature");
-			put("572bb56613b38458022725d3", "PumpMotorTemperature");
-			put("572bb56613b38458022725d4", "Vibration");
-			put("572bb56613b38458022725d5", "PresentRuntime");
-			put("572bb56613b38458022725d6", "Average3PhaseVoltage");
-			put("572bb56613b38458022725d7", "Average3PhaseCurrent");
-			put("572bb56613b38458022725d8", "PowerFactor");
-			put("572bb56613b38458022725d9", "Kilowatt");
-			put("572bb56613b38458022725da", "Power");
-			put("572bb56613b38458022725db", "ESPTrueLoad");
-			put("572bb56613b38458022725dc", "EarthLeakageCurrent");
-			put("572bb56613b38458022725dd", "LineVoltUnbalence");
-			put("572bb56613b38458022725de", "LineCurrentUnbalance");
-			put("572bb56613b38458022725e3", "RuntimeSinceLastStart");
-			put("572bb56613b38458022725e5", "TotalNumberofStarts");
-			put("572bb56613b38458022725e6", "Calculated_Flow");
-			put("572bb56613b38458022725e7", "OilDensity");
-			put("572bb56613b38458022725e8", "DriveOutputVoltage");
-			put("572bb56613b38458022725e9", "DriveOutputCurrent");
-			put("572bb56613b38458022725ea", "Speed");
+			put("5720babbb38fcd4e5f2a196b", "Runtime Since Last Start"); //"RuntimeFromLastStart"
+			put("5720babbb38fcd4e5f2a196c", "Motor Hertz"); //MotorHertz
+			put("5720babbb38fcd4e5f2a196d", "Speed"); //Same
+			put("5720babbb38fcd4e5f2a196e", "Average 3 Phase Current"); //"Ave3PhaseCurrent"
+			put("5720babbb38fcd4e5f2a196f", "Pump Motor Temperature");  //"PumpMotorTemp"
+			put("5720babbb38fcd4e5f2a1970", "Vibration"); //"PumpVibration"
 		}
 	};
 
@@ -142,33 +142,13 @@ public class AnalyticsUtil extends BaseTestUtil {
 
 	public static Map<String, String> analyticInputsMap = new HashMap<String, String>() {
 		{
-			// Analytic Input Id Asset Type Parameter Id
-			put("572bb56613b38458022725c6", "56fca9d633c5721c67060707");
-			put("572bb56613b38458022725c8", "56fca9d633c5721c67060708");
-			put("572bb56613b38458022725ca", "56fca9d633c5721c67060709");
-			put("572bb56613b38458022725cc", "56fca9d633c5721c6706070a");
-			put("572bb56613b38458022725ce", "56fca9d633c5721c6706070b");
-			put("572bb56613b38458022725d0", "56fca9d633c5721c6706070c");
-			put("572bb56613b38458022725d2", "56fca9d633c5721c6706070d");
-			put("572bb56613b38458022725d3", "56fca9d633c5721c6706070e");
-			put("572bb56613b38458022725d4", "56fca9d633c5721c6706070f");
-			put("572bb56613b38458022725d5", "56fca9d633c5721c67060710");
-			put("572bb56613b38458022725d6", "56fca9d633c5721c67060711");
-			put("572bb56613b38458022725d7", "56fca9d633c5721c67060712");
-			put("572bb56613b38458022725d8", "56fca9d633c5721c67060713");
-			put("572bb56613b38458022725d9", "56fca9d633c5721c67060714");
-			put("572bb56613b38458022725da", "56fca9d633c5721c67060715");
-			put("572bb56613b38458022725db", "56fca9d633c5721c67060716");
-			put("572bb56613b38458022725dc", "56fca9d633c5721c67060717");
-			put("572bb56613b38458022725dd", "56fca9d633c5721c67060718");
-			put("572bb56613b38458022725de", "56fca9d633c5721c67060719");
-			put("572bb56613b38458022725e3", "56fca9d633c5721c6706071a");
-			put("572bb56613b38458022725e5", "56fca9d633c5721c6706071b");
-			put("572bb56613b38458022725e6", "56fca9d633c5721c67060701");
-			put("572bb56613b38458022725e7", "56fca9d633c5721c67060702");
-			put("572bb56613b38458022725e8", "56fca9d633c5721c67060703");
-			put("572bb56613b38458022725e9", "56fca9d633c5721c67060704");
-			put("572bb56613b38458022725ea", "56fca9d633c5721c67060705");
+			// Analytic Input Id          - Asset Type Parameter Id
+			put("5720babbb38fcd4e5f2a196b", "56fca9d633c5721c6706071a");
+			put("5720babbb38fcd4e5f2a196c", "56fca9d633c5721c6706070c");
+			put("5720babbb38fcd4e5f2a196d", "56fca9d633c5721c67060705");
+			put("5720babbb38fcd4e5f2a196e", "56fca9d633c5721c67060712");
+			put("5720babbb38fcd4e5f2a196f", "56fca9d633c5721c6706070e");
+			put("5720babbb38fcd4e5f2a1970", "56fca9d633c5721c6706070f");
 		}
 	};
 

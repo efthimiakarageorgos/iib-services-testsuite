@@ -17,24 +17,24 @@ public class MInsightTypeAPIHelper extends MBaseAPIHelper {
 		return super.create(microservice, environment, createOrUpdateInsightTypeEndpoint, payload, apiRequestHeaders);
 	}
 
-	public void delete(String microservice, String environment, String InsightTypeId, APIRequestHelper apiRequestHeaders) {
-		super.delete(microservice, environment, replaceInsightTypeIdInSingleInsightTypeEndpoint(InsightTypeId), apiRequestHeaders);
+	public void delete(String microservice, String environment, String insightTypeId, APIRequestHelper apiRequestHeaders) {
+		super.delete(microservice, environment, replaceInsightTypeIdInSingleInsightTypeEndpoint(insightTypeId), apiRequestHeaders);
 	}
 
-	public ConnectionResponse update(String microservice, String environment, String payload, String InsightTypeId, APIRequestHelper apiRequestHeaders) {
-		return super.update(microservice, environment, replaceInsightTypeIdInSingleInsightTypeEndpoint(InsightTypeId), payload, apiRequestHeaders);
+	public ConnectionResponse update(String microservice, String environment, String payload, String insightTypeId, APIRequestHelper apiRequestHeaders) {
+		return super.update(microservice, environment, replaceInsightTypeIdInSingleInsightTypeEndpoint(insightTypeId), payload, apiRequestHeaders);
 	}
 
 	public ConnectionResponse retrieve(String microservice, String environment, APIRequestHelper apiRequestHeaders) {
 		return super.retrieve(microservice, environment, getAllInsightTypesEndpoint, apiRequestHeaders);
 	}
 
-	public ConnectionResponse retrieve(String microservice, String environment, String InsightTypeId, APIRequestHelper apiRequestHeaders) {
-		return super.retrieve(microservice, environment, replaceInsightTypeIdInSingleInsightTypeEndpoint(InsightTypeId), apiRequestHeaders);
+	public ConnectionResponse retrieve(String microservice, String environment, String insightTypeId, APIRequestHelper apiRequestHeaders) {
+		return super.retrieve(microservice, environment, replaceInsightTypeIdInSingleInsightTypeEndpoint(insightTypeId), apiRequestHeaders);
 	}
 
-	protected String replaceInsightTypeIdInSingleInsightTypeEndpoint(String InsightTypeId) {
-		String singleInsightTypeEndpoint = getOrDeleteSingleInsightTypeEndpointAbstract.replace("{InsightTypeId}", InsightTypeId);
+	protected String replaceInsightTypeIdInSingleInsightTypeEndpoint(String insightTypeId) {
+		String singleInsightTypeEndpoint = getOrDeleteSingleInsightTypeEndpointAbstract.replace("{insightTypeId}", insightTypeId);
 		return singleInsightTypeEndpoint;
 	}
 }

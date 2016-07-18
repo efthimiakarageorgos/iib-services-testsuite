@@ -1,6 +1,12 @@
 
 package com.qio.insightManagement.manageInsightTypes;
 
+import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+
+import org.apache.log4j.Logger;
+import org.codehaus.jackson.JsonGenerationException;
+import org.codehaus.jackson.map.JsonMappingException;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -23,6 +29,7 @@ public class CreateInsightTypesTest extends BaseTestSetupAndTearDown {
 	private ServerResponse serverResp;
 
 	private final int FIRST_ELEMENT = 0;
+	final static Logger logger = Logger.getRootLogger();
 
 	@BeforeClass
 	public static void initSetupBeforeAllTests() {
@@ -39,10 +46,12 @@ public class CreateInsightTypesTest extends BaseTestSetupAndTearDown {
 		serverResp = new ServerResponse();
 	}
 
+	//This will not work as Delete is not allowed!
 	@AfterClass
 	public static void cleanUpAfterAllTests() {
 		baseCleanUpAfterAllTests(insightTypeAPI);
 	}
+	
 
 	// The following test cases go here:
 	// issuetype=Test and issue in (linkedIssues("RREHM-1235")) and issue in linkedIssues("RREHM-XXX")
@@ -61,6 +70,7 @@ public class CreateInsightTypesTest extends BaseTestSetupAndTearDown {
 		String insightTypeId = APITestUtil.getElementId(responseInsightType.get_links().getSelfLink().getHref());
 		idsForAllCreatedElements.add(insightTypeId);
 
+		logger.info("AAA " + insightTypeId);
 		InsightType requestInsightTypeWithSameAbbr = insightTypeHelper.getInsightTypeWithNoAttributes();
 		requestInsightTypeWithSameAbbr.setAbbreviation(requestInsightType.getAbbreviation());
 		serverResp = APITestUtil.getResponseObjForCreate(requestInsightTypeWithSameAbbr, microservice, environment, apiRequestHelper, insightTypeAPI, ServerResponse.class);

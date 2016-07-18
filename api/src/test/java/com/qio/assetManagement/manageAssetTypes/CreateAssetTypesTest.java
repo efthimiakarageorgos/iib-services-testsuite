@@ -123,14 +123,14 @@ public class CreateAssetTypesTest extends BaseTestSetupAndTearDown {
 		}
 	}
 
-	// RREHM-384 (AssetType name is blank)
+	// RREHM-438 (AssetType name is blank)
 	@Test
 	public void shouldNotCreateAssetTypeWhenNameIsBlank() {
 		requestAssetType.setName("");
 
 		serverResp = APITestUtil.getResponseObjForCreate(requestAssetType, microservice, environment, apiRequestHelper, assetTypeAPI, ServerResponse.class);
 
-		CustomAssertions.assertServerError(400, "com.qiotec.application.exceptions.InvalidInputException", "Asset Type Name Should not Empty or Null", serverResp);
+		CustomAssertions.assertServerError(400, "com.qiotec.application.exceptions.InvalidInputException", "Asset type name is a required field", serverResp);
 	}
 
 	// RREHM-384 (AssetType Name is null - missing)
@@ -140,7 +140,7 @@ public class CreateAssetTypesTest extends BaseTestSetupAndTearDown {
 
 		serverResp = APITestUtil.getResponseObjForCreate(requestAssetType, microservice, environment, apiRequestHelper, assetTypeAPI, ServerResponse.class);
 
-		CustomAssertions.assertServerError(400, "com.qiotec.application.exceptions.InvalidInputException", "No message available", serverResp);
+		CustomAssertions.assertServerError(400, "com.qiotec.application.exceptions.InvalidInputException", "Asset type name is a required field", serverResp);
 	}
 
 	// RREHM-437 (AssetType name is longer than 50 chars)
@@ -177,8 +177,6 @@ public class CreateAssetTypesTest extends BaseTestSetupAndTearDown {
 	// RREHM-431 ()
 
 	// RREHM-432 ()
-
-	// RREHM-438 ()
 
 	// RREHM-439 ()
 
