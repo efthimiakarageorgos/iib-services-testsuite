@@ -25,6 +25,7 @@ public class BaseTestSetupAndTearDown {
 	protected static Config microserviceConfig;
 
 	protected static ArrayList<String> idsForAllCreatedElements;
+	protected static ArrayList<String> idsSecondaryForAllCreatedElements;
 	final static Logger logger = Logger.getRootLogger();
 
 	public static void baseInitSetupBeforeAllTests(String microserviceName) {
@@ -33,8 +34,8 @@ public class BaseTestSetupAndTearDown {
 		envRuntimeConfig = ConfigFactory.load("environment_runtime.conf");
 		microserviceConfig = ConfigFactory.load("microservices.conf");
 
-		username = userConfig.getString("user.test.username");
-		password = userConfig.getString("user.test.password");
+		username = userConfig.getString("user.superuser.username");
+		password = userConfig.getString("user.superuser.password");
 		environment = envConfig.getString("env.name");
 		envRuntime = envRuntimeConfig.getString("env.runtime");
 		microservice = microserviceConfig.getString(microserviceName + "." + envRuntime);
@@ -42,6 +43,7 @@ public class BaseTestSetupAndTearDown {
 		apiRequestHelper = new APIRequestHelper(username, password, oauthMicroservice);
 
 		idsForAllCreatedElements = new ArrayList<String>();
+		idsSecondaryForAllCreatedElements = new ArrayList<String>();
 	}
 
 	public static void baseCleanUpAfterAllTests(Object apiHelperObj) {
@@ -51,6 +53,13 @@ public class BaseTestSetupAndTearDown {
 	}
 
 	public static void baseCleanUpAfterAllTests(ArrayList<String> idsForAllCreatedElements, Object apiHelperObj) {
+		for (String elementId : idsForAllCreatedElements) {
+			APITestUtil.deleteRequestObj(microservice, environment, elementId, apiRequestHelper, apiHelperObj);
+		}
+	}
+	
+	public static void baseCleanUpAfterAllTests(ArrayList<String> idsForAllCreatedElements, Object apiHelperObj, String microserviceName) {
+		microservice = microserviceConfig.getString(microserviceName + "." + envRuntime);
 		for (String elementId : idsForAllCreatedElements) {
 			APITestUtil.deleteRequestObj(microservice, environment, elementId, apiRequestHelper, apiHelperObj);
 		}
