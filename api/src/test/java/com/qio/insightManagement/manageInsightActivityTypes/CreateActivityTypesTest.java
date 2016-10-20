@@ -8,12 +8,12 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.qio.common.BaseTestSetupAndTearDown;
-import com.qio.lib.apiHelpers.insights.MActivityTypeAPIHelper;
-import com.qio.lib.assertions.CustomAssertions;
-import com.qio.lib.exception.ServerResponse;
-import com.qio.model.insight.activityType.ActivityType;
-import com.qio.model.insight.activityType.helper.ActivityTypeHelper;
-import com.qio.util.common.APITestUtil;
+import io.qio.qa.lib.ehm.apiHelpers.insights.MActivityTypeAPIHelper;
+import io.qio.qa.lib.ehm.model.insight.activityType.ActivityType;
+import io.qio.qa.lib.ehm.model.insight.activityType.helper.ActivityTypeHelper;
+import io.qio.qa.lib.ehm.common.APITestUtil;
+import io.qio.qa.lib.assertions.CustomAssertions;
+import io.qio.qa.lib.exception.ServerResponse;
 
 public class CreateActivityTypesTest extends BaseTestSetupAndTearDown {
 
