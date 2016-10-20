@@ -8,14 +8,14 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.qio.common.BaseTestSetupAndTearDown;
-import com.qio.lib.apiHelpers.assetType.MAssetTypeAPIHelper;
-import com.qio.lib.assertions.CustomAssertions;
-import com.qio.lib.exception.ServerResponse;
-import com.qio.model.assetType.AssetType;
-import com.qio.model.assetType.AssetTypeAttribute;
-import com.qio.model.assetType.helper.AssetTypeHelper;
-import com.qio.model.assetType.helper.AttributeDataType;
-import com.qio.util.common.APITestUtil;
+import io.qio.qa.lib.ehm.apiHelpers.assetType.MAssetTypeAPIHelper;
+import io.qio.qa.lib.ehm.model.assetType.AssetType;
+import io.qio.qa.lib.ehm.model.assetType.AssetTypeAttribute;
+import io.qio.qa.lib.ehm.model.assetType.helper.AssetTypeHelper;
+import io.qio.qa.lib.ehm.model.assetType.helper.AttributeDataType;
+import io.qio.qa.lib.ehm.common.APITestUtil;
+import io.qio.qa.lib.assertions.CustomAssertions;
+import io.qio.qa.lib.exception.ServerResponse;
 
 public class CreateAssetTypeAttributesTest extends BaseTestSetupAndTearDown {
 	private static MAssetTypeAPIHelper assetTypeAPI;
@@ -40,7 +40,7 @@ public class CreateAssetTypeAttributesTest extends BaseTestSetupAndTearDown {
 		requestAssetType = assetTypeHelper.getAssetTypeWithOneAttribute(AttributeDataType.String);
 		responseAssetType = APITestUtil.getResponseObjForCreate(requestAssetType, microservice, environment, apiRequestHelper, assetTypeAPI, AssetType.class);
 		assetTypeId = APITestUtil.getElementId(responseAssetType.get_links().getSelfLink().getHref());
-		assetTypeAttributeId = responseAssetType.getAttributes().get(FIRST_ELEMENT).getAttributeId();
+		assetTypeAttributeId = APITestUtil.getElementId(responseAssetType.getAttributes().get(FIRST_ELEMENT).get_links().getSelfLink().getHref());
 		idsForAllCreatedElements.add(assetTypeId);
 		serverResp = new ServerResponse();
 	}
