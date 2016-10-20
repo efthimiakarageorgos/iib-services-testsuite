@@ -10,16 +10,16 @@ import org.junit.Test;
 import org.junit.Ignore;
 
 import com.qio.common.BaseTestSetupAndTearDown;
-import com.qio.lib.apiHelpers.insights.MInsightAPIHelper;
-import com.qio.lib.apiHelpers.insights.MInsightTypeAPIHelper;
-import com.qio.lib.apiHelpers.MTenantAPIHelper;
-import com.qio.lib.assertions.CustomAssertions;
-import com.qio.lib.exception.ServerResponse;
-import com.qio.model.insight.InsightRequest;
-import com.qio.model.insight.InsightResponse;
-import com.qio.model.insight.InsightStatus;
-import com.qio.model.insight.helper.InsightRequestHelper;
-import com.qio.util.common.APITestUtil;
+import io.qio.qa.lib.ehm.apiHelpers.insights.MInsightAPIHelper;
+import io.qio.qa.lib.ehm.apiHelpers.insights.MInsightTypeAPIHelper;
+import io.qio.qa.lib.ehm.apiHelpers.MTenantAPIHelper;
+import io.qio.qa.lib.ehm.model.insight.InsightRequest;
+import io.qio.qa.lib.ehm.model.insight.InsightResponse;
+import io.qio.qa.lib.ehm.model.insight.InsightStatus;
+import io.qio.qa.lib.ehm.model.insight.helper.InsightRequestHelper;
+import io.qio.qa.lib.ehm.common.APITestUtil;
+import io.qio.qa.lib.assertions.CustomAssertions;
+import io.qio.qa.lib.exception.ServerResponse;
 
 public class CreateInsightsTest extends BaseTestSetupAndTearDown {
 
