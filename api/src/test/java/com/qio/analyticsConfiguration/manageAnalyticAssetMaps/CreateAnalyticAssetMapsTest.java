@@ -15,16 +15,16 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import com.qio.common.BaseTestSetupAndTearDown;
-import com.qio.lib.apiHelpers.analytics.MAnalyticAssetMapAPIHelper;
-import com.qio.lib.assertions.CustomAssertions;
-import com.qio.lib.exception.ServerResponse;
-import com.qio.model.analyticAssetMap.AnalyticAssetMap;
-import com.qio.model.analyticAssetMap.AssetTemplateModelAttribute;
-import com.qio.model.analyticAssetMap.helper.AnalyticAssetMapHelper;
-import com.qio.model.asset.AssetResponse;
-import com.qio.util.common.APITestUtil;
-import com.qio.util.common.AnalyticsUtil;
-import com.qio.util.common.AssetUtil;
+import io.qio.qa.lib.ehm.apiHelpers.analytics.MAnalyticAssetMapAPIHelper;
+import io.qio.qa.lib.assertions.CustomAssertions;
+import io.qio.qa.lib.exception.ServerResponse;
+import io.qio.qa.lib.ehm.model.analyticAssetMap.AnalyticAssetMap;
+import io.qio.qa.lib.ehm.model.analyticAssetMap.AssetTemplateModelAttribute;
+import io.qio.qa.lib.ehm.model.analyticAssetMap.helper.AnalyticAssetMapHelper;
+import io.qio.qa.lib.ehm.model.asset.AssetResponse;
+import io.qio.qa.lib.ehm.common.APITestUtil;
+import io.qio.qa.lib.ehm.common.AnalyticsUtil;
+import io.qio.qa.lib.ehm.common.AssetUtil;
 
 public class CreateAnalyticAssetMapsTest extends BaseTestSetupAndTearDown {
 
