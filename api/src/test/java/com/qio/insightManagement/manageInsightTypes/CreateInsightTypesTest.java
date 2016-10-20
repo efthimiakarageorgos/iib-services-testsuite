@@ -13,12 +13,12 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.qio.common.BaseTestSetupAndTearDown;
-import com.qio.lib.apiHelpers.insights.MInsightTypeAPIHelper;
-import com.qio.lib.assertions.CustomAssertions;
-import com.qio.lib.exception.ServerResponse;
-import com.qio.model.insight.insightType.InsightType;
-import com.qio.model.insight.insightType.helper.InsightTypeHelper;
-import com.qio.util.common.APITestUtil;
+import io.qio.qa.lib.ehm.apiHelpers.insights.MInsightTypeAPIHelper;
+import io.qio.qa.lib.ehm.model.insight.insightType.InsightType;
+import io.qio.qa.lib.ehm.model.insight.insightType.helper.InsightTypeHelper;
+import io.qio.qa.lib.ehm.common.APITestUtil;
+import io.qio.qa.lib.assertions.CustomAssertions;
+import io.qio.qa.lib.exception.ServerResponse;
 
 public class CreateInsightTypesTest extends BaseTestSetupAndTearDown {
 
