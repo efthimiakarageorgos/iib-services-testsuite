@@ -105,7 +105,7 @@ public class CreateAssetTypeWithParametersTest extends BaseTestSetupAndTearDown 
 	}
 
 	// RREHM-633 ()
-	@Test
+	@Ignore
 	public void shouldNotCreateAssetTypeWhenDataTypeIsInvalidForOneOfTheInputParameters() {
 		requestAssetType = assetTypeHelper.getAssetTypeWithAllParameters();
 		// Setting data type for one of the parameters to be invalid.

@@ -4,8 +4,10 @@
  */
 package io.qio.qa.ehm.assetManagement.manageAssetTypes;
 
+import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Test;
 
 import io.qio.qa.ehm.common.BaseTestSetupAndTearDown;
 import io.qio.qa.lib.ehm.apiHelpers.assetType.MAssetTypeAPIHelper;
@@ -38,7 +40,12 @@ public class UpdateAssetTypesTest extends BaseTestSetupAndTearDown {
 		serverResp = new ServerResponse();
 	}
 	
-	// The following test cases go here:
+	@AfterClass
+	public static void cleanUpAfterAllTests() {
+		baseCleanUpAfterAllTests(assetTypeAPI);
+	}
+	
+	// Matching test cases in Test Case Management (Jira/Zephyr):
 	// issuetype=Test and issue in (linkedIssues("RREHM-1189")) and issue in  linkedIssues("RREHM-57") 
 	
 	/*

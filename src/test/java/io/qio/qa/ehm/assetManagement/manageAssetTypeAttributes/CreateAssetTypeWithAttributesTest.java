@@ -9,6 +9,7 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.Ignore;
 
 import io.qio.qa.ehm.common.BaseTestSetupAndTearDown;
 import io.qio.qa.lib.ehm.apiHelpers.assetType.MAssetTypeAPIHelper;
@@ -50,7 +51,7 @@ public class CreateAssetTypeWithAttributesTest extends BaseTestSetupAndTearDown 
 		baseCleanUpAfterAllTests(assetTypeAPI);
 	}
 
-	// This file should contain these tests
+	// Matching test cases in Test Case Management (Jira/Zephyr):
 	// issuetype = Test AND issue in (linkedIssues(RREHM-1193)) AND issue in (linkedIssues(RREHM-41))
 
 	/*
@@ -62,8 +63,7 @@ public class CreateAssetTypeWithAttributesTest extends BaseTestSetupAndTearDown 
 	public void shouldNotCreateAssetTypeWhenTwoAttrsHaveSameAbbr() {
 		requestAssetType = assetTypeHelper.getAssetTypeWithAllAttributes();
 
-		// Setting AssetType Attribute abbreviation of first attribute to the
-		// value of abbr of second attribute
+		// Setting AssetType Attribute abbreviation of first attribute to the value of abbr of second attribute
 		String abbrForSecondAttribute = requestAssetType.getAttributes().get(FIRST_ELEMENT + 1).getAbbreviation();
 		requestAssetType.getAttributes().get(FIRST_ELEMENT).setAbbreviation(abbrForSecondAttribute);
 
@@ -165,7 +165,7 @@ public class CreateAssetTypeWithAttributesTest extends BaseTestSetupAndTearDown 
 	}
 
 	// RREHM-458 ()
-	@Test
+	@Ignore
 	public void shouldNotCreateAssetTypeWhenDataTypeIsInvalidForOneOfTheAttributes() {
 		requestAssetType = assetTypeHelper.getAssetTypeWithAllAttributes();
 		requestAssetType.getAttributes().get(FIRST_ELEMENT).setDatatype("FicticiousDataType");
@@ -208,7 +208,7 @@ public class CreateAssetTypeWithAttributesTest extends BaseTestSetupAndTearDown 
 		responseAssetType = APITestUtil.getResponseObjForCreate(requestAssetType, microservice, environment, apiRequestHelper, assetTypeAPI, AssetType.class);
 		CustomAssertions.assertRequestAndResponseObj(201, APITestUtil.responseCodeForInputRequest, requestAssetType, responseAssetType);
 
-		String assetTypeId = APITestUtil.getElementId(responseAssetType.get_links().getSelfLink().getHref());
+		String assetTypeId = responseAssetType.getAssetTypeId();
 		idsForAllCreatedElements.add(assetTypeId);
 
 		AssetType committedAssetType = APITestUtil.getResponseObjForRetrieve(microservice, environment, assetTypeId, apiRequestHelper, assetTypeAPI, AssetType.class);
@@ -224,7 +224,7 @@ public class CreateAssetTypeWithAttributesTest extends BaseTestSetupAndTearDown 
 		responseAssetType = APITestUtil.getResponseObjForCreate(requestAssetType, microservice, environment, apiRequestHelper, assetTypeAPI, AssetType.class);
 		CustomAssertions.assertRequestAndResponseObj(201, APITestUtil.responseCodeForInputRequest, requestAssetType, responseAssetType);
 
-		String assetTypeId = APITestUtil.getElementId(responseAssetType.get_links().getSelfLink().getHref());
+		String assetTypeId = responseAssetType.getAssetTypeId();
 		idsForAllCreatedElements.add(assetTypeId);
 
 		AssetType committedAssetType = APITestUtil.getResponseObjForRetrieve(microservice, environment, assetTypeId, apiRequestHelper, assetTypeAPI, AssetType.class);
@@ -240,7 +240,7 @@ public class CreateAssetTypeWithAttributesTest extends BaseTestSetupAndTearDown 
 
 		CustomAssertions.assertRequestAndResponseObj(201, APITestUtil.responseCodeForInputRequest, requestAssetType, responseAssetType);
 
-		String assetTypeId = APITestUtil.getElementId(responseAssetType.get_links().getSelfLink().getHref());
+		String assetTypeId = responseAssetType.getAssetTypeId();
 		idsForAllCreatedElements.add(assetTypeId);
 
 		AssetType committedAssetType = APITestUtil.getResponseObjForRetrieve(microservice, environment, assetTypeId, apiRequestHelper, assetTypeAPI, AssetType.class);
@@ -258,7 +258,7 @@ public class CreateAssetTypeWithAttributesTest extends BaseTestSetupAndTearDown 
 
 		CustomAssertions.assertRequestAndResponseObj(201, APITestUtil.responseCodeForInputRequest, requestAssetType, responseAssetType);
 
-		String assetTypeId = APITestUtil.getElementId(responseAssetType.get_links().getSelfLink().getHref());
+		String assetTypeId = responseAssetType.getAssetTypeId();
 		idsForAllCreatedElements.add(assetTypeId);
 
 		AssetType committedAssetType = APITestUtil.getResponseObjForRetrieve(microservice, environment, assetTypeId, apiRequestHelper, assetTypeAPI, AssetType.class);

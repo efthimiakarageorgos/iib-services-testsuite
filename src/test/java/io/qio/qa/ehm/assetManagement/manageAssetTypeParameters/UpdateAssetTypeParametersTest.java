@@ -11,6 +11,7 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.Ignore;
 
 import io.qio.qa.ehm.common.BaseTestSetupAndTearDown;
 import io.qio.qa.lib.ehm.apiHelpers.assetType.MAssetTypeAPIHelper;
@@ -194,7 +195,7 @@ public class UpdateAssetTypeParametersTest extends BaseTestSetupAndTearDown {
 	}
 
 	// RREHM-1084 ()
-	@Test
+	@Ignore
 	public void shouldNotBeAllowedToUpdateParameterWhenDatatypeIsInvalid() {
 
 		requestAssetType.getParameters().get(FIRST_ELEMENT).setId(assetTypeParameterId);
@@ -204,7 +205,7 @@ public class UpdateAssetTypeParametersTest extends BaseTestSetupAndTearDown {
 		CustomAssertions.assertServerError(400, "org.springframework.http.converter.HttpMessageNotReadableException", serverResp);
 	}
 
-	@Test
+	@Ignore
 	public void shouldNotBeAllowedToUpdateParameterWhenDatatypeIsBlank() {
 
 		requestAssetType.getParameters().get(FIRST_ELEMENT).setId(assetTypeParameterId);

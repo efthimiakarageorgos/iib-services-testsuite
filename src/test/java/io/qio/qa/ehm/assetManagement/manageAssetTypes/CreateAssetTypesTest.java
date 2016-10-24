@@ -48,7 +48,7 @@ public class CreateAssetTypesTest extends BaseTestSetupAndTearDown {
 		baseCleanUpAfterAllTests(assetTypeAPI);
 	}
 
-	// The following test cases go here:
+	// Matching test cases in Test Case Management (Jira/Zephyr):
 	// issuetype=Test and issue in (linkedIssues("RREHM-1189")) and issue in linkedIssues("RREHM-41")
 
 	/*
@@ -59,8 +59,6 @@ public class CreateAssetTypesTest extends BaseTestSetupAndTearDown {
 	@Test
 	public void shouldNotCreateAssetTypeWhenAbbrIsNotUnique() {
 		responseAssetType = APITestUtil.getResponseObjForCreate(requestAssetType, microservice, environment, apiRequestHelper, assetTypeAPI, AssetType.class);
-		String assetTypeId = APITestUtil.getElementId(responseAssetType.get_links().getSelfLink().getHref());
-		idsForAllCreatedElements.add(assetTypeId);
 
 		AssetType requestAssetTypeWithSameAbbr = assetTypeHelper.getAssetTypeWithNoAttributesAndParameters();
 		requestAssetTypeWithSameAbbr.setAbbreviation(requestAssetType.getAbbreviation());
@@ -175,6 +173,8 @@ public class CreateAssetTypesTest extends BaseTestSetupAndTearDown {
 	 */
 
 	// RREHM-380 ()
+//	String assetTypeId = responseAssetType.getAssetTypeId();
+//	idsForAllCreatedElements.add(assetTypeId);
 
 	// RREHM-382 ()
 

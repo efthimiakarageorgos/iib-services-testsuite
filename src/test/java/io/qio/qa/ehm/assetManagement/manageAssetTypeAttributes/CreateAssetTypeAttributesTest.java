@@ -10,6 +10,7 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.Ignore;
 
 import io.qio.qa.ehm.common.BaseTestSetupAndTearDown;
 import io.qio.qa.lib.ehm.apiHelpers.assetType.MAssetTypeAPIHelper;
@@ -43,8 +44,10 @@ public class CreateAssetTypeAttributesTest extends BaseTestSetupAndTearDown {
 		assetTypeHelper = new AssetTypeHelper();
 		requestAssetType = assetTypeHelper.getAssetTypeWithOneAttribute(AttributeDataType.String);
 		responseAssetType = APITestUtil.getResponseObjForCreate(requestAssetType, microservice, environment, apiRequestHelper, assetTypeAPI, AssetType.class);
-		assetTypeId = APITestUtil.getElementId(responseAssetType.get_links().getSelfLink().getHref());
-		assetTypeAttributeId = APITestUtil.getElementId(responseAssetType.getAttributes().get(FIRST_ELEMENT).get_links().getSelfLink().getHref());
+	
+		assetTypeId = responseAssetType.getAssetTypeId();
+		assetTypeAttributeId = responseAssetType.getAttributes().get(FIRST_ELEMENT).getAttributeId();
+		//assetTypeAttributeId = APITestUtil.getElementId(responseAssetType.getAttributes().get(FIRST_ELEMENT).get_links().getSelfLink().getHref());
 		idsForAllCreatedElements.add(assetTypeId);
 		serverResp = new ServerResponse();
 	}
@@ -54,7 +57,7 @@ public class CreateAssetTypeAttributesTest extends BaseTestSetupAndTearDown {
 		baseCleanUpAfterAllTests(assetTypeAPI);
 	}
 
-	// This file should contain these tests
+	// Matching test cases in Test Case Management (Jira/Zephyr):
 	// issuetype = Test AND issue in (linkedIssues(RREHM-1193)) AND issue in (linkedIssues(RREHM-38))
 
 	/*
@@ -151,7 +154,7 @@ public class CreateAssetTypeAttributesTest extends BaseTestSetupAndTearDown {
 	}
 
 	// RREHM-848 ()
-	@Test
+	@Ignore
 	public void shouldNotBeAllowedToAddNewAttributeWhenItsDatatypeIsInvalid() {
 
 		List<AssetTypeAttribute> existingAssetTypeAttributes = requestAssetType.getAttributes();
@@ -166,7 +169,7 @@ public class CreateAssetTypeAttributesTest extends BaseTestSetupAndTearDown {
 		CustomAssertions.assertServerError(400, "org.springframework.http.converter.HttpMessageNotReadableException", serverResp);
 	}
 
-	@Test
+	@Ignore
 	public void shouldNotBeAllowedToAddNewAttributeWhenItsDatatypeIsBlank() {
 
 		List<AssetTypeAttribute> existingAssetTypeAttributes = requestAssetType.getAttributes();

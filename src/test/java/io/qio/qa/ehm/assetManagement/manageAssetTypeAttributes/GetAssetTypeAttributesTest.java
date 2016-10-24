@@ -51,7 +51,7 @@ public class GetAssetTypeAttributesTest extends BaseTestSetupAndTearDown {
 		baseCleanUpAfterAllTests(assetTypeAPI);
 	}
 
-	// This file should contain these tests
+	// Matching test cases in Test Case Management (Jira/Zephyr):
 	// issuetype = Test AND issue in (linkedIssues(RREHM-1193)) AND issue in (linkedIssues(RREHM-950), linkedIssues(RREHM-951))
 
 	/*
@@ -73,13 +73,13 @@ public class GetAssetTypeAttributesTest extends BaseTestSetupAndTearDown {
 
 		requestAssetType = assetTypeHelper.getAssetTypeWithNoAttributesAndParameters();
 		responseAssetType = APITestUtil.getResponseObjForCreate(requestAssetType, microservice, environment, apiRequestHelper, assetTypeAPI, AssetType.class);
-		String assetTypeId = APITestUtil.getElementId(responseAssetType.get_links().getSelfLink().getHref());
+		String assetTypeId = responseAssetType.getAssetTypeId();
 		idsForAllCreatedElements.add(assetTypeId);
 
 		String invalidAssetTypeAttributeId = "ThisDoesNotExist";
 		serverResp = APITestUtil.getResponseObjForRetrieve(microservice, environment, assetTypeId, invalidAssetTypeAttributeId, apiRequestHelper, assetTypeAttributeAPI, ServerResponse.class);
 		
-		//TODO - JEET 
+		//TODO
 		//If the message does not much it fails instead of giving the a nicer message (same as when the code does not match - not a bid deal though)
 		CustomAssertions.assertServerError(400, "com.qiotec.application.exceptions.InvalidInputException", "No Attributes are Associated with a given Asset Type", serverResp);
 	}
@@ -98,7 +98,7 @@ public class GetAssetTypeAttributesTest extends BaseTestSetupAndTearDown {
 
 		requestAssetType = assetTypeHelper.getAssetTypeWithAllAttributes();
 		responseAssetType = APITestUtil.getResponseObjForCreate(requestAssetType, microservice, environment, apiRequestHelper, assetTypeAPI, AssetType.class);
-		String assetTypeId = APITestUtil.getElementId(responseAssetType.get_links().getSelfLink().getHref());
+		String assetTypeId = responseAssetType.getAssetTypeId();
 		idsForAllCreatedElements.add(assetTypeId);
 
 		List<AssetTypeAttribute> committedAssetTypeAttributes = APITestUtil.getListResponseObjForRetrieve(microservice, environment, assetTypeId, apiRequestHelper, assetTypeAttributeAPI,
@@ -116,11 +116,11 @@ public class GetAssetTypeAttributesTest extends BaseTestSetupAndTearDown {
 
 		requestAssetType = assetTypeHelper.getAssetTypeWithAllAttributes();
 		responseAssetType = APITestUtil.getResponseObjForCreate(requestAssetType, microservice, environment, apiRequestHelper, assetTypeAPI, AssetType.class);
-		String assetTypeId = APITestUtil.getElementId(responseAssetType.get_links().getSelfLink().getHref());
+		String assetTypeId = responseAssetType.getAssetTypeId();
 		idsForAllCreatedElements.add(assetTypeId);
 
 		for (AssetTypeAttribute responseAssetTypeAttribute : responseAssetType.getAttributes()) {
-			String createdAttributeId = APITestUtil.getElementId(responseAssetTypeAttribute.get_links().getSelfLink().getHref());
+			String createdAttributeId = responseAssetTypeAttribute.getAttributeId();
 			AssetTypeAttribute committedAssetTypeAttribute = APITestUtil.getResponseObjForRetrieve(microservice, environment, assetTypeId, createdAttributeId, apiRequestHelper, assetTypeAttributeAPI,
 					AssetTypeAttribute.class);
 			CustomAssertions.assertRequestAndResponseObj(responseAssetTypeAttribute, committedAssetTypeAttribute);
@@ -133,7 +133,7 @@ public class GetAssetTypeAttributesTest extends BaseTestSetupAndTearDown {
 
 		requestAssetType = assetTypeHelper.getAssetTypeWithNoAttributesAndParameters();
 		responseAssetType = APITestUtil.getResponseObjForCreate(requestAssetType, microservice, environment, apiRequestHelper, assetTypeAPI, AssetType.class);
-		String assetTypeId = APITestUtil.getElementId(responseAssetType.get_links().getSelfLink().getHref());
+		String assetTypeId = responseAssetType.getAssetTypeId();
 		idsForAllCreatedElements.add(assetTypeId);
 
 		List<AssetTypeAttribute> committedAssetTypeAttributes = APITestUtil.getListResponseObjForRetrieve(microservice, environment, assetTypeId, apiRequestHelper, assetTypeAttributeAPI,
