@@ -79,9 +79,8 @@ public class CreateAssetsTest extends BaseTestSetupAndTearDown {
 		responseAsset = new AssetResponse();
 		serverResp = new ServerResponse();
 		
-		//PUT BACK
-		//username = userConfig.getString("user.superuser.username");
-		//password = userConfig.getString("user.superuser.password");
+		username = userConfig.getString("user.superuser.username");
+		password = userConfig.getString("user.superuser.password");
 		apiRequestHelper.setUserName(username);
 		apiRequestHelper.setPassword(password);
 	}
