@@ -209,7 +209,7 @@ public class CreateAssetTypeParametersTest extends BaseTestSetupAndTearDown {
 		CustomAssertions.assertServerError(400, "org.springframework.http.converter.HttpMessageNotReadableException", serverResp);
 	}
 
-	@Test
+	@Ignore
 	public void shouldNotBeAllowedToAddNewParameterWhenItsDatatypeIsBlank() {
 
 		List<AssetTypeParameter> existingAssetTypeParameters = requestAssetType.getParameters();
