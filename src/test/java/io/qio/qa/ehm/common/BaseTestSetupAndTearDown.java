@@ -28,7 +28,7 @@ public class BaseTestSetupAndTearDown {
 	protected static Config microserviceConfig;
 
 	protected static ArrayList<String> idsForAllCreatedElements;
-	protected static ArrayList<String> idsSecondaryForAllCreatedElements;
+	protected static ArrayList<String> secondaryIdListForDeletion;
 	final static Logger logger = Logger.getRootLogger();
 
 	public static void baseInitSetupBeforeAllTests(String microserviceName) {
@@ -39,9 +39,6 @@ public class BaseTestSetupAndTearDown {
 
 		username = userConfig.getString("user.superuser.username");
 		password = userConfig.getString("user.superuser.password");
-	
-//		username = userConfig.getString("user.user.username");
-//		password = userConfig.getString("user.user.password");
 		
 		environment = envConfig.getString("env.name");
 		envRuntime = envRuntimeConfig.getString("env.runtime");
@@ -52,7 +49,7 @@ public class BaseTestSetupAndTearDown {
 		apiRequestHelper = new APIRequestHelper(username, password, oauthMicroservice);
 
 		idsForAllCreatedElements = new ArrayList<String>();
-		idsSecondaryForAllCreatedElements = new ArrayList<String>();
+		secondaryIdListForDeletion = new ArrayList<String>();
 	}
 
 	public static void baseCleanUpAfterAllTests(Object apiHelperObj) {
@@ -61,15 +58,15 @@ public class BaseTestSetupAndTearDown {
 		}
 	}
 
-	public static void baseCleanUpAfterAllTests(ArrayList<String> idsForAllCreatedElements, Object apiHelperObj) {
-		for (String elementId : idsForAllCreatedElements) {
+	public static void baseCleanUpAfterAllTests(ArrayList<String> idListForDeletion, Object apiHelperObj) {
+		for (String elementId : idListForDeletion) {
 			APITestUtil.deleteRequestObj(microservice, environment, elementId, apiRequestHelper, apiHelperObj);
 		}
 	}
 	
-	public static void baseCleanUpAfterAllTests(ArrayList<String> idsForAllCreatedElements, Object apiHelperObj, String microserviceName) {
+	public static void baseCleanUpAfterAllTests(ArrayList<String> idListForDeletion, Object apiHelperObj, String microserviceName) {
 		microservice = microserviceConfig.getString(microserviceName + "." + envRuntime);
-		for (String elementId : idsForAllCreatedElements) {
+		for (String elementId : idListForDeletion) {
 			APITestUtil.deleteRequestObj(microservice, environment, elementId, apiRequestHelper, apiHelperObj);
 		}
 	}

@@ -10,6 +10,7 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.Ignore;
 
 import io.qio.qa.lib.ehm.apiHelpers.assetType.MAssetTypeAPIHelper;
 import io.qio.qa.lib.ehm.model.assetType.AssetType;
@@ -49,7 +50,7 @@ public class CreateAssetTypeWithParametersTest extends BaseTestSetupAndTearDown 
 		baseCleanUpAfterAllTests(assetTypeAPI);
 	}
 
-	// The following test cases go here:
+	// Matching test cases in Test Case Management (Jira/Zephyr):
 	// issuetype=Test and issue in (linkedIssues("RREHM-1192")) and issue in linkedIssues("RREHM-41")
 
 	/*
@@ -72,8 +73,7 @@ public class CreateAssetTypeWithParametersTest extends BaseTestSetupAndTearDown 
 	@Test
 	public void shouldNotCreateAssetTypeWhenParAbbrIsNull() {
 		requestAssetType = assetTypeHelper.getAssetTypeWithOneParameter(ParameterDataType.String);
-		// Setting AssetType Parameter abbreviation to null, so that it is not
-		// sent in the request.
+		// Setting AssetType Parameter abbreviation to null, so that it is not sent in the request.
 		requestAssetType.getParameters().get(FIRST_ELEMENT).setAbbreviation(null);
 
 		serverResp = APITestUtil.getResponseObjForCreate(requestAssetType, microservice, environment, apiRequestHelper, assetTypeAPI, ServerResponse.class);
@@ -167,7 +167,7 @@ public class CreateAssetTypeWithParametersTest extends BaseTestSetupAndTearDown 
 		// codes.
 		CustomAssertions.assertRequestAndResponseObj(201, APITestUtil.responseCodeForInputRequest, requestAssetType, responseAssetType);
 
-		String assetTypeId = APITestUtil.getElementId(responseAssetType.get_links().getSelfLink().getHref());
+		String assetTypeId = responseAssetType.getAssetTypeId();
 		idsForAllCreatedElements.add(assetTypeId);
 
 		AssetType committedAssetType = APITestUtil.getResponseObjForRetrieve(microservice, environment, assetTypeId, apiRequestHelper, assetTypeAPI, AssetType.class);
@@ -186,7 +186,7 @@ public class CreateAssetTypeWithParametersTest extends BaseTestSetupAndTearDown 
 		responseAssetType = APITestUtil.getResponseObjForCreate(requestAssetType, microservice, environment, apiRequestHelper, assetTypeAPI, AssetType.class);
 		CustomAssertions.assertRequestAndResponseObj(201, APITestUtil.responseCodeForInputRequest, requestAssetType, responseAssetType);
 
-		String assetTypeId = APITestUtil.getElementId(responseAssetType.get_links().getSelfLink().getHref());
+		String assetTypeId = responseAssetType.getAssetTypeId();
 		idsForAllCreatedElements.add(assetTypeId);
 
 		AssetType committedAssetType = APITestUtil.getResponseObjForRetrieve(microservice, environment, assetTypeId, apiRequestHelper, assetTypeAPI, AssetType.class);
@@ -205,7 +205,7 @@ public class CreateAssetTypeWithParametersTest extends BaseTestSetupAndTearDown 
 			responseAssetType = APITestUtil.getResponseObjForCreate(requestAssetType, microservice, environment, apiRequestHelper, assetTypeAPI, AssetType.class);
 			CustomAssertions.assertRequestAndResponseObj(201, APITestUtil.responseCodeForInputRequest, requestAssetType, responseAssetType);
 
-			String assetTypeId = APITestUtil.getElementId(responseAssetType.get_links().getSelfLink().getHref());
+			String assetTypeId = responseAssetType.getAssetTypeId();
 			idsForAllCreatedElements.add(assetTypeId);
 
 			AssetType committedAssetType = APITestUtil.getResponseObjForRetrieve(microservice, environment, assetTypeId, apiRequestHelper, assetTypeAPI, AssetType.class);
@@ -223,7 +223,7 @@ public class CreateAssetTypeWithParametersTest extends BaseTestSetupAndTearDown 
 		responseAssetType = APITestUtil.getResponseObjForCreate(requestAssetType, microservice, environment, apiRequestHelper, assetTypeAPI, AssetType.class);
 		CustomAssertions.assertRequestAndResponseObj(201, APITestUtil.responseCodeForInputRequest, requestAssetType, responseAssetType);
 
-		String assetTypeId = APITestUtil.getElementId(responseAssetType.get_links().getSelfLink().getHref());
+		String assetTypeId = responseAssetType.getAssetTypeId();
 		idsForAllCreatedElements.add(assetTypeId);
 
 		AssetType committedAssetType = APITestUtil.getResponseObjForRetrieve(microservice, environment, assetTypeId, apiRequestHelper, assetTypeAPI, AssetType.class);

@@ -45,8 +45,10 @@ public class UpdateAssetTypeParametersTest extends BaseTestSetupAndTearDown {
 		assetTypeHelper = new AssetTypeHelper();
 		requestAssetType = assetTypeHelper.getAssetTypeWithOneParameter(ParameterDataType.String);
 		responseAssetType = APITestUtil.getResponseObjForCreate(requestAssetType, microservice, environment, apiRequestHelper, assetTypeAPI, AssetType.class);
-		assetTypeId = APITestUtil.getElementId(responseAssetType.get_links().getSelfLink().getHref());
-		assetTypeParameterId = APITestUtil.getElementId(responseAssetType.getParameters().get(FIRST_ELEMENT).get_links().getSelfLink().getHref());
+		
+		assetTypeId = responseAssetType.getAssetTypeId();
+		assetTypeParameterId = responseAssetType.getParameters().get(FIRST_ELEMENT).getParameterId();
+		
 		idsForAllCreatedElements.add(assetTypeId);
 		serverResp = new ServerResponse();
 	}
@@ -59,12 +61,13 @@ public class UpdateAssetTypeParametersTest extends BaseTestSetupAndTearDown {
 	private String createAssetTypeWithAllParametersOnly() {
 		requestAssetType = assetTypeHelper.getAssetTypeWithAllParameters();
 		responseAssetType = APITestUtil.getResponseObjForCreate(requestAssetType, microservice, environment, apiRequestHelper, assetTypeAPI, AssetType.class);
-		String assetTypeIdLocal = APITestUtil.getElementId(responseAssetType.get_links().getSelfLink().getHref());
+		
+		String assetTypeIdLocal = responseAssetType.getAssetTypeId();
 		idsForAllCreatedElements.add(assetTypeIdLocal);
 		return assetTypeIdLocal;
 	}
 
-	// The following test cases go here:
+	// Matching test cases in Test Case Management (Jira/Zephyr):
 	// issuetype=Test and issue in (linkedIssues("RREHM-1192")) and issue in linkedIssues("RREHM-55")
 
 	/*
@@ -107,14 +110,15 @@ public class UpdateAssetTypeParametersTest extends BaseTestSetupAndTearDown {
 		}
 		requestAssetType.setParameters(existingAssetTypeParmaeters);
 		responseAssetType = APITestUtil.getResponseObjForCreate(requestAssetType, microservice, environment, apiRequestHelper, assetTypeAPI, AssetType.class);
-		String assetTypeIdLocal = APITestUtil.getElementId(responseAssetType.get_links().getSelfLink().getHref());
+		
+		String assetTypeIdLocal = responseAssetType.getAssetTypeId();
 		idsForAllCreatedElements.add(assetTypeIdLocal);
 
 		// Preparing the AssetTypeParameter for the update request
 		List<AssetTypeParameter> updateAssetTypeParameters = new ArrayList<AssetTypeParameter>();
 		for (AssetTypeParameter responseAssetTypeParameter : responseAssetType.getParameters()) {
 			if (!responseAssetTypeParameter.getDatatype().equals(ParameterDataType.String.toString())) {
-				responseAssetTypeParameter.setId(APITestUtil.getElementId(responseAssetTypeParameter.get_links().getSelfLink().getHref()));
+				responseAssetTypeParameter.setId(responseAssetTypeParameter.getParameterId());
 				responseAssetTypeParameter.set_links(null);
 				responseAssetTypeParameter.setAbbreviation("TRYTODUPLICATEME");
 				updateAssetTypeParameters.add(responseAssetTypeParameter);
@@ -156,7 +160,7 @@ public class UpdateAssetTypeParametersTest extends BaseTestSetupAndTearDown {
 
 		// Preparing the AssetTypeParameter for the update request
 		for (AssetTypeParameter responseAssetTypeParameter : responseAssetType.getParameters()) {
-			responseAssetTypeParameter.setId(APITestUtil.getElementId(responseAssetTypeParameter.get_links().getSelfLink().getHref()));
+			responseAssetTypeParameter.setId(responseAssetTypeParameter.getParameterId());
 			responseAssetTypeParameter.set_links(null);
 		}
 		responseAssetType.getParameters().get(FIRST_ELEMENT).setAbbreviation("NEWDUPLICATE");
@@ -226,7 +230,7 @@ public class UpdateAssetTypeParametersTest extends BaseTestSetupAndTearDown {
 		// Preparing the AssetTypeParameter for the update request
 		for (AssetTypeParameter responseAssetTypeParameter : responseAssetType.getParameters()) {
 			responseAssetTypeParameter.setAbbreviation(responseAssetTypeParameter.getAbbreviation() + "NEW");
-			responseAssetTypeParameter.setId(APITestUtil.getElementId(responseAssetTypeParameter.get_links().getSelfLink().getHref()));
+			responseAssetTypeParameter.setId(responseAssetTypeParameter.getParameterId());
 			responseAssetTypeParameter.set_links(null);
 		}
 
@@ -251,7 +255,7 @@ public class UpdateAssetTypeParametersTest extends BaseTestSetupAndTearDown {
 			responseAssetTypeParameter.setBaseuom(responseAssetTypeParameter.getBaseuom() + "NEW");
 			responseAssetTypeParameter.setDescription(responseAssetTypeParameter.getDescription() + "NEW");
 			responseAssetTypeParameter.setDatatype(ParameterDataType.Integer.toString());
-			responseAssetTypeParameter.setId(APITestUtil.getElementId(responseAssetTypeParameter.get_links().getSelfLink().getHref()));
+			responseAssetTypeParameter.setId(responseAssetTypeParameter.getParameterId());
 			responseAssetTypeParameter.set_links(null);
 		}
 
@@ -275,7 +279,7 @@ public class UpdateAssetTypeParametersTest extends BaseTestSetupAndTearDown {
 			// Preparing the AssetTypeParameter for the update request
 			for (AssetTypeParameter responseAssetTypeParameter : responseAssetType.getParameters()) {
 				responseAssetTypeParameter.setAbbreviation(specialChar + responseAssetTypeParameter.getAbbreviation());
-				responseAssetTypeParameter.setId(APITestUtil.getElementId(responseAssetTypeParameter.get_links().getSelfLink().getHref()));
+				responseAssetTypeParameter.setId(responseAssetTypeParameter.getParameterId());
 				responseAssetTypeParameter.set_links(null);
 			}
 
@@ -299,7 +303,7 @@ public class UpdateAssetTypeParametersTest extends BaseTestSetupAndTearDown {
 		// Preparing the AssetTypeParameter for the update request
 		for (AssetTypeParameter responseAssetTypeParameter : responseAssetType.getParameters()) {
 			responseAssetTypeParameter.setDescription("");
-			responseAssetTypeParameter.setId(APITestUtil.getElementId(responseAssetTypeParameter.get_links().getSelfLink().getHref()));
+			responseAssetTypeParameter.setId(responseAssetTypeParameter.getParameterId());
 			responseAssetTypeParameter.set_links(null);
 		}
 

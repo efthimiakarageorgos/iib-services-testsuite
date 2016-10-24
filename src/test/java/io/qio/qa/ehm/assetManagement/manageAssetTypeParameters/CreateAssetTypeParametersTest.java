@@ -9,7 +9,9 @@ import java.util.List;
 
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.AfterClass;
 import org.junit.Test;
+import org.junit.Ignore;
 
 import io.qio.qa.ehm.common.BaseTestSetupAndTearDown;
 import io.qio.qa.lib.ehm.apiHelpers.assetType.MAssetTypeAPIHelper;
@@ -44,18 +46,19 @@ public class CreateAssetTypeParametersTest extends BaseTestSetupAndTearDown {
 		assetTypeHelper = new AssetTypeHelper();
 		requestAssetType = assetTypeHelper.getAssetTypeWithOneParameter(ParameterDataType.String);
 		responseAssetType = APITestUtil.getResponseObjForCreate(requestAssetType, microservice, environment, apiRequestHelper, assetTypeAPI, AssetType.class);
-		assetTypeId = APITestUtil.getElementId(responseAssetType.get_links().getSelfLink().getHref());
-		assetTypeParameterId = APITestUtil.getElementId(responseAssetType.getParameters().get(FIRST_ELEMENT).get_links().getSelfLink().getHref());
+		
+		assetTypeId = responseAssetType.getAssetTypeId();
+		assetTypeParameterId = responseAssetType.getParameters().get(FIRST_ELEMENT).getParameterId();
 		idsForAllCreatedElements.add(assetTypeId);
 		serverResp = new ServerResponse();
 	}
 
-//	@AfterClass
-//	public static void cleanUpAfterAllTests() {
-//		baseCleanUpAfterAllTests(assetTypeAPI);
-//	}
+	@AfterClass
+	public static void cleanUpAfterAllTests() {
+		baseCleanUpAfterAllTests(assetTypeAPI);
+	}
 
-	// The following test cases go here:
+	// Matching test cases in Test Case Management (Jira/Zephyr):
 	// issuetype=Test and issue in (linkedIssues("RREHM-1192")) and issue in linkedIssues("RREHM-901")
 
 	/*
@@ -112,7 +115,7 @@ public class CreateAssetTypeParametersTest extends BaseTestSetupAndTearDown {
 	}
 
 	// RREHM-932 ()
-	@Test
+	@Ignore
 	public void shouldNotBeAllowedToAddNewParameterWhenItsBaseuomIsBlank() {
 
 		List<AssetTypeParameter> existingAssetTypeParameters = requestAssetType.getParameters();
@@ -191,7 +194,7 @@ public class CreateAssetTypeParametersTest extends BaseTestSetupAndTearDown {
 	}
 
 	// RREHM-1098 ()
-	@Test
+	@Ignore
 	public void shouldNotBeAllowedToAddNewParameterWhenItsDatatypeIsInvalid() {
 
 		List<AssetTypeParameter> existingAssetTypeParameters = requestAssetType.getParameters();
@@ -239,7 +242,7 @@ public class CreateAssetTypeParametersTest extends BaseTestSetupAndTearDown {
 		 AssetType requestAssetTypeContainingSameParameterAsAnotherExistingAssetType = assetTypeHelper.getAssetTypeWithNoAttributesAndParameters();
 		 AssetType responseAssetTypeContainingSameParameterAsAnotherExistingAssetType = APITestUtil.getResponseObjForCreate(requestAssetTypeContainingSameParameterAsAnotherExistingAssetType, microservice, environment, apiRequestHelper, assetTypeAPI, AssetType.class); 
 		 
-		 String assetTypeIdForNewlyCreatedAssetType = APITestUtil.getElementId(responseAssetTypeContainingSameParameterAsAnotherExistingAssetType.get_links().getSelfLink().getHref());
+		 String assetTypeIdForNewlyCreatedAssetType = responseAssetTypeContainingSameParameterAsAnotherExistingAssetType.getAssetTypeId();
 		 idsForAllCreatedElements.add(assetTypeIdForNewlyCreatedAssetType);
 	
 		 requestAssetTypeContainingSameParameterAsAnotherExistingAssetType.setParameters(new ArrayList<AssetTypeParameter>() {
