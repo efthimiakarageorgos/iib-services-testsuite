@@ -52,7 +52,6 @@ public class CreateTenantsTest extends BaseTestSetupAndTearDown {
 	@Before
 	public void initSetupBeforeEveryTest() {
 		tenantHelper = new TenantHelper();
-		requestTenant = new Tenant();
 		requestTenant = tenantHelper.getTenant();
 		responseTenant = new Tenant();
 		serverResp = new ServerResponse();
