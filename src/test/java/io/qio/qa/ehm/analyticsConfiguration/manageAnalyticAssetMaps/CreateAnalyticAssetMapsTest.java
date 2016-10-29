@@ -16,6 +16,9 @@ import io.qio.qa.lib.ehm.model.analyticAssetMap.AssetTemplateModelAttribute;
 import io.qio.qa.lib.ehm.model.analyticAssetMap.helper.AnalyticAssetMapHelper;
 import io.qio.qa.lib.ehm.model.asset.AssetResponse;
 import io.qio.qa.lib.exception.ServerResponse;
+import io.qio.qa.lib.common.MAbstractAPIHelper;
+import io.qio.qa.lib.common.BaseHelper;
+
 import org.apache.log4j.Logger;
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;
@@ -78,8 +81,8 @@ public class CreateAnalyticAssetMapsTest extends BaseTestSetupAndTearDown {
 		requestAnalyticAssetMap.setAsset("NonExistentId");
 		requestAnalyticAssetMap.setAnalytic(AnalyticsUtil.analyticIdForAnalyticAssetMapTests);
 
-		// TODO: JEET: Response Body makes the below call fail: [{"logref":"error","message":"Invalid Asset id in the request","links":[]}]
-		serverResp = APITestUtil.getResponseObjForCreate(requestAnalyticAssetMap, microservice, environment, apiRequestHelper, analyticAssetMapAPI, ServerResponse.class);
+		// TODO: Response Body makes the below call fail: [{"logref":"error","message":"Invalid Asset id in the request","links":[]}]
+		serverResp = MAbstractAPIHelper.getResponseObjForCreate(requestAnalyticAssetMap, microservice, environment, apiRequestHelper, analyticAssetMapAPI, ServerResponse.class);
 		// CustomAssertions.assertServerError(404, "xxxx", "Invalid Asset id in the request", serverResp);
 	}
 
@@ -92,7 +95,7 @@ public class CreateAnalyticAssetMapsTest extends BaseTestSetupAndTearDown {
 		requestAnalyticAssetMap.setAnalytic(AnalyticsUtil.analyticIdForAnalyticAssetMapTests);
 
 		// TODO: JEET: Response Body makes the below call fail: [{"logref":"error","message":"Invalid Asset id in the request","links":[]}]
-		serverResp = APITestUtil.getResponseObjForCreate(requestAnalyticAssetMap, microservice, environment, apiRequestHelper, analyticAssetMapAPI, ServerResponse.class);
+		serverResp = MAbstractAPIHelper.getResponseObjForCreate(requestAnalyticAssetMap, microservice, environment, apiRequestHelper, analyticAssetMapAPI, ServerResponse.class);
 		// CustomAssertions.assertServerError(404, "xxxx", "Invalid Asset id in the request", serverResp);
 	}
 	
@@ -105,7 +108,7 @@ public class CreateAnalyticAssetMapsTest extends BaseTestSetupAndTearDown {
 		requestAnalyticAssetMap.setAnalytic("572bbadb13b38458022a33e6"); // Non existent but valid id format
 
 		// TODO: JEET: Response Body makes the below call fail: [{"logref":"error","message":"Analytic 572bbadb13b38458022a33e6 not found.","links":[]}]
-		serverResp = APITestUtil.getResponseObjForCreate(requestAnalyticAssetMap, microservice, environment, apiRequestHelper, analyticAssetMapAPI, ServerResponse.class);
+		serverResp = MAbstractAPIHelper.getResponseObjForCreate(requestAnalyticAssetMap, microservice, environment, apiRequestHelper, analyticAssetMapAPI, ServerResponse.class);
 		// CustomAssertions.assertServerError(404, "xxxx", "Analytic 572bbadb13b38458022a33e6 not found.", serverResp);
 	}
 	
@@ -117,7 +120,7 @@ public class CreateAnalyticAssetMapsTest extends BaseTestSetupAndTearDown {
 		requestAnalyticAssetMap.setAsset(assetId); // Non existent but valid id format
 		requestAnalyticAssetMap.setAnalytic("NonExistentId"); // Non existent non valid id format
 
-		serverResp = APITestUtil.getResponseObjForCreate(requestAnalyticAssetMap, microservice, environment, apiRequestHelper, analyticAssetMapAPI, ServerResponse.class);
+		serverResp = MAbstractAPIHelper.getResponseObjForCreate(requestAnalyticAssetMap, microservice, environment, apiRequestHelper, analyticAssetMapAPI, ServerResponse.class);
 		CustomAssertions.assertServerError(500, "java.lang.IllegalArgumentException", "invalid ObjectId [NonExistentId]", serverResp);
 	}
 	
@@ -132,7 +135,7 @@ public class CreateAnalyticAssetMapsTest extends BaseTestSetupAndTearDown {
 		String analyticAttribute = requestAnalyticAssetMap.getAssetTemplateModelAttributes().get(FIRST_ELEMENT).getAnalyticAttribute();
 		requestAnalyticAssetMap.getAssetTemplateModelAttributes().get(FIRST_ELEMENT).setAssetTypeAttribute(analyticAttribute);
 		
-		serverResp = APITestUtil.getResponseObjForCreate(requestAnalyticAssetMap, microservice, environment, apiRequestHelper, analyticAssetMapAPI, ServerResponse.class);
+		serverResp = MAbstractAPIHelper.getResponseObjForCreate(requestAnalyticAssetMap, microservice, environment, apiRequestHelper, analyticAssetMapAPI, ServerResponse.class);
 		CustomAssertions.assertServerError(400, "org.springframework.http.converter.HttpMessageNotReadableException", "TODO", serverResp);
 	}
 	
@@ -148,7 +151,7 @@ public class CreateAnalyticAssetMapsTest extends BaseTestSetupAndTearDown {
 
 		requestAnalyticAssetMap.getAssetTemplateModelAttributes().get(FIRST_ELEMENT).setAnalyticAttribute(assetTypeAttribute);
 		
-		serverResp = APITestUtil.getResponseObjForCreate(requestAnalyticAssetMap, microservice, environment, apiRequestHelper, analyticAssetMapAPI, ServerResponse.class);
+		serverResp = MAbstractAPIHelper.getResponseObjForCreate(requestAnalyticAssetMap, microservice, environment, apiRequestHelper, analyticAssetMapAPI, ServerResponse.class);
 		CustomAssertions.assertServerError(400, "org.springframework.http.converter.HttpMessageNotReadableException", "TODO", serverResp);
 	}
 	
@@ -163,7 +166,7 @@ public class CreateAnalyticAssetMapsTest extends BaseTestSetupAndTearDown {
 		String assetTypeParameter = requestAnalyticAssetMap.getAnalyticInputParameters().get(FIRST_ELEMENT).getAssetTypeParameter();
 		requestAnalyticAssetMap.getAnalyticInputParameters().get(FIRST_ELEMENT).setAnalyticInput(assetTypeParameter);
 		
-		serverResp = APITestUtil.getResponseObjForCreate(requestAnalyticAssetMap, microservice, environment, apiRequestHelper, analyticAssetMapAPI, ServerResponse.class);
+		serverResp = MAbstractAPIHelper.getResponseObjForCreate(requestAnalyticAssetMap, microservice, environment, apiRequestHelper, analyticAssetMapAPI, ServerResponse.class);
 		//CustomAssertions.assertServerError(400, "DONOTKNOWYET", "TODO", serverResp);
 	}
 	
@@ -178,7 +181,7 @@ public class CreateAnalyticAssetMapsTest extends BaseTestSetupAndTearDown {
 		String analyticParameter = requestAnalyticAssetMap.getAnalyticInputParameters().get(FIRST_ELEMENT).getAnalyticInput();
 		requestAnalyticAssetMap.getAnalyticInputParameters().get(FIRST_ELEMENT).setAssetTypeParameter(analyticParameter);
 		
-		serverResp = APITestUtil.getResponseObjForCreate(requestAnalyticAssetMap, microservice, environment, apiRequestHelper, analyticAssetMapAPI, ServerResponse.class);
+		serverResp = MAbstractAPIHelper.getResponseObjForCreate(requestAnalyticAssetMap, microservice, environment, apiRequestHelper, analyticAssetMapAPI, ServerResponse.class);
 		//CustomAssertions.assertServerError(400, "DONOTKNOWYET", "TODO", serverResp);
 	}
 	
@@ -203,12 +206,12 @@ public class CreateAnalyticAssetMapsTest extends BaseTestSetupAndTearDown {
 		requestAnalyticAssetMap.setAsset(assetId);
 		requestAnalyticAssetMap.setAnalytic(AnalyticsUtil.analyticIdForAnalyticAssetMapTests);
 
-		responseAnalyticAssetMap = APITestUtil.getResponseObjForCreate(requestAnalyticAssetMap, microservice, environment, apiRequestHelper, analyticAssetMapAPI, AnalyticAssetMap.class);
+		responseAnalyticAssetMap = MAbstractAPIHelper.getResponseObjForCreate(requestAnalyticAssetMap, microservice, environment, apiRequestHelper, analyticAssetMapAPI, AnalyticAssetMap.class);
 
-		String analyticAssetMapId = APITestUtil.getElementId(responseAnalyticAssetMap.get_links().getSelfLink().getHref());
+		String analyticAssetMapId = BaseHelper.getElementId(responseAnalyticAssetMap.get_links().getSelfLink().getHref());
 		idsForAllCreatedElements.add(analyticAssetMapId);
 
-		AnalyticAssetMap committedAnalyticAssetMap = APITestUtil.getResponseObjForRetrieve(microservice, environment, analyticAssetMapId, apiRequestHelper, analyticAssetMapAPI, AnalyticAssetMap.class);
+		AnalyticAssetMap committedAnalyticAssetMap = MAbstractAPIHelper.getResponseObjForRetrieve(microservice, environment, analyticAssetMapId, apiRequestHelper, analyticAssetMapAPI, AnalyticAssetMap.class);
 		CustomAssertions.assertRequestAndResponseObj(responseAnalyticAssetMap, committedAnalyticAssetMap);
 	}
 	
@@ -220,12 +223,12 @@ public class CreateAnalyticAssetMapsTest extends BaseTestSetupAndTearDown {
 		requestAnalyticAssetMap.setAsset(assetId);
 		requestAnalyticAssetMap.setAnalytic(AnalyticsUtil.analyticIdForAnalyticAssetMapTests);
 
-		responseAnalyticAssetMap = APITestUtil.getResponseObjForCreate(requestAnalyticAssetMap, microservice, environment, apiRequestHelper, analyticAssetMapAPI, AnalyticAssetMap.class);
+		responseAnalyticAssetMap = MAbstractAPIHelper.getResponseObjForCreate(requestAnalyticAssetMap, microservice, environment, apiRequestHelper, analyticAssetMapAPI, AnalyticAssetMap.class);
 
-		String analyticAssetMapId = APITestUtil.getElementId(responseAnalyticAssetMap.get_links().getSelfLink().getHref());
+		String analyticAssetMapId = BaseHelper.getElementId(responseAnalyticAssetMap.get_links().getSelfLink().getHref());
 		idsForAllCreatedElements.add(analyticAssetMapId);
 
-		AnalyticAssetMap committedAnalyticAssetMap = APITestUtil.getResponseObjForRetrieve(microservice, environment, analyticAssetMapId, apiRequestHelper, analyticAssetMapAPI, AnalyticAssetMap.class);
+		AnalyticAssetMap committedAnalyticAssetMap = MAbstractAPIHelper.getResponseObjForRetrieve(microservice, environment, analyticAssetMapId, apiRequestHelper, analyticAssetMapAPI, AnalyticAssetMap.class);
 		CustomAssertions.assertRequestAndResponseObj(responseAnalyticAssetMap, committedAnalyticAssetMap);
 	}
 	
@@ -246,12 +249,12 @@ public class CreateAnalyticAssetMapsTest extends BaseTestSetupAndTearDown {
 		assetTemplateModelAttribute.get(0).setValue("0.5");
 		requestAnalyticAssetMap.setAssetTemplateModelAttributes(assetTemplateModelAttribute);
 
-		responseAnalyticAssetMap = APITestUtil.getResponseObjForCreate(requestAnalyticAssetMap, microservice, environment, apiRequestHelper, analyticAssetMapAPI, AnalyticAssetMap.class);
+		responseAnalyticAssetMap = MAbstractAPIHelper.getResponseObjForCreate(requestAnalyticAssetMap, microservice, environment, apiRequestHelper, analyticAssetMapAPI, AnalyticAssetMap.class);
 				
-		String analyticAssetMapId = APITestUtil.getElementId(responseAnalyticAssetMap.get_links().getSelfLink().getHref());
+		String analyticAssetMapId = BaseHelper.getElementId(responseAnalyticAssetMap.get_links().getSelfLink().getHref());
 		//idsForAllCreatedElements.add(analyticAssetMapId);
 
-		AnalyticAssetMap committedAnalyticAssetMap = APITestUtil.getResponseObjForRetrieve(microservice, environment, analyticAssetMapId, apiRequestHelper, analyticAssetMapAPI, AnalyticAssetMap.class);
+		AnalyticAssetMap committedAnalyticAssetMap = MAbstractAPIHelper.getResponseObjForRetrieve(microservice, environment, analyticAssetMapId, apiRequestHelper, analyticAssetMapAPI, AnalyticAssetMap.class);
 		CustomAssertions.assertRequestAndResponseObj(responseAnalyticAssetMap, committedAnalyticAssetMap);
 	}
 }

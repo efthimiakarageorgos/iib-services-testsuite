@@ -290,7 +290,7 @@ public class CreateActivityTypesTest extends BaseTestSetupAndTearDown {
 		String activityTypeNonUniqueNameId = responseActivityTypeNonUniqueName.getActivityTypeId();
 		idsForAllCreatedElements.add(activityTypeNonUniqueNameId);
 
-		ActivityType committedActivityType = APITestUtil.getResponseObjForRetrieve(microservice, environment, activityTypeNonUniqueNameId, apiRequestHelper, activityTypeAPI, ActivityType.class);
+		ActivityType committedActivityType = MAbstractAPIHelper.getResponseObjForRetrieve(microservice, environment, activityTypeNonUniqueNameId, apiRequestHelper, activityTypeAPI, ActivityType.class);
 
 		CustomAssertions.assertRequestAndResponseObj(responseActivityTypeNonUniqueName, committedActivityType);
 	}
