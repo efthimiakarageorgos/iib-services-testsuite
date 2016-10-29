@@ -18,6 +18,8 @@ import io.qio.qa.lib.ehm.model.insight.insightType.helper.InsightTypeHelper;
 import io.qio.qa.lib.ehm.common.APITestUtil;
 import io.qio.qa.lib.assertions.CustomAssertions;
 import io.qio.qa.lib.exception.ServerResponse;
+import io.qio.qa.lib.common.MAbstractAPIHelper;
+import io.qio.qa.lib.common.BaseHelper;
 
 public class CreateInsightTypesTest extends BaseTestSetupAndTearDown {
 
@@ -65,14 +67,14 @@ public class CreateInsightTypesTest extends BaseTestSetupAndTearDown {
 	// RREHM-516 (InsightType has non unique abbreviation)
 	@Test
 	public void shouldNotCreateInsightTypeWhenAbbrIsNotUnique() {
-		responseInsightType = APITestUtil.getResponseObjForCreate(requestInsightType, microservice, environment, apiRequestHelper, insightTypeAPI, InsightType.class);
-		String insightTypeId = APITestUtil.getElementId(responseInsightType.get_links().getSelfLink().getHref());
+		responseInsightType = MAbstractAPIHelper.getResponseObjForCreate(requestInsightType, microservice, environment, apiRequestHelper, insightTypeAPI, InsightType.class);
+		String insightTypeId = BaseHelper.getElementId(responseInsightType.get_links().getSelfLink().getHref());
 		idsForAllCreatedElements.add(insightTypeId);
 
 		logger.info("AAA " + insightTypeId);
 		InsightType requestInsightTypeWithSameAbbr = insightTypeHelper.getInsightTypeWithNoAttributes();
 		requestInsightTypeWithSameAbbr.setAbbreviation(requestInsightType.getAbbreviation());
-		serverResp = APITestUtil.getResponseObjForCreate(requestInsightTypeWithSameAbbr, microservice, environment, apiRequestHelper, insightTypeAPI, ServerResponse.class);
+		serverResp = MAbstractAPIHelper.getResponseObjForCreate(requestInsightTypeWithSameAbbr, microservice, environment, apiRequestHelper, insightTypeAPI, ServerResponse.class);
 
 		CustomAssertions.assertServerError(409, null, "Insight type creation failed as another insight type has same abbreviation.", serverResp);
 	}
@@ -83,7 +85,7 @@ public class CreateInsightTypesTest extends BaseTestSetupAndTearDown {
 		String abbr = requestInsightType.getAbbreviation();
 		requestInsightType.setAbbreviation("Abrr has a space" + abbr);
 
-		serverResp = APITestUtil.getResponseObjForCreate(requestInsightType, microservice, environment, apiRequestHelper, insightTypeAPI, ServerResponse.class);
+		serverResp = MAbstractAPIHelper.getResponseObjForCreate(requestInsightType, microservice, environment, apiRequestHelper, insightTypeAPI, ServerResponse.class);
 
 		CustomAssertions.assertServerError(400, null, "Abbreviation should not have Space or Tab", serverResp);
 	}
@@ -93,7 +95,7 @@ public class CreateInsightTypesTest extends BaseTestSetupAndTearDown {
 	public void shouldNotCreateInsightTypeWhenAbbreviationIsLongerThan50Chars() {
 		requestInsightType.setAbbreviation(APITestUtil.FIFTYONE_CHARS);
 
-		serverResp = APITestUtil.getResponseObjForCreate(requestInsightType, microservice, environment, apiRequestHelper, insightTypeAPI, ServerResponse.class);
+		serverResp = MAbstractAPIHelper.getResponseObjForCreate(requestInsightType, microservice, environment, apiRequestHelper, insightTypeAPI, ServerResponse.class);
 
 		CustomAssertions.assertServerError(400, null, "Abbreviation should be less than 50 characters", serverResp);
 	}
@@ -103,7 +105,7 @@ public class CreateInsightTypesTest extends BaseTestSetupAndTearDown {
 	public void shouldNotCreateInsightTypeWhenAbbreviationIsBlank() {
 		requestInsightType.setAbbreviation("");
 
-		serverResp = APITestUtil.getResponseObjForCreate(requestInsightType, microservice, environment, apiRequestHelper, insightTypeAPI, ServerResponse.class);
+		serverResp = MAbstractAPIHelper.getResponseObjForCreate(requestInsightType, microservice, environment, apiRequestHelper, insightTypeAPI, ServerResponse.class);
 
 		CustomAssertions.assertServerError(400, null, "Abbreviation is mandatory, should be less than 50 characters and no special characters are allowed.", serverResp);
 	}
@@ -113,7 +115,7 @@ public class CreateInsightTypesTest extends BaseTestSetupAndTearDown {
 	public void shouldNotCreateInsightTypeWhenAbbreviationIsNull() {
 		requestInsightType.setAbbreviation(null);
 
-		serverResp = APITestUtil.getResponseObjForCreate(requestInsightType, microservice, environment, apiRequestHelper, insightTypeAPI, ServerResponse.class);
+		serverResp = MAbstractAPIHelper.getResponseObjForCreate(requestInsightType, microservice, environment, apiRequestHelper, insightTypeAPI, ServerResponse.class);
 
 		CustomAssertions.assertServerError(400, null, "Abbreviation is mandatory, should be less than 50 characters and no special characters are allowed.", serverResp);
 	}
@@ -127,7 +129,7 @@ public class CreateInsightTypesTest extends BaseTestSetupAndTearDown {
 		for (int i = 0; i < count; i++) {
 			requestInsightType.setAbbreviation(APITestUtil.SPECIAL_CHARS.charAt(i) + defaultAbbr);
 
-			serverResp = APITestUtil.getResponseObjForCreate(requestInsightType, microservice, environment, apiRequestHelper, insightTypeAPI, ServerResponse.class);
+			serverResp = MAbstractAPIHelper.getResponseObjForCreate(requestInsightType, microservice, environment, apiRequestHelper, insightTypeAPI, ServerResponse.class);
 
 			CustomAssertions.assertServerError(400, null, "Abbreviation should not have special character except '.', '-', '_' ", serverResp);
 		}
@@ -138,7 +140,7 @@ public class CreateInsightTypesTest extends BaseTestSetupAndTearDown {
 	public void shouldNotCreateInsightTypeWhenNameIsBlank() {
 		requestInsightType.setName("");
 
-		serverResp = APITestUtil.getResponseObjForCreate(requestInsightType, microservice, environment, apiRequestHelper, insightTypeAPI, ServerResponse.class);
+		serverResp = MAbstractAPIHelper.getResponseObjForCreate(requestInsightType, microservice, environment, apiRequestHelper, insightTypeAPI, ServerResponse.class);
 
 		CustomAssertions.assertServerError(400, null, "Insight name is required, should be less than 255 char", serverResp);
 	}
@@ -148,7 +150,7 @@ public class CreateInsightTypesTest extends BaseTestSetupAndTearDown {
 	public void shouldNotCreateInsightTypeWhenNameIsNull() {
 		requestInsightType.setName(null);
 
-		serverResp = APITestUtil.getResponseObjForCreate(requestInsightType, microservice, environment, apiRequestHelper, insightTypeAPI, ServerResponse.class);
+		serverResp = MAbstractAPIHelper.getResponseObjForCreate(requestInsightType, microservice, environment, apiRequestHelper, insightTypeAPI, ServerResponse.class);
 
 		CustomAssertions.assertServerError(400, null, "Insight name is required, should be less than 255 char", serverResp);
 	}
@@ -158,7 +160,7 @@ public class CreateInsightTypesTest extends BaseTestSetupAndTearDown {
 	public void shouldNotCreateInsightTypeWhenDescriptionIsBlank() {
 		requestInsightType.setDescription("");
 
-		serverResp = APITestUtil.getResponseObjForCreate(requestInsightType, microservice, environment, apiRequestHelper, insightTypeAPI, ServerResponse.class);
+		serverResp = MAbstractAPIHelper.getResponseObjForCreate(requestInsightType, microservice, environment, apiRequestHelper, insightTypeAPI, ServerResponse.class);
 
 		CustomAssertions.assertServerError(400, null, "Description is mandatory, should be of reasonable length.", serverResp);
 	}
@@ -168,7 +170,7 @@ public class CreateInsightTypesTest extends BaseTestSetupAndTearDown {
 	public void shouldNotCreateInsightTypeWhenNameIsLongerThan50Chars() {
 		requestInsightType.setName(APITestUtil.TWOFIFTYSIX_CHARS);
 
-		serverResp = APITestUtil.getResponseObjForCreate(requestInsightType, microservice, environment, apiRequestHelper, insightTypeAPI, ServerResponse.class);
+		serverResp = MAbstractAPIHelper.getResponseObjForCreate(requestInsightType, microservice, environment, apiRequestHelper, insightTypeAPI, ServerResponse.class);
 
 		CustomAssertions.assertServerError(400, null, "Insight name should be less than 255 characters", serverResp);
 	}

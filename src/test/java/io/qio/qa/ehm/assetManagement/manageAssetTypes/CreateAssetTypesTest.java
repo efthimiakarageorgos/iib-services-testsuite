@@ -17,6 +17,7 @@ import io.qio.qa.lib.ehm.model.assetType.helper.AssetTypeHelper;
 import io.qio.qa.lib.ehm.common.APITestUtil;
 import io.qio.qa.lib.assertions.CustomAssertions;
 import io.qio.qa.lib.exception.ServerResponse;
+import io.qio.qa.lib.common.MAbstractAPIHelper;
 
 public class CreateAssetTypesTest extends BaseTestSetupAndTearDown {
 
@@ -58,11 +59,11 @@ public class CreateAssetTypesTest extends BaseTestSetupAndTearDown {
 	// RREHM-383 (AssetType abbreviation is not unique)
 	@Test
 	public void shouldNotCreateAssetTypeWhenAbbrIsNotUnique() {
-		responseAssetType = APITestUtil.getResponseObjForCreate(requestAssetType, microservice, environment, apiRequestHelper, assetTypeAPI, AssetType.class);
+		responseAssetType = MAbstractAPIHelper.getResponseObjForCreate(requestAssetType, microservice, environment, apiRequestHelper, assetTypeAPI, AssetType.class);
 
 		AssetType requestAssetTypeWithSameAbbr = assetTypeHelper.getAssetTypeWithNoAttributesAndParameters();
 		requestAssetTypeWithSameAbbr.setAbbreviation(requestAssetType.getAbbreviation());
-		serverResp = APITestUtil.getResponseObjForCreate(requestAssetTypeWithSameAbbr, microservice, environment, apiRequestHelper, assetTypeAPI, ServerResponse.class);
+		serverResp = MAbstractAPIHelper.getResponseObjForCreate(requestAssetTypeWithSameAbbr, microservice, environment, apiRequestHelper, assetTypeAPI, ServerResponse.class);
 
 		CustomAssertions.assertServerError(500, "org.springframework.dao.DuplicateKeyException", serverResp);
 	}
@@ -75,7 +76,7 @@ public class CreateAssetTypesTest extends BaseTestSetupAndTearDown {
 		String abbr = requestAssetType.getAbbreviation();
 		requestAssetType.setAbbreviation("Abrr has a space" + abbr);
 
-		serverResp = APITestUtil.getResponseObjForCreate(requestAssetType, microservice, environment, apiRequestHelper, assetTypeAPI, ServerResponse.class);
+		serverResp = MAbstractAPIHelper.getResponseObjForCreate(requestAssetType, microservice, environment, apiRequestHelper, assetTypeAPI, ServerResponse.class);
 
 		CustomAssertions.assertServerError(400, "com.qiotec.application.exceptions.InvalidInputException", "Asset Type Abbreviation must not contain Spaces", serverResp);
 	}
@@ -85,7 +86,7 @@ public class CreateAssetTypesTest extends BaseTestSetupAndTearDown {
 	public void shouldNotCreateAssetTypeWhenAbbreviationIsLongerThan50Chars() {
 		requestAssetType.setAbbreviation(APITestUtil.FIFTYONE_CHARS);
 
-		serverResp = APITestUtil.getResponseObjForCreate(requestAssetType, microservice, environment, apiRequestHelper, assetTypeAPI, ServerResponse.class);
+		serverResp = MAbstractAPIHelper.getResponseObjForCreate(requestAssetType, microservice, environment, apiRequestHelper, assetTypeAPI, ServerResponse.class);
 
 		CustomAssertions.assertServerError(400, "com.qiotec.application.exceptions.InvalidInputException", "Asset Type Abbreviation Should Less Than 50 Character", serverResp);
 	}
@@ -95,7 +96,7 @@ public class CreateAssetTypesTest extends BaseTestSetupAndTearDown {
 	public void shouldNotCreateAssetTypeWhenAbbreviationIsBlank() {
 		requestAssetType.setAbbreviation("");
 
-		serverResp = APITestUtil.getResponseObjForCreate(requestAssetType, microservice, environment, apiRequestHelper, assetTypeAPI, ServerResponse.class);
+		serverResp = MAbstractAPIHelper.getResponseObjForCreate(requestAssetType, microservice, environment, apiRequestHelper, assetTypeAPI, ServerResponse.class);
 
 		CustomAssertions.assertServerError(400, "com.qiotec.application.exceptions.InvalidInputException", "Asset type abbreviation is a required field", serverResp);
 	}
@@ -105,7 +106,7 @@ public class CreateAssetTypesTest extends BaseTestSetupAndTearDown {
 	public void shouldNotCreateAssetTypeWhenAbbreviationIsNull() {
 		requestAssetType.setAbbreviation(null);
 
-		serverResp = APITestUtil.getResponseObjForCreate(requestAssetType, microservice, environment, apiRequestHelper, assetTypeAPI, ServerResponse.class);
+		serverResp = MAbstractAPIHelper.getResponseObjForCreate(requestAssetType, microservice, environment, apiRequestHelper, assetTypeAPI, ServerResponse.class);
 
 		CustomAssertions.assertServerError(400, "com.qiotec.application.exceptions.InvalidInputException", "Asset type abbreviation is a required field", serverResp);
 	}
@@ -119,7 +120,7 @@ public class CreateAssetTypesTest extends BaseTestSetupAndTearDown {
 		for (int i = 0; i < count; i++) {
 			requestAssetType.setAbbreviation(APITestUtil.SPECIAL_CHARS.charAt(i) + defaultAbbr);
 
-			serverResp = APITestUtil.getResponseObjForCreate(requestAssetType, microservice, environment, apiRequestHelper, assetTypeAPI, ServerResponse.class);
+			serverResp = MAbstractAPIHelper.getResponseObjForCreate(requestAssetType, microservice, environment, apiRequestHelper, assetTypeAPI, ServerResponse.class);
 
 			CustomAssertions.assertServerError(400, "com.qiotec.application.exceptions.InvalidInputException", "Asset Type Abbreviation must not contain illegal characters", serverResp);
 		}
@@ -130,7 +131,7 @@ public class CreateAssetTypesTest extends BaseTestSetupAndTearDown {
 	public void shouldNotCreateAssetTypeWhenNameIsBlank() {
 		requestAssetType.setName("");
 
-		serverResp = APITestUtil.getResponseObjForCreate(requestAssetType, microservice, environment, apiRequestHelper, assetTypeAPI, ServerResponse.class);
+		serverResp = MAbstractAPIHelper.getResponseObjForCreate(requestAssetType, microservice, environment, apiRequestHelper, assetTypeAPI, ServerResponse.class);
 
 		CustomAssertions.assertServerError(400, "com.qiotec.application.exceptions.InvalidInputException", "Asset type name is a required field", serverResp);
 	}
@@ -140,7 +141,7 @@ public class CreateAssetTypesTest extends BaseTestSetupAndTearDown {
 	public void shouldNotCreateAssetTypeWhenNameIsNull() {
 		requestAssetType.setName(null);
 
-		serverResp = APITestUtil.getResponseObjForCreate(requestAssetType, microservice, environment, apiRequestHelper, assetTypeAPI, ServerResponse.class);
+		serverResp = MAbstractAPIHelper.getResponseObjForCreate(requestAssetType, microservice, environment, apiRequestHelper, assetTypeAPI, ServerResponse.class);
 
 		CustomAssertions.assertServerError(400, "com.qiotec.application.exceptions.InvalidInputException", "Asset type name is a required field", serverResp);
 	}
@@ -150,7 +151,7 @@ public class CreateAssetTypesTest extends BaseTestSetupAndTearDown {
 	public void shouldNotCreateAssetTypeWhenNameIsLongerThan50Chars() {
 		requestAssetType.setName(APITestUtil.FIFTYONE_CHARS);
 
-		serverResp = APITestUtil.getResponseObjForCreate(requestAssetType, microservice, environment, apiRequestHelper, assetTypeAPI, ServerResponse.class);
+		serverResp = MAbstractAPIHelper.getResponseObjForCreate(requestAssetType, microservice, environment, apiRequestHelper, assetTypeAPI, ServerResponse.class);
 
 		CustomAssertions.assertServerError(400, "com.qiotec.application.exceptions.InvalidInputException", "Asset Type Name should be less than 50 characters", serverResp);
 	}
@@ -160,7 +161,7 @@ public class CreateAssetTypesTest extends BaseTestSetupAndTearDown {
 	public void shouldNotCreateAssetTypeWhenDescriptionIsLongerThan255Chars() {
 		requestAssetType.setDescription(APITestUtil.TWOFIFTYSIX_CHARS);
 
-		serverResp = APITestUtil.getResponseObjForCreate(requestAssetType, microservice, environment, apiRequestHelper, assetTypeAPI, ServerResponse.class);
+		serverResp = MAbstractAPIHelper.getResponseObjForCreate(requestAssetType, microservice, environment, apiRequestHelper, assetTypeAPI, ServerResponse.class);
 
 		CustomAssertions.assertServerError(400, "com.qiotec.application.exceptions.InvalidInputException", "Asset Type Description should be less than 255 characters", serverResp);
 	}

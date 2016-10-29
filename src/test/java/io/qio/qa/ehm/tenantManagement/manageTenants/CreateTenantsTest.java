@@ -20,6 +20,8 @@ import io.qio.qa.lib.ehm.model.tenant.Tenant;
 import io.qio.qa.lib.ehm.model.tenant.helper.TenantHelper;
 import io.qio.qa.lib.ehm.model.userGroup.*;
 import io.qio.qa.lib.ehm.common.APITestUtil;
+import io.qio.qa.lib.common.MAbstractAPIHelper;
+import io.qio.qa.lib.common.BaseHelper;
 
 public class CreateTenantsTest extends BaseTestSetupAndTearDown {
 
@@ -76,12 +78,12 @@ public class CreateTenantsTest extends BaseTestSetupAndTearDown {
 	@Test
 	public void shouldNotCreateTenantWhenAbbreviationIsNotUnique() {
 		requestTenant2 = tenantHelper.getTenant();
-		serverResp = APITestUtil.getResponseObjForCreate(requestTenant2, microservice, environment, apiRequestHelper, tenantAPI, ServerResponse.class);
+		serverResp = MAbstractAPIHelper.getResponseObjForCreate(requestTenant2, microservice, environment, apiRequestHelper, tenantAPI, ServerResponse.class);
 		String tenantAbbr2 = requestTenant2.getAbbreviation();
 
 		// Setting Tenant abbreviation to be the same as the name of tenant2
 		requestTenant.setAbbreviation(tenantAbbr2);
-		serverResp = APITestUtil.getResponseObjForCreate(requestTenant, microservice, environment, apiRequestHelper, tenantAPI, ServerResponse.class);
+		serverResp = MAbstractAPIHelper.getResponseObjForCreate(requestTenant, microservice, environment, apiRequestHelper, tenantAPI, ServerResponse.class);
 
 		CustomAssertions.assertServerError(409, null, "Creating tenant failed, as another tenant has same abbreviation.", serverResp);
 		// GetTenant should not return two tenants with the same abbreviation
@@ -94,7 +96,7 @@ public class CreateTenantsTest extends BaseTestSetupAndTearDown {
 		String defaultAbbr = requestTenant.getAbbreviation();
 		requestTenant.setAbbreviation("Abbr has spaces" + defaultAbbr);
 
-		serverResp = APITestUtil.getResponseObjForCreate(requestTenant, microservice, environment, apiRequestHelper, tenantAPI, ServerResponse.class);
+		serverResp = MAbstractAPIHelper.getResponseObjForCreate(requestTenant, microservice, environment, apiRequestHelper, tenantAPI, ServerResponse.class);
 
 		CustomAssertions.assertServerError(400, null, "Abbreviation should not have Space or Tab.", serverResp);
 		// GetTenant should not return a tenant with Abbreviation as specified above
@@ -109,7 +111,7 @@ public class CreateTenantsTest extends BaseTestSetupAndTearDown {
 		requestTenant.setAbbreviation(null);
 		requestTenant.setName("ThisTenantShouldNotGetCreated" + defaultAbbr);
 
-		serverResp = APITestUtil.getResponseObjForCreate(requestTenant, microservice, environment, apiRequestHelper, tenantAPI, ServerResponse.class);
+		serverResp = MAbstractAPIHelper.getResponseObjForCreate(requestTenant, microservice, environment, apiRequestHelper, tenantAPI, ServerResponse.class);
 
 		CustomAssertions.assertServerError(400, null, "Abbreviation is required, should be less than 50 characters.", serverResp);
 		// GetTenant should not return a tenant with Name as specified above
@@ -124,7 +126,7 @@ public class CreateTenantsTest extends BaseTestSetupAndTearDown {
 		requestTenant.setAbbreviation("");
 		requestTenant.setName("ThisTenantShouldNotGetCreated" + defaultAbbr);
 
-		serverResp = APITestUtil.getResponseObjForCreate(requestTenant, microservice, environment, apiRequestHelper, tenantAPI, ServerResponse.class);
+		serverResp = MAbstractAPIHelper.getResponseObjForCreate(requestTenant, microservice, environment, apiRequestHelper, tenantAPI, ServerResponse.class);
 
 		CustomAssertions.assertServerError(400, null, "Abbreviation is required, should be less than 50 characters.", serverResp);
 		// GetTenant should not return a tenant with Name as specified above.
@@ -139,7 +141,7 @@ public class CreateTenantsTest extends BaseTestSetupAndTearDown {
 		requestTenant.setAbbreviation(APITestUtil.FIFTYONE_CHARS);
 		requestTenant.setName("ThisTenantShouldNotGetCreated" + defaultAbbr);
 
-		serverResp = APITestUtil.getResponseObjForCreate(requestTenant, microservice, environment, apiRequestHelper, tenantAPI, ServerResponse.class);
+		serverResp = MAbstractAPIHelper.getResponseObjForCreate(requestTenant, microservice, environment, apiRequestHelper, tenantAPI, ServerResponse.class);
 
 		CustomAssertions.assertServerError(400, null, "Abbreviation should be less than 50 characters.", serverResp);
 		// GetTenant should not return a tenant with abbr as specified above.
@@ -152,7 +154,7 @@ public class CreateTenantsTest extends BaseTestSetupAndTearDown {
 
 		requestTenant.setName("");
 
-		serverResp = APITestUtil.getResponseObjForCreate(requestTenant, microservice, environment, apiRequestHelper, tenantAPI, ServerResponse.class);
+		serverResp = MAbstractAPIHelper.getResponseObjForCreate(requestTenant, microservice, environment, apiRequestHelper, tenantAPI, ServerResponse.class);
 
 		CustomAssertions.assertServerError(400, null, "Tenant name is required, should be less than 255 characters.", serverResp);
 		// GetTenant should not return a tenant with Name equal to ""
@@ -164,7 +166,7 @@ public class CreateTenantsTest extends BaseTestSetupAndTearDown {
 
 		requestTenant.setName("");
 
-		serverResp = APITestUtil.getResponseObjForCreate(requestTenant, microservice, environment, apiRequestHelper, tenantAPI, ServerResponse.class);
+		serverResp = MAbstractAPIHelper.getResponseObjForCreate(requestTenant, microservice, environment, apiRequestHelper, tenantAPI, ServerResponse.class);
 
 		CustomAssertions.assertServerError(400, null, "Tenant name is required, should be less than 255 characters.", serverResp);
 		// GetTenant should not return a tenant with Name equal to null
@@ -177,7 +179,7 @@ public class CreateTenantsTest extends BaseTestSetupAndTearDown {
 
 		requestTenant.setName(APITestUtil.TWOFIFTYSIX_CHARS);
 
-		serverResp = APITestUtil.getResponseObjForCreate(requestTenant, microservice, environment, apiRequestHelper, tenantAPI, ServerResponse.class);
+		serverResp = MAbstractAPIHelper.getResponseObjForCreate(requestTenant, microservice, environment, apiRequestHelper, tenantAPI, ServerResponse.class);
 
 		CustomAssertions.assertServerError(400, null, "Tenant name should be less than 255 characters.", serverResp);
 		// GetTenant should not return a tenant with Name equal to name specified above
@@ -195,16 +197,16 @@ public class CreateTenantsTest extends BaseTestSetupAndTearDown {
 	@Test
 	public void shouldCreateTenantWithUniqueAbbr() {
 
-		responseTenant = APITestUtil.getResponseObjForCreate(requestTenant, microservice, environment, apiRequestHelper, tenantAPI, Tenant.class);
+		responseTenant = MAbstractAPIHelper.getResponseObjForCreate(requestTenant, microservice, environment, apiRequestHelper, tenantAPI, Tenant.class);
 		String tenantId = responseTenant.getTenantId();
-		Tenant committedTenant = APITestUtil.getResponseObjForRetrieve(microservice, environment, tenantId, apiRequestHelper, tenantAPI, Tenant.class);
+		Tenant committedTenant = MAbstractAPIHelper.getResponseObjForRetrieve(microservice, environment, tenantId, apiRequestHelper, tenantAPI, Tenant.class);
 		CustomAssertions.assertRequestAndResponseObj(responseTenant, committedTenant);
 		
 		//Assert that a group was created in IDM db for the tenant; the group name should be set to tenantId
 		//UserGroup committedGroups = APITestUtil.getResponseObjForRetrieve(oauthMicroservice, environment, tenantId, apiRequestHelper, groupAPI, UserGroup.class);
-		committedGroups = APITestUtil.getListResponseObjForRetrieveBySearch(oauthMicroservice, environment, "byName", tenantId, apiRequestHelper, groupAPI, UserGroup.class);
+		committedGroups = MAbstractAPIHelper.getListResponseObjForRetrieveBySearch(oauthMicroservice, environment, "byName", tenantId, apiRequestHelper, groupAPI, UserGroup.class);
 		UserGroup committedGroup =committedGroups.get(0);
-		String groupId = APITestUtil.getElementId(committedGroup.get_links().getSelfLink().getHref());
+		String groupId = BaseHelper.getElementId(committedGroup.get_links().getSelfLink().getHref());
 		
 		//TODO:
 		//Assert the groupId is not empty
@@ -220,9 +222,9 @@ public class CreateTenantsTest extends BaseTestSetupAndTearDown {
 		String defaultAbbr = requestTenant.getAbbreviation();
 		requestTenant.setAbbreviation(APITestUtil.SPECIAL_CHARS+defaultAbbr);
 		
-		responseTenant = APITestUtil.getResponseObjForCreate(requestTenant, microservice, environment, apiRequestHelper, tenantAPI, Tenant.class);
+		responseTenant = MAbstractAPIHelper.getResponseObjForCreate(requestTenant, microservice, environment, apiRequestHelper, tenantAPI, Tenant.class);
 		String tenantId = responseTenant.getTenantId();
-		Tenant committedTenant = APITestUtil.getResponseObjForRetrieve(microservice, environment, tenantId, apiRequestHelper, tenantAPI, Tenant.class);
+		Tenant committedTenant = MAbstractAPIHelper.getResponseObjForRetrieve(microservice, environment, tenantId, apiRequestHelper, tenantAPI, Tenant.class);
 		CustomAssertions.assertRequestAndResponseObj(responseTenant, committedTenant);
 		
 		//Cleanup
@@ -230,10 +232,10 @@ public class CreateTenantsTest extends BaseTestSetupAndTearDown {
 		
 		//Get the group created in IDM db for the tenant
 		//UserGroup committedGroups = APITestUtil.getResponseObjForRetrieve(oauthMicroservice, environment, tenantId, apiRequestHelper, groupAPI, UserGroup.class);
-		committedGroups = APITestUtil.getListResponseObjForRetrieveBySearch(oauthMicroservice, environment, "byNameLike", tenantId, apiRequestHelper, groupAPI, UserGroup.class);
+		committedGroups = MAbstractAPIHelper.getListResponseObjForRetrieveBySearch(oauthMicroservice, environment, "byNameLike", tenantId, apiRequestHelper, groupAPI, UserGroup.class);
 		UserGroup committedGroup =committedGroups.get(0);
 		
-		String groupId = APITestUtil.getElementId(committedGroup.get_links().getSelfLink().getHref());
+		String groupId = BaseHelper.getElementId(committedGroup.get_links().getSelfLink().getHref());
 		secondaryIdListForDeletion.add(groupId);
 	}
 

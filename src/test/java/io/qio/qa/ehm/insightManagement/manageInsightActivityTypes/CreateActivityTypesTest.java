@@ -18,6 +18,7 @@ import io.qio.qa.lib.ehm.model.insight.activityType.helper.ActivityTypeHelper;
 import io.qio.qa.lib.ehm.common.APITestUtil;
 import io.qio.qa.lib.assertions.CustomAssertions;
 import io.qio.qa.lib.exception.ServerResponse;
+import io.qio.qa.lib.common.MAbstractAPIHelper;
 
 public class CreateActivityTypesTest extends BaseTestSetupAndTearDown {
 
@@ -62,7 +63,7 @@ public class CreateActivityTypesTest extends BaseTestSetupAndTearDown {
 	public void shouldNotCreateActivityTypeWhenAbbrIsNotUnique() {
 		String defaultAbbr = requestActivityType.getAbbreviation();
 
-		responseActivityType = APITestUtil.getResponseObjForCreate(requestActivityType, microservice, environment, apiRequestHelper, activityTypeAPI, ActivityType.class);
+		responseActivityType = MAbstractAPIHelper.getResponseObjForCreate(requestActivityType, microservice, environment, apiRequestHelper, activityTypeAPI, ActivityType.class);
 		String activityTypeId = responseActivityType.getActivityTypeId();
 		idsForAllCreatedElements.add(activityTypeId);
 
@@ -70,7 +71,7 @@ public class CreateActivityTypesTest extends BaseTestSetupAndTearDown {
 		requestActivityTypeNonUnique = activityTypeHelper.getActivityType();
 		requestActivityTypeNonUnique.setAbbreviation(defaultAbbr);
 
-		serverResp = APITestUtil.getResponseObjForCreate(requestActivityTypeNonUnique, microservice, environment, apiRequestHelper, activityTypeAPI, ServerResponse.class);
+		serverResp = MAbstractAPIHelper.getResponseObjForCreate(requestActivityTypeNonUnique, microservice, environment, apiRequestHelper, activityTypeAPI, ServerResponse.class);
 		CustomAssertions.assertServerError(409, null, "Creating Activity Type failed as another activity has same abbreviation.", serverResp);
 	}
 
@@ -80,7 +81,7 @@ public class CreateActivityTypesTest extends BaseTestSetupAndTearDown {
 		String abbr = requestActivityType.getAbbreviation();
 		requestActivityType.setAbbreviation("Abrr has a space" + abbr);
 
-		serverResp = APITestUtil.getResponseObjForCreate(requestActivityType, microservice, environment, apiRequestHelper, activityTypeAPI, ServerResponse.class);
+		serverResp = MAbstractAPIHelper.getResponseObjForCreate(requestActivityType, microservice, environment, apiRequestHelper, activityTypeAPI, ServerResponse.class);
 
 		CustomAssertions.assertServerError(400, null, "Abbreviation should not have Space or Tab", serverResp);
 	}
@@ -90,7 +91,7 @@ public class CreateActivityTypesTest extends BaseTestSetupAndTearDown {
 	public void shouldNotCreateActivityTypeWhenAbbreviationIsLongerThan50Chars() {
 		requestActivityType.setAbbreviation(APITestUtil.FIFTYONE_CHARS);
 
-		serverResp = APITestUtil.getResponseObjForCreate(requestActivityType, microservice, environment, apiRequestHelper, activityTypeAPI, ServerResponse.class);
+		serverResp = MAbstractAPIHelper.getResponseObjForCreate(requestActivityType, microservice, environment, apiRequestHelper, activityTypeAPI, ServerResponse.class);
 
 		CustomAssertions.assertServerError(400, null, "Abbreviation should be less than 50 characters", serverResp);
 	}
@@ -100,7 +101,7 @@ public class CreateActivityTypesTest extends BaseTestSetupAndTearDown {
 	public void shouldNotCreateActivityTypeWhenAbbreviationIsBlank() {
 		requestActivityType.setAbbreviation("");
 
-		serverResp = APITestUtil.getResponseObjForCreate(requestActivityType, microservice, environment, apiRequestHelper, activityTypeAPI, ServerResponse.class);
+		serverResp = MAbstractAPIHelper.getResponseObjForCreate(requestActivityType, microservice, environment, apiRequestHelper, activityTypeAPI, ServerResponse.class);
 
 		CustomAssertions.assertServerError(400, null, "Abbreviation is mandatory, should be less than 50 characters and no special characters are allowed.", serverResp);
 	}
@@ -110,7 +111,7 @@ public class CreateActivityTypesTest extends BaseTestSetupAndTearDown {
 	public void shouldNotCreateActivityTypeWhenAbbreviationIsNull() {
 		requestActivityType.setAbbreviation(null);
 
-		serverResp = APITestUtil.getResponseObjForCreate(requestActivityType, microservice, environment, apiRequestHelper, activityTypeAPI, ServerResponse.class);
+		serverResp = MAbstractAPIHelper.getResponseObjForCreate(requestActivityType, microservice, environment, apiRequestHelper, activityTypeAPI, ServerResponse.class);
 
 		CustomAssertions.assertServerError(400, null, "Abbreviation is mandatory, should be less than 50 characters and no special characters are allowed.", serverResp);
 	}
@@ -124,7 +125,7 @@ public class CreateActivityTypesTest extends BaseTestSetupAndTearDown {
 			String origAbbr = requestActivityType.getAbbreviation();
 			requestActivityType.setAbbreviation(specialChar + origAbbr);
 
-			serverResp = APITestUtil.getResponseObjForCreate(requestActivityType, microservice, environment, apiRequestHelper, activityTypeAPI, ServerResponse.class);
+			serverResp = MAbstractAPIHelper.getResponseObjForCreate(requestActivityType, microservice, environment, apiRequestHelper, activityTypeAPI, ServerResponse.class);
 
 			CustomAssertions.assertServerError(400, null, "Abbreviation should not have special character except '.', '-', '_' ", serverResp);
 		}
@@ -135,7 +136,7 @@ public class CreateActivityTypesTest extends BaseTestSetupAndTearDown {
 	public void shouldNotCreateActivityTypeWhenNameIsBlank() {
 		requestActivityType.setActivityName("");
 
-		serverResp = APITestUtil.getResponseObjForCreate(requestActivityType, microservice, environment, apiRequestHelper, activityTypeAPI, ServerResponse.class);
+		serverResp = MAbstractAPIHelper.getResponseObjForCreate(requestActivityType, microservice, environment, apiRequestHelper, activityTypeAPI, ServerResponse.class);
 
 		CustomAssertions.assertServerError(400, null, "Name is mandatory, should be less than 255 characters.", serverResp);
 	}
@@ -145,7 +146,7 @@ public class CreateActivityTypesTest extends BaseTestSetupAndTearDown {
 	public void shouldNotCreateActivityTypeWhenNameIsNull() {
 		requestActivityType.setActivityName(null);
 
-		serverResp = APITestUtil.getResponseObjForCreate(requestActivityType, microservice, environment, apiRequestHelper, activityTypeAPI, ServerResponse.class);
+		serverResp = MAbstractAPIHelper.getResponseObjForCreate(requestActivityType, microservice, environment, apiRequestHelper, activityTypeAPI, ServerResponse.class);
 
 		CustomAssertions.assertServerError(400, null, "Name is mandatory, should be less than 255 characters.", serverResp);
 	}
@@ -155,7 +156,7 @@ public class CreateActivityTypesTest extends BaseTestSetupAndTearDown {
 	public void shouldNotCreateActivityTypeWhenNameIsLongerThan255Chars() {
 		requestActivityType.setActivityName(APITestUtil.TWOFIFTYSIX_CHARS);
 
-		serverResp = APITestUtil.getResponseObjForCreate(requestActivityType, microservice, environment, apiRequestHelper, activityTypeAPI, ServerResponse.class);
+		serverResp = MAbstractAPIHelper.getResponseObjForCreate(requestActivityType, microservice, environment, apiRequestHelper, activityTypeAPI, ServerResponse.class);
 
 		CustomAssertions.assertServerError(400, null, "Name should be less than 255 characters", serverResp);
 	}
@@ -165,7 +166,7 @@ public class CreateActivityTypesTest extends BaseTestSetupAndTearDown {
 	public void shouldNotCreateActivityTypeWhenDescIsNull() {
 		requestActivityType.setActivityDescription(null);
 
-		serverResp = APITestUtil.getResponseObjForCreate(requestActivityType, microservice, environment, apiRequestHelper, activityTypeAPI, ServerResponse.class);
+		serverResp = MAbstractAPIHelper.getResponseObjForCreate(requestActivityType, microservice, environment, apiRequestHelper, activityTypeAPI, ServerResponse.class);
 
 		CustomAssertions.assertServerError(400, null, "Description is mandatory, should be of reasonable length.", serverResp);
 	}
@@ -185,12 +186,12 @@ public class CreateActivityTypesTest extends BaseTestSetupAndTearDown {
 	@Test
 	public void shouldCreateActivityTypeWithUniqueAbbrWithMultiParagraphDesc() {
 		requestActivityType.setActivityDescription("A Desc \r\n new line \n\r new line");
-		responseActivityType = APITestUtil.getResponseObjForCreate(requestActivityType, microservice, environment, apiRequestHelper, activityTypeAPI, ActivityType.class);
+		responseActivityType = MAbstractAPIHelper.getResponseObjForCreate(requestActivityType, microservice, environment, apiRequestHelper, activityTypeAPI, ActivityType.class);
 
 		String activityTypeId = responseActivityType.getActivityTypeId();
 		idsForAllCreatedElements.add(activityTypeId);
 
-		ActivityType committedActivityType = APITestUtil.getResponseObjForRetrieve(microservice, environment, activityTypeId, apiRequestHelper, activityTypeAPI, ActivityType.class);
+		ActivityType committedActivityType = MAbstractAPIHelper.getResponseObjForRetrieve(microservice, environment, activityTypeId, apiRequestHelper, activityTypeAPI, ActivityType.class);
 		CustomAssertions.assertRequestAndResponseObj(responseActivityType, committedActivityType);
 	}
 
@@ -198,12 +199,12 @@ public class CreateActivityTypesTest extends BaseTestSetupAndTearDown {
 	@Test
 	public void shouldCreateActivityTypeWithUniqueAbbrWhenNameContainsSpecialChars() {
 		requestActivityType.setActivityName(APITestUtil.SPECIAL_CHARS);
-		responseActivityType = APITestUtil.getResponseObjForCreate(requestActivityType, microservice, environment, apiRequestHelper, activityTypeAPI, ActivityType.class);
+		responseActivityType = MAbstractAPIHelper.getResponseObjForCreate(requestActivityType, microservice, environment, apiRequestHelper, activityTypeAPI, ActivityType.class);
 
 		String activityTypeId = responseActivityType.getActivityTypeId();
 		idsForAllCreatedElements.add(activityTypeId);
 
-		ActivityType committedActivityType = APITestUtil.getResponseObjForRetrieve(microservice, environment, activityTypeId, apiRequestHelper, activityTypeAPI, ActivityType.class);
+		ActivityType committedActivityType = MAbstractAPIHelper.getResponseObjForRetrieve(microservice, environment, activityTypeId, apiRequestHelper, activityTypeAPI, ActivityType.class);
 		CustomAssertions.assertRequestAndResponseObj(responseActivityType, committedActivityType);
 	}
 
@@ -212,12 +213,12 @@ public class CreateActivityTypesTest extends BaseTestSetupAndTearDown {
 	public void shouldCreateActivityTypeWithUniqueAbbrWhenAbbrContainsDotDashUnderscore() {
 		String defaultAbbr = requestActivityType.getAbbreviation();
 		requestActivityType.setAbbreviation(".-_" + defaultAbbr);
-		responseActivityType = APITestUtil.getResponseObjForCreate(requestActivityType, microservice, environment, apiRequestHelper, activityTypeAPI, ActivityType.class);
+		responseActivityType = MAbstractAPIHelper.getResponseObjForCreate(requestActivityType, microservice, environment, apiRequestHelper, activityTypeAPI, ActivityType.class);
 
 		String activityTypeId = responseActivityType.getActivityTypeId();
 		idsForAllCreatedElements.add(activityTypeId);
 
-		ActivityType committedActivityType = APITestUtil.getResponseObjForRetrieve(microservice, environment, activityTypeId, apiRequestHelper, activityTypeAPI, ActivityType.class);
+		ActivityType committedActivityType = MAbstractAPIHelper.getResponseObjForRetrieve(microservice, environment, activityTypeId, apiRequestHelper, activityTypeAPI, ActivityType.class);
 		CustomAssertions.assertRequestAndResponseObj(responseActivityType, committedActivityType);
 	}
 
@@ -226,12 +227,12 @@ public class CreateActivityTypesTest extends BaseTestSetupAndTearDown {
 	public void shouldCreateActivityTypeWithUniqueAbbrWhenNameIs255CharsLong() {
 
 		requestActivityType.setActivityName(APITestUtil.TWOFIFTYFIVE_CHARS);
-		responseActivityType = APITestUtil.getResponseObjForCreate(requestActivityType, microservice, environment, apiRequestHelper, activityTypeAPI, ActivityType.class);
+		responseActivityType = MAbstractAPIHelper.getResponseObjForCreate(requestActivityType, microservice, environment, apiRequestHelper, activityTypeAPI, ActivityType.class);
 
 		String activityTypeId = responseActivityType.getActivityTypeId();
 		idsForAllCreatedElements.add(activityTypeId);
 
-		ActivityType committedActivityType = APITestUtil.getResponseObjForRetrieve(microservice, environment, activityTypeId, apiRequestHelper, activityTypeAPI, ActivityType.class);
+		ActivityType committedActivityType = MAbstractAPIHelper.getResponseObjForRetrieve(microservice, environment, activityTypeId, apiRequestHelper, activityTypeAPI, ActivityType.class);
 		CustomAssertions.assertRequestAndResponseObj(responseActivityType, committedActivityType);
 	}
 
@@ -245,12 +246,12 @@ public class CreateActivityTypesTest extends BaseTestSetupAndTearDown {
 		String partialFiftyChars = fiftyChars.substring(defaultAbbr.length());
 
 		requestActivityType.setAbbreviation(defaultAbbr + partialFiftyChars);
-		responseActivityType = APITestUtil.getResponseObjForCreate(requestActivityType, microservice, environment, apiRequestHelper, activityTypeAPI, ActivityType.class);
+		responseActivityType = MAbstractAPIHelper.getResponseObjForCreate(requestActivityType, microservice, environment, apiRequestHelper, activityTypeAPI, ActivityType.class);
 
 		String activityTypeId = responseActivityType.getActivityTypeId();
 		idsForAllCreatedElements.add(activityTypeId);
 
-		ActivityType committedActivityType = APITestUtil.getResponseObjForRetrieve(microservice, environment, activityTypeId, apiRequestHelper, activityTypeAPI, ActivityType.class);
+		ActivityType committedActivityType = MAbstractAPIHelper.getResponseObjForRetrieve(microservice, environment, activityTypeId, apiRequestHelper, activityTypeAPI, ActivityType.class);
 		CustomAssertions.assertRequestAndResponseObj(responseActivityType, committedActivityType);
 	}
 
@@ -260,12 +261,12 @@ public class CreateActivityTypesTest extends BaseTestSetupAndTearDown {
 	public void shouldCreateActivityTypeWithUniqueAbbrWhenDescContainsSpecialChars() {
 
 		requestActivityType.setActivityDescription(APITestUtil.SPECIAL_CHARS);
-		responseActivityType = APITestUtil.getResponseObjForCreate(requestActivityType, microservice, environment, apiRequestHelper, activityTypeAPI, ActivityType.class);
+		responseActivityType = MAbstractAPIHelper.getResponseObjForCreate(requestActivityType, microservice, environment, apiRequestHelper, activityTypeAPI, ActivityType.class);
 
 		String activityTypeId = responseActivityType.getActivityTypeId();
 		idsForAllCreatedElements.add(activityTypeId);
 
-		ActivityType committedActivityType = APITestUtil.getResponseObjForRetrieve(microservice, environment, activityTypeId, apiRequestHelper, activityTypeAPI, ActivityType.class);
+		ActivityType committedActivityType = MAbstractAPIHelper.getResponseObjForRetrieve(microservice, environment, activityTypeId, apiRequestHelper, activityTypeAPI, ActivityType.class);
 		CustomAssertions.assertRequestAndResponseObj(responseActivityType, committedActivityType);
 	}
 
@@ -277,14 +278,14 @@ public class CreateActivityTypesTest extends BaseTestSetupAndTearDown {
 		ActivityType requestActivityTypeNonUniqueName;
 
 		String defaultName = requestActivityType.getActivityName();
-		responseActivityType = APITestUtil.getResponseObjForCreate(requestActivityType, microservice, environment, apiRequestHelper, activityTypeAPI, ActivityType.class);
+		responseActivityType = MAbstractAPIHelper.getResponseObjForCreate(requestActivityType, microservice, environment, apiRequestHelper, activityTypeAPI, ActivityType.class);
 		String activityTypeId = responseActivityType.getActivityTypeId();
 		idsForAllCreatedElements.add(activityTypeId);
 
 		requestActivityTypeNonUniqueName = activityTypeHelper.getActivityType();
 		requestActivityTypeNonUniqueName.setActivityName(defaultName);
 
-		responseActivityTypeNonUniqueName = APITestUtil.getResponseObjForCreate(requestActivityTypeNonUniqueName, microservice, environment, apiRequestHelper, activityTypeAPI, ActivityType.class);
+		responseActivityTypeNonUniqueName = MAbstractAPIHelper.getResponseObjForCreate(requestActivityTypeNonUniqueName, microservice, environment, apiRequestHelper, activityTypeAPI, ActivityType.class);
 
 		String activityTypeNonUniqueNameId = responseActivityTypeNonUniqueName.getActivityTypeId();
 		idsForAllCreatedElements.add(activityTypeNonUniqueNameId);
@@ -298,12 +299,12 @@ public class CreateActivityTypesTest extends BaseTestSetupAndTearDown {
 	@Test
 	public void shouldCreateActivityTypeWithUniqueAbbr() {
 
-		responseActivityType = APITestUtil.getResponseObjForCreate(requestActivityType, microservice, environment, apiRequestHelper, activityTypeAPI, ActivityType.class);
+		responseActivityType = MAbstractAPIHelper.getResponseObjForCreate(requestActivityType, microservice, environment, apiRequestHelper, activityTypeAPI, ActivityType.class);
 
 		String activityTypeId = responseActivityType.getActivityTypeId();
 		idsForAllCreatedElements.add(activityTypeId);
 
-		ActivityType committedActivityType = APITestUtil.getResponseObjForRetrieve(microservice, environment, activityTypeId, apiRequestHelper, activityTypeAPI, ActivityType.class);
+		ActivityType committedActivityType = MAbstractAPIHelper.getResponseObjForRetrieve(microservice, environment, activityTypeId, apiRequestHelper, activityTypeAPI, ActivityType.class);
 		CustomAssertions.assertRequestAndResponseObj(responseActivityType, committedActivityType);
 	}
 

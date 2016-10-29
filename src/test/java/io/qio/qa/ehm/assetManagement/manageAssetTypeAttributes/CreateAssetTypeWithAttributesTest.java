@@ -19,6 +19,7 @@ import io.qio.qa.lib.ehm.model.assetType.helper.AttributeDataType;
 import io.qio.qa.lib.ehm.common.APITestUtil;
 import io.qio.qa.lib.assertions.CustomAssertions;
 import io.qio.qa.lib.exception.ServerResponse;
+import io.qio.qa.lib.common.MAbstractAPIHelper;
 
 public class CreateAssetTypeWithAttributesTest extends BaseTestSetupAndTearDown {
 	private static MAssetTypeAPIHelper assetTypeAPI;
@@ -67,7 +68,7 @@ public class CreateAssetTypeWithAttributesTest extends BaseTestSetupAndTearDown 
 		String abbrForSecondAttribute = requestAssetType.getAttributes().get(FIRST_ELEMENT + 1).getAbbreviation();
 		requestAssetType.getAttributes().get(FIRST_ELEMENT).setAbbreviation(abbrForSecondAttribute);
 
-		serverResp = APITestUtil.getResponseObjForCreate(requestAssetType, microservice, environment, apiRequestHelper, assetTypeAPI, ServerResponse.class);
+		serverResp = MAbstractAPIHelper.getResponseObjForCreate(requestAssetType, microservice, environment, apiRequestHelper, assetTypeAPI, ServerResponse.class);
 
 		CustomAssertions.assertServerError(400, "com.qiotec.application.exceptions.InvalidInputException", "Attribute Abbreviation Should not Contain Duplicate Entries", serverResp);
 	}
@@ -80,7 +81,7 @@ public class CreateAssetTypeWithAttributesTest extends BaseTestSetupAndTearDown 
 			String origFirstAttributeAbbr = requestAssetType.getAttributes().get(FIRST_ELEMENT).getAbbreviation();
 			requestAssetType.getAttributes().get(FIRST_ELEMENT).setAbbreviation(specialChar + origFirstAttributeAbbr);
 
-			serverResp = APITestUtil.getResponseObjForCreate(requestAssetType, microservice, environment, apiRequestHelper, assetTypeAPI, ServerResponse.class);
+			serverResp = MAbstractAPIHelper.getResponseObjForCreate(requestAssetType, microservice, environment, apiRequestHelper, assetTypeAPI, ServerResponse.class);
 
 			CustomAssertions.assertServerError(400, "com.qiotec.application.exceptions.InvalidInputException", "Asset Type Attribute Abbreviation must not contain illegal characters", serverResp);
 		}
@@ -92,7 +93,7 @@ public class CreateAssetTypeWithAttributesTest extends BaseTestSetupAndTearDown 
 		requestAssetType = assetTypeHelper.getAssetTypeWithAllAttributes();
 		requestAssetType.getAttributes().get(FIRST_ELEMENT).setAbbreviation("This Abbreviation contains spaces");
 
-		serverResp = APITestUtil.getResponseObjForCreate(requestAssetType, microservice, environment, apiRequestHelper, assetTypeAPI, ServerResponse.class);
+		serverResp = MAbstractAPIHelper.getResponseObjForCreate(requestAssetType, microservice, environment, apiRequestHelper, assetTypeAPI, ServerResponse.class);
 
 		CustomAssertions.assertServerError(400, "com.qiotec.application.exceptions.InvalidInputException", "Attribute Abbreviation must not contain Spaces", serverResp);
 	}
@@ -103,7 +104,7 @@ public class CreateAssetTypeWithAttributesTest extends BaseTestSetupAndTearDown 
 		requestAssetType = assetTypeHelper.getAssetTypeWithAllAttributes();
 		requestAssetType.getAttributes().get(FIRST_ELEMENT).setAbbreviation("");
 
-		serverResp = APITestUtil.getResponseObjForCreate(requestAssetType, microservice, environment, apiRequestHelper, assetTypeAPI, ServerResponse.class);
+		serverResp = MAbstractAPIHelper.getResponseObjForCreate(requestAssetType, microservice, environment, apiRequestHelper, assetTypeAPI, ServerResponse.class);
 
 		CustomAssertions.assertServerError(400, "com.qiotec.application.exceptions.InvalidInputException", "Attribute Abbreviation Should not be Empty or Null", serverResp);
 	}
@@ -114,7 +115,7 @@ public class CreateAssetTypeWithAttributesTest extends BaseTestSetupAndTearDown 
 		requestAssetType = assetTypeHelper.getAssetTypeWithAllAttributes();
 		requestAssetType.getAttributes().get(FIRST_ELEMENT).setAbbreviation(null);
 
-		serverResp = APITestUtil.getResponseObjForCreate(requestAssetType, microservice, environment, apiRequestHelper, assetTypeAPI, ServerResponse.class);
+		serverResp = MAbstractAPIHelper.getResponseObjForCreate(requestAssetType, microservice, environment, apiRequestHelper, assetTypeAPI, ServerResponse.class);
 
 		CustomAssertions.assertServerError(500, "java.lang.NullPointerException", "No message available", serverResp);
 	}
@@ -123,9 +124,9 @@ public class CreateAssetTypeWithAttributesTest extends BaseTestSetupAndTearDown 
 	@Test
 	public void shouldNotCreateAssetTypeWhenAttrAbbrIsLongerThan50Chars() {
 		requestAssetType = assetTypeHelper.getAssetTypeWithAllAttributes();
-		requestAssetType.getAttributes().get(FIRST_ELEMENT).setAbbreviation("51charlong51charlong51charlong51charlong51charSlong");
+		requestAssetType.getAttributes().get(FIRST_ELEMENT).setAbbreviation(APITestUtil.FIFTYONE_CHARS);
 
-		serverResp = APITestUtil.getResponseObjForCreate(requestAssetType, microservice, environment, apiRequestHelper, assetTypeAPI, ServerResponse.class);
+		serverResp = MAbstractAPIHelper.getResponseObjForCreate(requestAssetType, microservice, environment, apiRequestHelper, assetTypeAPI, ServerResponse.class);
 
 		CustomAssertions.assertServerError(400, "com.qiotec.application.exceptions.InvalidInputException", "Attribute Abbreviation Should Less Than 50 Character", serverResp);
 	}
@@ -136,7 +137,7 @@ public class CreateAssetTypeWithAttributesTest extends BaseTestSetupAndTearDown 
 		requestAssetType = assetTypeHelper.getAssetTypeWithAllAttributes();
 		requestAssetType.getAttributes().get(FIRST_ELEMENT).setName("");
 
-		serverResp = APITestUtil.getResponseObjForCreate(requestAssetType, microservice, environment, apiRequestHelper, assetTypeAPI, ServerResponse.class);
+		serverResp = MAbstractAPIHelper.getResponseObjForCreate(requestAssetType, microservice, environment, apiRequestHelper, assetTypeAPI, ServerResponse.class);
 
 		CustomAssertions.assertServerError(400, "com.qiotec.application.exceptions.InvalidInputException", "Attribute name should not be empty or null", serverResp);
 	}
@@ -147,7 +148,7 @@ public class CreateAssetTypeWithAttributesTest extends BaseTestSetupAndTearDown 
 		requestAssetType = assetTypeHelper.getAssetTypeWithAllAttributes();
 		requestAssetType.getAttributes().get(FIRST_ELEMENT).setName(null);
 
-		serverResp = APITestUtil.getResponseObjForCreate(requestAssetType, microservice, environment, apiRequestHelper, assetTypeAPI, ServerResponse.class);
+		serverResp = MAbstractAPIHelper.getResponseObjForCreate(requestAssetType, microservice, environment, apiRequestHelper, assetTypeAPI, ServerResponse.class);
 
 		CustomAssertions.assertServerError(500, "java.lang.NullPointerException", "No message available", serverResp);
 	}
@@ -156,11 +157,9 @@ public class CreateAssetTypeWithAttributesTest extends BaseTestSetupAndTearDown 
 	@Test
 	public void shouldNotCreateAssetTypeWhenAttrNameIsLongerThan255Chars() {
 		requestAssetType = assetTypeHelper.getAssetTypeWithAllAttributes();
-		requestAssetType.getAttributes().get(FIRST_ELEMENT).setName(
-				"256charactelong256charactelong256charactelong256charactelong256charactelong256charactelong256charactelong256charactelong256charactelong256charactelong256charactelong256charactelong256charactelong256charactelong256charactelong256charactelong256characteRlong");
+		requestAssetType.getAttributes().get(FIRST_ELEMENT).setName(APITestUtil.TWOFIFTYSIX_CHARS);
 
-		serverResp = APITestUtil.getResponseObjForCreate(requestAssetType, microservice, environment, apiRequestHelper, assetTypeAPI, ServerResponse.class);
-
+		serverResp = MAbstractAPIHelper.getResponseObjForCreate(requestAssetType, microservice, environment, apiRequestHelper, assetTypeAPI, ServerResponse.class);
 		CustomAssertions.assertServerError(400, "com.qiotec.application.exceptions.InvalidInputException", "Attribute Name should be less than 255 characters", serverResp);
 	}
 
@@ -170,7 +169,7 @@ public class CreateAssetTypeWithAttributesTest extends BaseTestSetupAndTearDown 
 		requestAssetType = assetTypeHelper.getAssetTypeWithAllAttributes();
 		requestAssetType.getAttributes().get(FIRST_ELEMENT).setDatatype("FicticiousDataType");
 
-		serverResp = APITestUtil.getResponseObjForCreate(requestAssetType, microservice, environment, apiRequestHelper, assetTypeAPI, ServerResponse.class);
+		serverResp = MAbstractAPIHelper.getResponseObjForCreate(requestAssetType, microservice, environment, apiRequestHelper, assetTypeAPI, ServerResponse.class);
 
 		CustomAssertions.assertServerError(400, "org.springframework.http.converter.HttpMessageNotReadableException", serverResp);
 	}
@@ -205,13 +204,13 @@ public class CreateAssetTypeWithAttributesTest extends BaseTestSetupAndTearDown 
 		requestAssetType = assetTypeHelper.getAssetTypeWithAllAttributes();
 		requestAssetType.getAttributes().get(FIRST_ELEMENT).setAbbreviation("AAbbr-._");
 
-		responseAssetType = APITestUtil.getResponseObjForCreate(requestAssetType, microservice, environment, apiRequestHelper, assetTypeAPI, AssetType.class);
-		CustomAssertions.assertRequestAndResponseObj(201, APITestUtil.responseCodeForInputRequest, requestAssetType, responseAssetType);
+		responseAssetType = MAbstractAPIHelper.getResponseObjForCreate(requestAssetType, microservice, environment, apiRequestHelper, assetTypeAPI, AssetType.class);
+		CustomAssertions.assertRequestAndResponseObj(201, MAbstractAPIHelper.responseCodeForInputRequest, requestAssetType, responseAssetType);
 
 		String assetTypeId = responseAssetType.getAssetTypeId();
 		idsForAllCreatedElements.add(assetTypeId);
 
-		AssetType committedAssetType = APITestUtil.getResponseObjForRetrieve(microservice, environment, assetTypeId, apiRequestHelper, assetTypeAPI, AssetType.class);
+		AssetType committedAssetType = MAbstractAPIHelper.getResponseObjForRetrieve(microservice, environment, assetTypeId, apiRequestHelper, assetTypeAPI, AssetType.class);
 		CustomAssertions.assertRequestAndResponseObj(responseAssetType, committedAssetType);
 	}
 
@@ -221,13 +220,13 @@ public class CreateAssetTypeWithAttributesTest extends BaseTestSetupAndTearDown 
 
 		requestAssetType = assetTypeHelper.getAssetTypeWithAllAttributes();
 
-		responseAssetType = APITestUtil.getResponseObjForCreate(requestAssetType, microservice, environment, apiRequestHelper, assetTypeAPI, AssetType.class);
-		CustomAssertions.assertRequestAndResponseObj(201, APITestUtil.responseCodeForInputRequest, requestAssetType, responseAssetType);
+		responseAssetType = MAbstractAPIHelper.getResponseObjForCreate(requestAssetType, microservice, environment, apiRequestHelper, assetTypeAPI, AssetType.class);
+		CustomAssertions.assertRequestAndResponseObj(201, MAbstractAPIHelper.responseCodeForInputRequest, requestAssetType, responseAssetType);
 
 		String assetTypeId = responseAssetType.getAssetTypeId();
 		idsForAllCreatedElements.add(assetTypeId);
 
-		AssetType committedAssetType = APITestUtil.getResponseObjForRetrieve(microservice, environment, assetTypeId, apiRequestHelper, assetTypeAPI, AssetType.class);
+		AssetType committedAssetType = MAbstractAPIHelper.getResponseObjForRetrieve(microservice, environment, assetTypeId, apiRequestHelper, assetTypeAPI, AssetType.class);
 		CustomAssertions.assertRequestAndResponseObj(responseAssetType, committedAssetType);
 	}
 
@@ -236,14 +235,14 @@ public class CreateAssetTypeWithAttributesTest extends BaseTestSetupAndTearDown 
 	public void shouldBeAllowedToCreateAnAssetTypeWithUniqueAbbrWithOneAttributeOfFloatDataType() {
 
 		requestAssetType = assetTypeHelper.getAssetTypeWithOneAttribute(AttributeDataType.Float);
-		responseAssetType = APITestUtil.getResponseObjForCreate(requestAssetType, microservice, environment, apiRequestHelper, assetTypeAPI, AssetType.class);
+		responseAssetType = MAbstractAPIHelper.getResponseObjForCreate(requestAssetType, microservice, environment, apiRequestHelper, assetTypeAPI, AssetType.class);
 
-		CustomAssertions.assertRequestAndResponseObj(201, APITestUtil.responseCodeForInputRequest, requestAssetType, responseAssetType);
+		CustomAssertions.assertRequestAndResponseObj(201, MAbstractAPIHelper.responseCodeForInputRequest, requestAssetType, responseAssetType);
 
 		String assetTypeId = responseAssetType.getAssetTypeId();
 		idsForAllCreatedElements.add(assetTypeId);
 
-		AssetType committedAssetType = APITestUtil.getResponseObjForRetrieve(microservice, environment, assetTypeId, apiRequestHelper, assetTypeAPI, AssetType.class);
+		AssetType committedAssetType = MAbstractAPIHelper.getResponseObjForRetrieve(microservice, environment, assetTypeId, apiRequestHelper, assetTypeAPI, AssetType.class);
 		CustomAssertions.assertRequestAndResponseObj(responseAssetType, committedAssetType);
 	}
 
@@ -254,14 +253,14 @@ public class CreateAssetTypeWithAttributesTest extends BaseTestSetupAndTearDown 
 		requestAssetType = assetTypeHelper.getAssetTypeWithAllAttributes();
 		requestAssetType.getAttributes().get(FIRST_ELEMENT).setDescription("This is paragraph 1.\n This is paragraph 2.\nThis is paragraph 3.");
 
-		responseAssetType = APITestUtil.getResponseObjForCreate(requestAssetType, microservice, environment, apiRequestHelper, assetTypeAPI, AssetType.class);
+		responseAssetType = MAbstractAPIHelper.getResponseObjForCreate(requestAssetType, microservice, environment, apiRequestHelper, assetTypeAPI, AssetType.class);
 
-		CustomAssertions.assertRequestAndResponseObj(201, APITestUtil.responseCodeForInputRequest, requestAssetType, responseAssetType);
+		CustomAssertions.assertRequestAndResponseObj(201, MAbstractAPIHelper.responseCodeForInputRequest, requestAssetType, responseAssetType);
 
 		String assetTypeId = responseAssetType.getAssetTypeId();
 		idsForAllCreatedElements.add(assetTypeId);
 
-		AssetType committedAssetType = APITestUtil.getResponseObjForRetrieve(microservice, environment, assetTypeId, apiRequestHelper, assetTypeAPI, AssetType.class);
+		AssetType committedAssetType = MAbstractAPIHelper.getResponseObjForRetrieve(microservice, environment, assetTypeId, apiRequestHelper, assetTypeAPI, AssetType.class);
 		CustomAssertions.assertRequestAndResponseObj(responseAssetType, committedAssetType);
 	}
 

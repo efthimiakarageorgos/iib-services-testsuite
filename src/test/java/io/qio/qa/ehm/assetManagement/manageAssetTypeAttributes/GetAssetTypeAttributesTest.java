@@ -18,9 +18,10 @@ import io.qio.qa.lib.ehm.apiHelpers.assetType.MAssetTypeAttributeAPIHelper;
 import io.qio.qa.lib.ehm.model.assetType.AssetType;
 import io.qio.qa.lib.ehm.model.assetType.AssetTypeAttribute;
 import io.qio.qa.lib.ehm.model.assetType.helper.AssetTypeHelper;
-import io.qio.qa.lib.ehm.common.APITestUtil;
+//import io.qio.qa.lib.ehm.common.APITestUtil;
 import io.qio.qa.lib.assertions.CustomAssertions;
 import io.qio.qa.lib.exception.ServerResponse;
+import io.qio.qa.lib.common.MAbstractAPIHelper;
 
 public class GetAssetTypeAttributesTest extends BaseTestSetupAndTearDown {
 	private static MAssetTypeAPIHelper assetTypeAPI;
@@ -63,7 +64,7 @@ public class GetAssetTypeAttributesTest extends BaseTestSetupAndTearDown {
 	public void shouldGetAnErrorMsgWhenTryingToGetAttributesForANonExistingAssetType() {
 
 		String invalidAssetTypeId = "ThisAssetTypeDoesNotExist";
-		serverResp = APITestUtil.getResponseObjForRetrieve(microservice, environment, invalidAssetTypeId, apiRequestHelper, assetTypeAPI, ServerResponse.class);
+		serverResp = MAbstractAPIHelper.getResponseObjForRetrieve(microservice, environment, invalidAssetTypeId, apiRequestHelper, assetTypeAPI, ServerResponse.class);
 		CustomAssertions.assertServerError(404, "com.qiotec.application.exceptions.InvalidParameterException", "Wrong Asset Type id in the URL", serverResp);
 	}
 
@@ -72,12 +73,12 @@ public class GetAssetTypeAttributesTest extends BaseTestSetupAndTearDown {
 	public void shouldGetAnErrorMsgWhenTryingToGetAttributesForAnExistingAssetTypeThatHasNoAttributesConfigured() {
 
 		requestAssetType = assetTypeHelper.getAssetTypeWithNoAttributesAndParameters();
-		responseAssetType = APITestUtil.getResponseObjForCreate(requestAssetType, microservice, environment, apiRequestHelper, assetTypeAPI, AssetType.class);
+		responseAssetType = MAbstractAPIHelper.getResponseObjForCreate(requestAssetType, microservice, environment, apiRequestHelper, assetTypeAPI, AssetType.class);
 		String assetTypeId = responseAssetType.getAssetTypeId();
 		idsForAllCreatedElements.add(assetTypeId);
 
 		String invalidAssetTypeAttributeId = "ThisDoesNotExist";
-		serverResp = APITestUtil.getResponseObjForRetrieve(microservice, environment, assetTypeId, invalidAssetTypeAttributeId, apiRequestHelper, assetTypeAttributeAPI, ServerResponse.class);
+		serverResp = MAbstractAPIHelper.getResponseObjForRetrieve(microservice, environment, assetTypeId, invalidAssetTypeAttributeId, apiRequestHelper, assetTypeAttributeAPI, ServerResponse.class);
 		
 		//TODO
 		//If the message does not much it fails instead of giving the a nicer message (same as when the code does not match - not a bid deal though)
@@ -97,11 +98,11 @@ public class GetAssetTypeAttributesTest extends BaseTestSetupAndTearDown {
 	public void shouldBeAbleToGetAllAssetTypeAttributesForAnExistingAssetTypeIdWithAllAttributes() {
 
 		requestAssetType = assetTypeHelper.getAssetTypeWithAllAttributes();
-		responseAssetType = APITestUtil.getResponseObjForCreate(requestAssetType, microservice, environment, apiRequestHelper, assetTypeAPI, AssetType.class);
+		responseAssetType = MAbstractAPIHelper.getResponseObjForCreate(requestAssetType, microservice, environment, apiRequestHelper, assetTypeAPI, AssetType.class);
 		String assetTypeId = responseAssetType.getAssetTypeId();
 		idsForAllCreatedElements.add(assetTypeId);
 
-		List<AssetTypeAttribute> committedAssetTypeAttributes = APITestUtil.getListResponseObjForRetrieve(microservice, environment, assetTypeId, apiRequestHelper, assetTypeAttributeAPI,
+		List<AssetTypeAttribute> committedAssetTypeAttributes = MAbstractAPIHelper.getListResponseObjForRetrieve(microservice, environment, assetTypeId, apiRequestHelper, assetTypeAttributeAPI,
 				AssetTypeAttribute.class);
 
 		Collections.sort(committedAssetTypeAttributes);
@@ -115,13 +116,13 @@ public class GetAssetTypeAttributesTest extends BaseTestSetupAndTearDown {
 	public void shouldBeAbleToGetAnAssetTypeAttributeUsingExistingAssetTypeIdAndAttributeId() {
 
 		requestAssetType = assetTypeHelper.getAssetTypeWithAllAttributes();
-		responseAssetType = APITestUtil.getResponseObjForCreate(requestAssetType, microservice, environment, apiRequestHelper, assetTypeAPI, AssetType.class);
+		responseAssetType = MAbstractAPIHelper.getResponseObjForCreate(requestAssetType, microservice, environment, apiRequestHelper, assetTypeAPI, AssetType.class);
 		String assetTypeId = responseAssetType.getAssetTypeId();
 		idsForAllCreatedElements.add(assetTypeId);
 
 		for (AssetTypeAttribute responseAssetTypeAttribute : responseAssetType.getAttributes()) {
 			String createdAttributeId = responseAssetTypeAttribute.getAttributeId();
-			AssetTypeAttribute committedAssetTypeAttribute = APITestUtil.getResponseObjForRetrieve(microservice, environment, assetTypeId, createdAttributeId, apiRequestHelper, assetTypeAttributeAPI,
+			AssetTypeAttribute committedAssetTypeAttribute = MAbstractAPIHelper.getResponseObjForRetrieve(microservice, environment, assetTypeId, createdAttributeId, apiRequestHelper, assetTypeAttributeAPI,
 					AssetTypeAttribute.class);
 			CustomAssertions.assertRequestAndResponseObj(responseAssetTypeAttribute, committedAssetTypeAttribute);
 		}
@@ -132,11 +133,11 @@ public class GetAssetTypeAttributesTest extends BaseTestSetupAndTearDown {
 	public void shouldBeAbleToGetAllAssetTypeAttributesForAnExistingAssetTypeIdWithNoAttributes() {
 
 		requestAssetType = assetTypeHelper.getAssetTypeWithNoAttributesAndParameters();
-		responseAssetType = APITestUtil.getResponseObjForCreate(requestAssetType, microservice, environment, apiRequestHelper, assetTypeAPI, AssetType.class);
+		responseAssetType = MAbstractAPIHelper.getResponseObjForCreate(requestAssetType, microservice, environment, apiRequestHelper, assetTypeAPI, AssetType.class);
 		String assetTypeId = responseAssetType.getAssetTypeId();
 		idsForAllCreatedElements.add(assetTypeId);
 
-		List<AssetTypeAttribute> committedAssetTypeAttributes = APITestUtil.getListResponseObjForRetrieve(microservice, environment, assetTypeId, apiRequestHelper, assetTypeAttributeAPI,
+		List<AssetTypeAttribute> committedAssetTypeAttributes = MAbstractAPIHelper.getListResponseObjForRetrieve(microservice, environment, assetTypeId, apiRequestHelper, assetTypeAttributeAPI,
 				AssetTypeAttribute.class);
 
 		committedAssetTypeAttributes = committedAssetTypeAttributes.size() == 0 ? null : committedAssetTypeAttributes;

@@ -5,7 +5,6 @@
 package io.qio.qa.ehm.insightManagement.manageInsights;
 
 import java.util.ArrayList;
-
 import org.apache.log4j.Logger;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -22,6 +21,7 @@ import io.qio.qa.lib.ehm.model.insight.helper.InsightRequestHelper;
 import io.qio.qa.lib.ehm.common.APITestUtil;
 import io.qio.qa.lib.assertions.CustomAssertions;
 import io.qio.qa.lib.exception.ServerResponse;
+import io.qio.qa.lib.common.MAbstractAPIHelper;
 
 public class CreateInsightsTest extends BaseTestSetupAndTearDown {
 
@@ -58,8 +58,8 @@ public class CreateInsightsTest extends BaseTestSetupAndTearDown {
 		idsForAllCreatedTenants = new ArrayList<String>();
 
 		requestInsight = insightRequestHelper.getInsightWithCreatingInsightTypeAndTenant("WithNoAttributes", null);
-		insightTypeId = requestInsight.getInsightType();
-		tenantId = requestInsight.getTenant();
+		insightTypeId = requestInsight.getInsightTypeId();
+		tenantId = requestInsight.getTenantId();
 
 		idsForAllCreatedInsightTypes.add(insightTypeId);
 		idsForAllCreatedTenants.add(tenantId);
@@ -94,9 +94,9 @@ public class CreateInsightsTest extends BaseTestSetupAndTearDown {
 		requestInsight = insightRequestHelper.getInsightWithPredefinedInsightTypeAndTenant(insightTypeId, tenantId);
 		requestInsight.setTitle("");
 
-		serverResp = APITestUtil.getResponseObjForCreate(requestInsight, microservice, environment, apiRequestHelper, insightAPI, ServerResponse.class);
+		serverResp = MAbstractAPIHelper.getResponseObjForCreate(requestInsight, microservice, environment, apiRequestHelper, insightAPI, ServerResponse.class);
 
-		CustomAssertions.assertServerError(400, "com.qiotec.application.exceptions.InvalidInputException", "Asset Abbreviation must not contain Spaces", serverResp);
+		CustomAssertions.assertServerError(400, null, "Insight title is mandatory and should be less than 255 character", serverResp);
 	}
 	
 
@@ -104,7 +104,7 @@ public class CreateInsightsTest extends BaseTestSetupAndTearDown {
 	 * NEGATIVE TESTS END
 	 */
 
-	// TODO: Jeet
+	// TODO:
 	// MORE ASSERTIONS REQS for NEGATIVE:
 	// We could use one tenant and asset type for negative tests and a separate pair for positive
 	// In that case we could also validate that the tenant used for the positive tests does not have any assets associated with it
@@ -115,7 +115,7 @@ public class CreateInsightsTest extends BaseTestSetupAndTearDown {
 	 * POSITIVE TESTS START
 	 */
 
-	// TODO: Jeet
+	// TODO:
 	// MORE ASSERTIONS REQS for POSITIVE:
 	//
 	// Want to validate that if the asset type we link to has parameters and or attributes, then these parameters and attributes are part of the asset create response
@@ -131,16 +131,18 @@ public class CreateInsightsTest extends BaseTestSetupAndTearDown {
 
 	// RREHM-357 ()
 	@Test
-	public void shouldCreateAssetWithUniqueAbbrLinkingToValidTenantAndAssetTypeWithoutAttrPars() {
+	public void shouldCreateInsightWithValidPropertyValuesLinkingToValidTenantAndInsightType() {
 		requestInsight = insightRequestHelper.getInsightWithPredefinedInsightTypeAndTenant(insightTypeId, tenantId);
 
-		responseInsight = APITestUtil.getResponseObjForCreate(requestInsight, microservice, environment, apiRequestHelper, insightAPI, InsightResponse.class);
-		CustomAssertions.assertRequestAndResponseObj(201, APITestUtil.responseCodeForInputRequest);
-
-		String insightId = APITestUtil.getElementId(responseInsight.get_links().getSelfLink().getHref());
+		responseInsight = MAbstractAPIHelper.getResponseObjForCreate(requestInsight, microservice, environment, apiRequestHelper, insightAPI, InsightResponse.class);
+		String insightId = responseInsight.getInsightId();
 		idsForAllCreatedInsights.add(insightId);
 
-		InsightResponse committedInsight = APITestUtil.getResponseObjForRetrieve(microservice, environment, insightId, apiRequestHelper, insightAPI, InsightResponse.class);
+		CustomAssertions.assertResponseCode(201, MAbstractAPIHelper.responseCodeForInputRequest);
+		CustomAssertions.assertRequestAndResponseObj(requestInsight, responseInsight);
+
+		InsightResponse committedInsight = MAbstractAPIHelper.getResponseObjForRetrieve(microservice, environment, insightId, apiRequestHelper, insightAPI, InsightResponse.class);
+
 		CustomAssertions.assertRequestAndResponseObj(responseInsight, committedInsight);
 	}
 

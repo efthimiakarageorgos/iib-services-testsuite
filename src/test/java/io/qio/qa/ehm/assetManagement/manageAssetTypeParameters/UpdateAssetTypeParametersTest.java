@@ -22,6 +22,8 @@ import io.qio.qa.lib.ehm.model.assetType.helper.ParameterDataType;
 import io.qio.qa.lib.ehm.common.APITestUtil;
 import io.qio.qa.lib.assertions.CustomAssertions;
 import io.qio.qa.lib.exception.ServerResponse;
+import io.qio.qa.lib.common.MAbstractAPIHelper;
+import io.qio.qa.lib.common.BaseHelper;
 
 public class UpdateAssetTypeParametersTest extends BaseTestSetupAndTearDown {
 
@@ -45,7 +47,7 @@ public class UpdateAssetTypeParametersTest extends BaseTestSetupAndTearDown {
 	public void initSetupBeforeEveryTest() {
 		assetTypeHelper = new AssetTypeHelper();
 		requestAssetType = assetTypeHelper.getAssetTypeWithOneParameter(ParameterDataType.String);
-		responseAssetType = APITestUtil.getResponseObjForCreate(requestAssetType, microservice, environment, apiRequestHelper, assetTypeAPI, AssetType.class);
+		responseAssetType = MAbstractAPIHelper.getResponseObjForCreate(requestAssetType, microservice, environment, apiRequestHelper, assetTypeAPI, AssetType.class);
 		
 		assetTypeId = responseAssetType.getAssetTypeId();
 		assetTypeParameterId = responseAssetType.getParameters().get(FIRST_ELEMENT).getParameterId();
@@ -61,7 +63,7 @@ public class UpdateAssetTypeParametersTest extends BaseTestSetupAndTearDown {
 
 	private String createAssetTypeWithAllParametersOnly() {
 		requestAssetType = assetTypeHelper.getAssetTypeWithAllParameters();
-		responseAssetType = APITestUtil.getResponseObjForCreate(requestAssetType, microservice, environment, apiRequestHelper, assetTypeAPI, AssetType.class);
+		responseAssetType = MAbstractAPIHelper.getResponseObjForCreate(requestAssetType, microservice, environment, apiRequestHelper, assetTypeAPI, AssetType.class);
 		
 		String assetTypeIdLocal = responseAssetType.getAssetTypeId();
 		idsForAllCreatedElements.add(assetTypeIdLocal);
@@ -80,9 +82,9 @@ public class UpdateAssetTypeParametersTest extends BaseTestSetupAndTearDown {
 	public void shouldNotBeAllowedToUpdateParameterWhenAbbrHasSpaces() {
 
 		requestAssetType.getParameters().get(FIRST_ELEMENT).setId(assetTypeParameterId);
-		requestAssetType.getParameters().get(FIRST_ELEMENT).setAbbreviation(APITestUtil.getCurrentTimeStamp() + " This has spaces");
+		requestAssetType.getParameters().get(FIRST_ELEMENT).setAbbreviation(BaseHelper.getCurrentTimeStamp() + " This has spaces");
 
-		serverResp = APITestUtil.getResponseObjForUpdate(requestAssetType, microservice, environment, assetTypeId, apiRequestHelper, assetTypeAPI, ServerResponse.class);
+		serverResp = MAbstractAPIHelper.getResponseObjForUpdate(requestAssetType, microservice, environment, assetTypeId, apiRequestHelper, assetTypeAPI, ServerResponse.class);
 		CustomAssertions.assertServerError(400, "com.qiotec.application.exceptions.InvalidInputException", "Parameter Abbreviation must not contain Spaces", serverResp);
 	}
 
@@ -93,7 +95,7 @@ public class UpdateAssetTypeParametersTest extends BaseTestSetupAndTearDown {
 		requestAssetType.getParameters().get(FIRST_ELEMENT).setId(assetTypeParameterId);
 		requestAssetType.getParameters().get(FIRST_ELEMENT).setAbbreviation(APITestUtil.TWOFIFTYSIX_CHARS);
 
-		serverResp = APITestUtil.getResponseObjForUpdate(requestAssetType, microservice, environment, assetTypeId, apiRequestHelper, assetTypeAPI, ServerResponse.class);
+		serverResp = MAbstractAPIHelper.getResponseObjForUpdate(requestAssetType, microservice, environment, assetTypeId, apiRequestHelper, assetTypeAPI, ServerResponse.class);
 		CustomAssertions.assertServerError(400, "com.qiotec.application.exceptions.InvalidInputException", "Parameter Abbreviation Should Less Than 255 Character", serverResp);
 	}
 
@@ -110,7 +112,7 @@ public class UpdateAssetTypeParametersTest extends BaseTestSetupAndTearDown {
 				assetTypeParameter.setAbbreviation("TRYTODUPLICATEME");
 		}
 		requestAssetType.setParameters(existingAssetTypeParmaeters);
-		responseAssetType = APITestUtil.getResponseObjForCreate(requestAssetType, microservice, environment, apiRequestHelper, assetTypeAPI, AssetType.class);
+		responseAssetType = MAbstractAPIHelper.getResponseObjForCreate(requestAssetType, microservice, environment, apiRequestHelper, assetTypeAPI, AssetType.class);
 		
 		String assetTypeIdLocal = responseAssetType.getAssetTypeId();
 		idsForAllCreatedElements.add(assetTypeIdLocal);
@@ -128,7 +130,7 @@ public class UpdateAssetTypeParametersTest extends BaseTestSetupAndTearDown {
 
 		// Setting up the update request
 		requestAssetType.setParameters(updateAssetTypeParameters);
-		serverResp = APITestUtil.getResponseObjForUpdate(requestAssetType, microservice, environment, assetTypeIdLocal, apiRequestHelper, assetTypeAPI, ServerResponse.class);
+		serverResp = MAbstractAPIHelper.getResponseObjForUpdate(requestAssetType, microservice, environment, assetTypeIdLocal, apiRequestHelper, assetTypeAPI, ServerResponse.class);
 		CustomAssertions.assertServerError(400, "com.qiotec.application.exceptions.InvalidInputException", "Parameter Abbreviation Should not Contain Duplicate Entries", serverResp);
 	}
 
@@ -139,7 +141,7 @@ public class UpdateAssetTypeParametersTest extends BaseTestSetupAndTearDown {
 		requestAssetType.getParameters().get(FIRST_ELEMENT).setId(assetTypeParameterId);
 		requestAssetType.getParameters().get(FIRST_ELEMENT).setAbbreviation("");
 
-		serverResp = APITestUtil.getResponseObjForUpdate(requestAssetType, microservice, environment, assetTypeId, apiRequestHelper, assetTypeAPI, ServerResponse.class);
+		serverResp = MAbstractAPIHelper.getResponseObjForUpdate(requestAssetType, microservice, environment, assetTypeId, apiRequestHelper, assetTypeAPI, ServerResponse.class);
 		CustomAssertions.assertServerError(400, "com.qiotec.application.exceptions.InvalidInputException", "Parameter Abbreviation Should not be Empty or Null", serverResp);
 	}
 
@@ -149,7 +151,7 @@ public class UpdateAssetTypeParametersTest extends BaseTestSetupAndTearDown {
 		requestAssetType.getParameters().get(FIRST_ELEMENT).setId(assetTypeParameterId);
 		requestAssetType.getParameters().get(FIRST_ELEMENT).setAbbreviation(null);
 
-		serverResp = APITestUtil.getResponseObjForUpdate(requestAssetType, microservice, environment, assetTypeId, apiRequestHelper, assetTypeAPI, ServerResponse.class);
+		serverResp = MAbstractAPIHelper.getResponseObjForUpdate(requestAssetType, microservice, environment, assetTypeId, apiRequestHelper, assetTypeAPI, ServerResponse.class);
 		CustomAssertions.assertServerError(500, "java.lang.NullPointerException", "No message available", serverResp);
 	}
 
@@ -169,7 +171,7 @@ public class UpdateAssetTypeParametersTest extends BaseTestSetupAndTearDown {
 
 		// Setting up the update request
 		requestAssetType.setParameters(responseAssetType.getParameters());
-		serverResp = APITestUtil.getResponseObjForUpdate(requestAssetType, microservice, environment, assetTypeIdLocal, apiRequestHelper, assetTypeAPI, ServerResponse.class);
+		serverResp = MAbstractAPIHelper.getResponseObjForUpdate(requestAssetType, microservice, environment, assetTypeIdLocal, apiRequestHelper, assetTypeAPI, ServerResponse.class);
 		CustomAssertions.assertServerError(400, "com.qiotec.application.exceptions.InvalidInputException", "Parameter Abbreviation Should not Contain Duplicate Entries", serverResp);
 	}
 
@@ -180,7 +182,7 @@ public class UpdateAssetTypeParametersTest extends BaseTestSetupAndTearDown {
 		requestAssetType.getParameters().get(FIRST_ELEMENT).setId(assetTypeParameterId);
 		requestAssetType.getParameters().get(FIRST_ELEMENT).setBaseuom("");
 
-		serverResp = APITestUtil.getResponseObjForUpdate(requestAssetType, microservice, environment, assetTypeId, apiRequestHelper, assetTypeAPI, ServerResponse.class);
+		serverResp = MAbstractAPIHelper.getResponseObjForUpdate(requestAssetType, microservice, environment, assetTypeId, apiRequestHelper, assetTypeAPI, ServerResponse.class);
 		CustomAssertions.assertServerError(400, "com.qiotec.application.exceptions.InvalidInputException", "Parameter BaseUom Should not be Empty or Null", serverResp);
 	}
 
@@ -190,7 +192,7 @@ public class UpdateAssetTypeParametersTest extends BaseTestSetupAndTearDown {
 		requestAssetType.getParameters().get(FIRST_ELEMENT).setId(assetTypeParameterId);
 		requestAssetType.getParameters().get(FIRST_ELEMENT).setBaseuom(null);
 
-		serverResp = APITestUtil.getResponseObjForUpdate(requestAssetType, microservice, environment, assetTypeId, apiRequestHelper, assetTypeAPI, ServerResponse.class);
+		serverResp = MAbstractAPIHelper.getResponseObjForUpdate(requestAssetType, microservice, environment, assetTypeId, apiRequestHelper, assetTypeAPI, ServerResponse.class);
 		CustomAssertions.assertServerError(400, "com.qiotec.application.exceptions.InvalidInputException", "Parameter BaseUom Should not be Empty or Null", serverResp);
 	}
 
@@ -201,7 +203,7 @@ public class UpdateAssetTypeParametersTest extends BaseTestSetupAndTearDown {
 		requestAssetType.getParameters().get(FIRST_ELEMENT).setId(assetTypeParameterId);
 		requestAssetType.getParameters().get(FIRST_ELEMENT).setDatatype("FicticiousDataType");
 
-		serverResp = APITestUtil.getResponseObjForUpdate(requestAssetType, microservice, environment, assetTypeId, apiRequestHelper, assetTypeAPI, ServerResponse.class);
+		serverResp = MAbstractAPIHelper.getResponseObjForUpdate(requestAssetType, microservice, environment, assetTypeId, apiRequestHelper, assetTypeAPI, ServerResponse.class);
 		CustomAssertions.assertServerError(400, "org.springframework.http.converter.HttpMessageNotReadableException", serverResp);
 	}
 
@@ -211,7 +213,7 @@ public class UpdateAssetTypeParametersTest extends BaseTestSetupAndTearDown {
 		requestAssetType.getParameters().get(FIRST_ELEMENT).setId(assetTypeParameterId);
 		requestAssetType.getParameters().get(FIRST_ELEMENT).setDatatype("");
 
-		serverResp = APITestUtil.getResponseObjForUpdate(requestAssetType, microservice, environment, assetTypeId, apiRequestHelper, assetTypeAPI, ServerResponse.class);
+		serverResp = MAbstractAPIHelper.getResponseObjForUpdate(requestAssetType, microservice, environment, assetTypeId, apiRequestHelper, assetTypeAPI, ServerResponse.class);
 		CustomAssertions.assertServerError(400, "org.springframework.http.converter.HttpMessageNotReadableException", serverResp);
 	}
 
@@ -238,10 +240,10 @@ public class UpdateAssetTypeParametersTest extends BaseTestSetupAndTearDown {
 		// Setting up the update request
 		requestAssetType.setParameters(responseAssetType.getParameters());
 
-		responseAssetType = APITestUtil.getResponseObjForUpdate(requestAssetType, microservice, environment, assetTypeIdLocal, apiRequestHelper, assetTypeAPI, AssetType.class);
-		CustomAssertions.assertRequestAndResponseObj(200, APITestUtil.responseCodeForInputRequest, requestAssetType, responseAssetType);
+		responseAssetType = MAbstractAPIHelper.getResponseObjForUpdate(requestAssetType, microservice, environment, assetTypeIdLocal, apiRequestHelper, assetTypeAPI, AssetType.class);
+		CustomAssertions.assertRequestAndResponseObj(200, MAbstractAPIHelper.responseCodeForInputRequest, requestAssetType, responseAssetType);
 
-		AssetType updatedAssetType = APITestUtil.getResponseObjForRetrieve(microservice, environment, assetTypeIdLocal, apiRequestHelper, assetTypeAPI, AssetType.class);
+		AssetType updatedAssetType = MAbstractAPIHelper.getResponseObjForRetrieve(microservice, environment, assetTypeIdLocal, apiRequestHelper, assetTypeAPI, AssetType.class);
 		CustomAssertions.assertRequestAndResponseObj(responseAssetType, updatedAssetType);
 	}
 
@@ -263,10 +265,10 @@ public class UpdateAssetTypeParametersTest extends BaseTestSetupAndTearDown {
 		// Setting up the update request
 		requestAssetType.setParameters(responseAssetType.getParameters());
 
-		responseAssetType = APITestUtil.getResponseObjForUpdate(requestAssetType, microservice, environment, assetTypeIdLocal, apiRequestHelper, assetTypeAPI, AssetType.class);
-		CustomAssertions.assertRequestAndResponseObj(200, APITestUtil.responseCodeForInputRequest, requestAssetType, responseAssetType);
+		responseAssetType = MAbstractAPIHelper.getResponseObjForUpdate(requestAssetType, microservice, environment, assetTypeIdLocal, apiRequestHelper, assetTypeAPI, AssetType.class);
+		CustomAssertions.assertRequestAndResponseObj(200, MAbstractAPIHelper.responseCodeForInputRequest, requestAssetType, responseAssetType);
 
-		AssetType updatedAssetType = APITestUtil.getResponseObjForRetrieve(microservice, environment, assetTypeIdLocal, apiRequestHelper, assetTypeAPI, AssetType.class);
+		AssetType updatedAssetType = MAbstractAPIHelper.getResponseObjForRetrieve(microservice, environment, assetTypeIdLocal, apiRequestHelper, assetTypeAPI, AssetType.class);
 		CustomAssertions.assertRequestAndResponseObj(responseAssetType, updatedAssetType);
 	}
 
@@ -287,10 +289,10 @@ public class UpdateAssetTypeParametersTest extends BaseTestSetupAndTearDown {
 			// Setting up the update request
 			requestAssetType.setParameters(responseAssetType.getParameters());
 
-			responseAssetType = APITestUtil.getResponseObjForUpdate(requestAssetType, microservice, environment, assetTypeIdLocal, apiRequestHelper, assetTypeAPI, AssetType.class);
-			CustomAssertions.assertRequestAndResponseObj(200, APITestUtil.responseCodeForInputRequest, requestAssetType, responseAssetType);
+			responseAssetType = MAbstractAPIHelper.getResponseObjForUpdate(requestAssetType, microservice, environment, assetTypeIdLocal, apiRequestHelper, assetTypeAPI, AssetType.class);
+			CustomAssertions.assertRequestAndResponseObj(200, MAbstractAPIHelper.responseCodeForInputRequest, requestAssetType, responseAssetType);
 
-			AssetType updatedAssetType = APITestUtil.getResponseObjForRetrieve(microservice, environment, assetTypeIdLocal, apiRequestHelper, assetTypeAPI, AssetType.class);
+			AssetType updatedAssetType = MAbstractAPIHelper.getResponseObjForRetrieve(microservice, environment, assetTypeIdLocal, apiRequestHelper, assetTypeAPI, AssetType.class);
 			CustomAssertions.assertRequestAndResponseObj(responseAssetType, updatedAssetType);
 		}
 	}
@@ -311,10 +313,10 @@ public class UpdateAssetTypeParametersTest extends BaseTestSetupAndTearDown {
 		// Setting up the update request
 		requestAssetType.setParameters(responseAssetType.getParameters());
 
-		responseAssetType = APITestUtil.getResponseObjForUpdate(requestAssetType, microservice, environment, assetTypeIdLocal, apiRequestHelper, assetTypeAPI, AssetType.class);
-		CustomAssertions.assertRequestAndResponseObj(200, APITestUtil.responseCodeForInputRequest, requestAssetType, responseAssetType);
+		responseAssetType = MAbstractAPIHelper.getResponseObjForUpdate(requestAssetType, microservice, environment, assetTypeIdLocal, apiRequestHelper, assetTypeAPI, AssetType.class);
+		CustomAssertions.assertRequestAndResponseObj(200, MAbstractAPIHelper.responseCodeForInputRequest, requestAssetType, responseAssetType);
 
-		AssetType updatedAssetType = APITestUtil.getResponseObjForRetrieve(microservice, environment, assetTypeIdLocal, apiRequestHelper, assetTypeAPI, AssetType.class);
+		AssetType updatedAssetType = MAbstractAPIHelper.getResponseObjForRetrieve(microservice, environment, assetTypeIdLocal, apiRequestHelper, assetTypeAPI, AssetType.class);
 		CustomAssertions.assertRequestAndResponseObj(responseAssetType, updatedAssetType);
 	}
 

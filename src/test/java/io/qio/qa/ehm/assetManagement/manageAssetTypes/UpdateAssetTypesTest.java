@@ -14,6 +14,7 @@ import io.qio.qa.lib.ehm.apiHelpers.assetType.MAssetTypeAPIHelper;
 import io.qio.qa.lib.ehm.model.assetType.AssetType;
 import io.qio.qa.lib.ehm.model.assetType.helper.AssetTypeHelper;
 import io.qio.qa.lib.exception.ServerResponse;
+import io.qio.qa.lib.common.MAbstractAPIHelper;
 
 public class UpdateAssetTypesTest extends BaseTestSetupAndTearDown {
 

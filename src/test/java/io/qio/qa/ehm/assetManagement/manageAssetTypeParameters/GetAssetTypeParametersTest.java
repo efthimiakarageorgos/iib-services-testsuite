@@ -18,9 +18,10 @@ import io.qio.qa.lib.ehm.apiHelpers.assetType.MAssetTypeParameterAPIHelper;
 import io.qio.qa.lib.ehm.model.assetType.AssetType;
 import io.qio.qa.lib.ehm.model.assetType.AssetTypeParameter;
 import io.qio.qa.lib.ehm.model.assetType.helper.AssetTypeHelper;
-import io.qio.qa.lib.ehm.common.APITestUtil;
+//import io.qio.qa.lib.ehm.common.APITestUtil;
 import io.qio.qa.lib.assertions.CustomAssertions;
 import io.qio.qa.lib.exception.ServerResponse;
+import io.qio.qa.lib.common.MAbstractAPIHelper;
 
 public class GetAssetTypeParametersTest extends BaseTestSetupAndTearDown {
 
@@ -63,7 +64,7 @@ public class GetAssetTypeParametersTest extends BaseTestSetupAndTearDown {
 	@Test
 	public void shouldGetAnErrorMsgWhenTryingToGetParametersForANonExistingAssetType() {
 		String invalidAssetTypeId = "ThisAssetTypeDoesNotExist";
-		serverResp = APITestUtil.getResponseObjForRetrieve(microservice, environment, invalidAssetTypeId, apiRequestHelper, assetTypeAPI, ServerResponse.class);
+		serverResp = MAbstractAPIHelper.getResponseObjForRetrieve(microservice, environment, invalidAssetTypeId, apiRequestHelper, assetTypeAPI, ServerResponse.class);
 		CustomAssertions.assertServerError(404, "com.qiotec.application.exceptions.InvalidParameterException", "Wrong Asset Type id in the URL", serverResp);
 	}
 
@@ -71,13 +72,13 @@ public class GetAssetTypeParametersTest extends BaseTestSetupAndTearDown {
 	@Test
 	public void shouldGetAnErrorMsgWhenTryingToGetParametersForAnExistingAssetTypeThatHasNoParametersConfigured() {
 		requestAssetType = assetTypeHelper.getAssetTypeWithNoAttributesAndParameters();
-		responseAssetType = APITestUtil.getResponseObjForCreate(requestAssetType, microservice, environment, apiRequestHelper, assetTypeAPI, AssetType.class);
+		responseAssetType = MAbstractAPIHelper.getResponseObjForCreate(requestAssetType, microservice, environment, apiRequestHelper, assetTypeAPI, AssetType.class);
 		
 		String assetTypeId=responseAssetType.getAssetTypeId();
 		idsForAllCreatedElements.add(assetTypeId);
 
 		String invalidAssetTypeParameterId = "ThisDoesNotExist";
-		serverResp = APITestUtil.getResponseObjForRetrieve(microservice, environment, assetTypeId, invalidAssetTypeParameterId, apiRequestHelper, assetTypeParameterAPI, ServerResponse.class);
+		serverResp = MAbstractAPIHelper.getResponseObjForRetrieve(microservice, environment, assetTypeId, invalidAssetTypeParameterId, apiRequestHelper, assetTypeParameterAPI, ServerResponse.class);
 		CustomAssertions.assertServerError(400, "com.qiotec.application.exceptions.InvalidInputException", "No Parameters are Associated with a given Asset Type", serverResp);
 	}
 
@@ -94,14 +95,14 @@ public class GetAssetTypeParametersTest extends BaseTestSetupAndTearDown {
 	public void shouldBeAbleToGetAnAssetTypeParameterUsingExistingAssetTypeIdAndParameterId() {
 
 		requestAssetType = assetTypeHelper.getAssetTypeWithAllParameters();
-		responseAssetType = APITestUtil.getResponseObjForCreate(requestAssetType, microservice, environment, apiRequestHelper, assetTypeAPI, AssetType.class);
+		responseAssetType = MAbstractAPIHelper.getResponseObjForCreate(requestAssetType, microservice, environment, apiRequestHelper, assetTypeAPI, AssetType.class);
 		
 		String assetTypeId=responseAssetType.getAssetTypeId();
 		idsForAllCreatedElements.add(assetTypeId);
 
 		for (AssetTypeParameter responseAssetTypeParameter : responseAssetType.getParameters()) {
 			String createdParameterId = responseAssetTypeParameter.getParameterId();
-			AssetTypeParameter committedAssetTypeParameter = APITestUtil.getResponseObjForRetrieve(microservice, environment, assetTypeId, createdParameterId, apiRequestHelper, assetTypeParameterAPI,
+			AssetTypeParameter committedAssetTypeParameter = MAbstractAPIHelper.getResponseObjForRetrieve(microservice, environment, assetTypeId, createdParameterId, apiRequestHelper, assetTypeParameterAPI,
 					AssetTypeParameter.class);
 			CustomAssertions.assertRequestAndResponseObj(responseAssetTypeParameter, committedAssetTypeParameter);
 		}
@@ -112,12 +113,12 @@ public class GetAssetTypeParametersTest extends BaseTestSetupAndTearDown {
 	public void shouldBeAbleToGetAllAssetTypeParametersForAnExistingAssetTypeIdWithNoParameters() {
 
 		requestAssetType = assetTypeHelper.getAssetTypeWithNoAttributesAndParameters();
-		responseAssetType = APITestUtil.getResponseObjForCreate(requestAssetType, microservice, environment, apiRequestHelper, assetTypeAPI, AssetType.class);
+		responseAssetType = MAbstractAPIHelper.getResponseObjForCreate(requestAssetType, microservice, environment, apiRequestHelper, assetTypeAPI, AssetType.class);
 		
 		String assetTypeId=responseAssetType.getAssetTypeId();
 		idsForAllCreatedElements.add(assetTypeId);
 
-		List<AssetTypeParameter> committedAssetTypeParameters = APITestUtil.getListResponseObjForRetrieve(microservice, environment, assetTypeId, apiRequestHelper, assetTypeParameterAPI,
+		List<AssetTypeParameter> committedAssetTypeParameters = MAbstractAPIHelper.getListResponseObjForRetrieve(microservice, environment, assetTypeId, apiRequestHelper, assetTypeParameterAPI,
 				AssetTypeParameter.class);
 
 		committedAssetTypeParameters = committedAssetTypeParameters.size() == 0 ? null : committedAssetTypeParameters;
@@ -129,12 +130,12 @@ public class GetAssetTypeParametersTest extends BaseTestSetupAndTearDown {
 	public void shouldBeAbleToGetAllAssetTypeParametersForAnExistingAssetTypeIdWithAllParameters() {
 
 		requestAssetType = assetTypeHelper.getAssetTypeWithAllParameters();
-		responseAssetType = APITestUtil.getResponseObjForCreate(requestAssetType, microservice, environment, apiRequestHelper, assetTypeAPI, AssetType.class);
+		responseAssetType = MAbstractAPIHelper.getResponseObjForCreate(requestAssetType, microservice, environment, apiRequestHelper, assetTypeAPI, AssetType.class);
 		
 		String assetTypeId=responseAssetType.getAssetTypeId();
 		idsForAllCreatedElements.add(assetTypeId);
 
-		List<AssetTypeParameter> committedAssetTypeParameters = APITestUtil.getListResponseObjForRetrieve(microservice, environment, assetTypeId, apiRequestHelper, assetTypeParameterAPI,
+		List<AssetTypeParameter> committedAssetTypeParameters = MAbstractAPIHelper.getListResponseObjForRetrieve(microservice, environment, assetTypeId, apiRequestHelper, assetTypeParameterAPI,
 				AssetTypeParameter.class);
 
 		Collections.sort(committedAssetTypeParameters);

@@ -8,17 +8,18 @@ import io.qio.qa.ehm.common.BaseTestSetupAndTearDown;
 import org.junit.Before;
 import org.junit.BeforeClass;
 
-import io.qio.qa.lib.ehm.apiHelpers.assetType.MAssetTypeAPIHelper;
-import io.qio.qa.lib.ehm.model.assetType.AssetType;
-import io.qio.qa.lib.ehm.model.assetType.helper.AssetTypeHelper;
+import io.qio.qa.lib.ehm.apiHelpers.insights.MActivityTypeAPIHelper;
+import io.qio.qa.lib.ehm.model.insight.activityType.ActivityType;
+import io.qio.qa.lib.ehm.model.insight.activityType.helper.ActivityTypeHelper;
 import io.qio.qa.lib.exception.ServerResponse;
+import io.qio.qa.lib.common.MAbstractAPIHelper;
 
 public class GetActivityTypesTest extends BaseTestSetupAndTearDown {
 
-	private static MAssetTypeAPIHelper assetTypeAPI;
-	private AssetTypeHelper assetTypeHelper;
-	private AssetType requestAssetType;
-	private AssetType responseAssetType;
+	private static MActivityTypeAPIHelper activityTypeAPI;
+	private ActivityTypeHelper activityTypeHelper;
+	private ActivityType requestActivityType;
+	private ActivityType responseActivityType;
 	private ServerResponse serverResp;
 
 	private final int FIRST_ELEMENT = 0;
@@ -26,15 +27,15 @@ public class GetActivityTypesTest extends BaseTestSetupAndTearDown {
 	@BeforeClass
 	public static void initSetupBeforeAllTests() {
 		baseInitSetupBeforeAllTests("asset");
-		assetTypeAPI = new MAssetTypeAPIHelper();
+        activityTypeAPI = new MActivityTypeAPIHelper();
 	}
 
 	@Before
 	public void initSetupBeforeEceryTest() {
 		// Initializing a new set of objects before each test case.
-		assetTypeHelper = new AssetTypeHelper();
-		requestAssetType = new AssetType();
-		responseAssetType = new AssetType();
+        activityTypeHelper = new ActivityTypeHelper();
+        requestActivityType = new ActivityType();
+        responseActivityType = new ActivityType();
 		serverResp = new ServerResponse();
 	}
 
