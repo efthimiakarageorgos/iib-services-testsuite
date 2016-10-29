@@ -7,7 +7,8 @@ package io.qio.qa.ehm.common;
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
 import io.qio.qa.lib.apiHelpers.APIRequestHelper;
-import io.qio.qa.lib.ehm.common.APITestUtil;
+//import io.qio.qa.lib.ehm.common.APITestUtil;
+import io.qio.qa.lib.common.MAbstractAPIHelper;
 import org.apache.log4j.Logger;
 
 import java.util.ArrayList;
@@ -54,20 +55,20 @@ public class BaseTestSetupAndTearDown {
 
 	public static void baseCleanUpAfterAllTests(Object apiHelperObj) {
 		for (String elementId : idsForAllCreatedElements) {
-			APITestUtil.deleteRequestObj(microservice, environment, elementId, apiRequestHelper, apiHelperObj);
+			MAbstractAPIHelper.deleteRequestObj(microservice, environment, elementId, apiRequestHelper, apiHelperObj);
 		}
 	}
 
 	public static void baseCleanUpAfterAllTests(ArrayList<String> idListForDeletion, Object apiHelperObj) {
 		for (String elementId : idListForDeletion) {
-			APITestUtil.deleteRequestObj(microservice, environment, elementId, apiRequestHelper, apiHelperObj);
+			MAbstractAPIHelper.deleteRequestObj(microservice, environment, elementId, apiRequestHelper, apiHelperObj);
 		}
 	}
 	
 	public static void baseCleanUpAfterAllTests(ArrayList<String> idListForDeletion, Object apiHelperObj, String microserviceName) {
 		microservice = microserviceConfig.getString(microserviceName + "." + envRuntime);
 		for (String elementId : idListForDeletion) {
-			APITestUtil.deleteRequestObj(microservice, environment, elementId, apiRequestHelper, apiHelperObj);
+			MAbstractAPIHelper.deleteRequestObj(microservice, environment, elementId, apiRequestHelper, apiHelperObj);
 		}
 	}
 }
