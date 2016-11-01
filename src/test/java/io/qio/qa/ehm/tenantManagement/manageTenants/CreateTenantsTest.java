@@ -4,7 +4,6 @@
  */
 package io.qio.qa.ehm.tenantManagement.manageTenants;
 
-import java.util.List;
 import org.apache.log4j.Logger;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -18,54 +17,60 @@ import io.qio.qa.lib.assertions.CustomAssertions;
 import io.qio.qa.lib.exception.ServerResponse;
 import io.qio.qa.lib.ehm.model.tenant.Tenant;
 import io.qio.qa.lib.ehm.model.tenant.helper.TenantHelper;
-import io.qio.qa.lib.ehm.model.userGroup.*;
 import io.qio.qa.lib.ehm.common.APITestUtil;
+import io.qio.qa.lib.ehm.common.TenantUtil;
 import io.qio.qa.lib.common.MAbstractAPIHelper;
-import io.qio.qa.lib.common.BaseHelper;
 
 public class CreateTenantsTest extends BaseTestSetupAndTearDown {
 
-	private static MTenantAPIHelper tenantAPI;
-	private static MUserGroupAPIHelper groupAPI;
-	private TenantHelper tenantHelper;
-	private Tenant requestTenant;
-	private Tenant responseTenant;
-	private Tenant requestTenant2;
-	private ServerResponse serverResp;
-	private List<UserGroup> committedGroups;
+    private static MTenantAPIHelper tenantAPI;
+    private static MUserGroupAPIHelper groupAPI;
+    private static TenantUtil tenantUtil;
+    private TenantHelper tenantHelper;
+    private Tenant requestTenant;
+    private Tenant responseTenant;
+    private Tenant requestTenant2;
+    private ServerResponse serverResp;
 
-	// private UserGroupHelper groupHelper;
-	final static Logger logger = Logger.getRootLogger();
+    final static Logger logger = Logger.getRootLogger();
 
-	@BeforeClass
-	public static void initSetupBeforeAllTests() {
-		baseInitSetupBeforeAllTests("tenant");
-		
-		//INFO: Only users in the ADMIN group can create a tenant
-		username = userConfig.getString("user.admin.username");
-		password = userConfig.getString("user.admin.password");
-		apiRequestHelper.setUserName(username);
-		apiRequestHelper.setPassword(password);
-		
-		tenantAPI = new MTenantAPIHelper();
-		groupAPI = new MUserGroupAPIHelper();
-	}
+    @BeforeClass
+    public static void initSetupBeforeAllTests() {
+        baseInitSetupBeforeAllTests("tenant");
 
-	@Before
-	public void initSetupBeforeEveryTest() {
-		tenantHelper = new TenantHelper();
-		requestTenant = tenantHelper.getTenant();
-		responseTenant = new Tenant();
-		serverResp = new ServerResponse();
-	}
+        //INFO: Only users in the ADMIN group can create a tenant
+        username = userConfig.getString("user.admin.username");
+        password = userConfig.getString("user.admin.password");
+        apiRequestHelper.setUserName(username);
+        apiRequestHelper.setPassword(password);
 
-	@AfterClass
-	public static void cleanUpAfterAllTests() {
-		// INFO:Currently no user is allowed to delete a tenant
-		baseCleanUpAfterAllTests(tenantAPI);
-		// INFO: This delete will not be required if we move to MVP3 code
-		baseCleanUpAfterAllTests(secondaryIdListForDeletion, groupAPI, "idm");
-	}
+        tenantAPI = new MTenantAPIHelper();
+        groupAPI = new MUserGroupAPIHelper();
+
+        tenantUtil = new TenantUtil();
+    }
+
+    @Before
+    public void initSetupBeforeEveryTest() {
+        tenantHelper = new TenantHelper();
+        requestTenant = tenantHelper.getTenant();
+        responseTenant = new Tenant();
+        serverResp = new ServerResponse();
+    }
+
+    @AfterClass
+    public static void cleanUpAfterAllTests() {
+        // INFO:Currently no user is allowed to delete a tenant
+        baseCleanUpAfterAllTests(tenantAPI);
+
+        // INFO: This delete will not be required if we move to MVP3 code
+        for (String elementId : idsForAllCreatedElements) {
+            String groupId = tenantUtil.getIDMGroupForTenant(elementId);
+            //logger.info("Adding group id to list "+ groupId);
+            secondaryIdListForDeletion.add(groupId);
+        }
+        baseCleanUpAfterAllTests(secondaryIdListForDeletion, groupAPI, "idm");
+    }
 
 	// Matching test cases in Test Case Management (Jira/Zephyr):
 	// issuetype=Test and issue in (linkedIssues("RREHM-1191")) and issue in linkedIssues("RREHM-37")
@@ -199,21 +204,19 @@ public class CreateTenantsTest extends BaseTestSetupAndTearDown {
 
 		responseTenant = MAbstractAPIHelper.getResponseObjForCreate(requestTenant, microservice, environment, apiRequestHelper, tenantAPI, Tenant.class);
 		String tenantId = responseTenant.getTenantId();
+
+        //Preparation for Cleanup
+        idsForAllCreatedElements.add(tenantId);
+
 		Tenant committedTenant = MAbstractAPIHelper.getResponseObjForRetrieve(microservice, environment, tenantId, apiRequestHelper, tenantAPI, Tenant.class);
 		CustomAssertions.assertRequestAndResponseObj(responseTenant, committedTenant);
 		
 		//Assert that a group was created in IDM db for the tenant; the group name should be set to tenantId
-		//UserGroup committedGroups = APITestUtil.getResponseObjForRetrieve(oauthMicroservice, environment, tenantId, apiRequestHelper, groupAPI, UserGroup.class);
-		committedGroups = MAbstractAPIHelper.getListResponseObjForRetrieveBySearch(oauthMicroservice, environment, "byName", tenantId, apiRequestHelper, groupAPI, UserGroup.class);
-		UserGroup committedGroup =committedGroups.get(0);
-		String groupId = BaseHelper.getElementId(committedGroup.get_links().getSelfLink().getHref());
+		String groupId = tenantUtil.getIDMGroupForTenant(tenantId);
 		
 		//TODO:
 		//Assert the groupId is not empty
-		
-		//Cleanup
-		idsForAllCreatedElements.add(tenantId);
-		secondaryIdListForDeletion.add(groupId);
+
 	}
 
 	// RREHM-982
@@ -224,19 +227,12 @@ public class CreateTenantsTest extends BaseTestSetupAndTearDown {
 		
 		responseTenant = MAbstractAPIHelper.getResponseObjForCreate(requestTenant, microservice, environment, apiRequestHelper, tenantAPI, Tenant.class);
 		String tenantId = responseTenant.getTenantId();
+
+		//Preparation for Cleanup
+		idsForAllCreatedElements.add(tenantId);
+
 		Tenant committedTenant = MAbstractAPIHelper.getResponseObjForRetrieve(microservice, environment, tenantId, apiRequestHelper, tenantAPI, Tenant.class);
 		CustomAssertions.assertRequestAndResponseObj(responseTenant, committedTenant);
-		
-		//Cleanup
-		idsForAllCreatedElements.add(tenantId);
-		
-		//Get the group created in IDM db for the tenant
-		//UserGroup committedGroups = APITestUtil.getResponseObjForRetrieve(oauthMicroservice, environment, tenantId, apiRequestHelper, groupAPI, UserGroup.class);
-		committedGroups = MAbstractAPIHelper.getListResponseObjForRetrieveBySearch(oauthMicroservice, environment, "byNameLike", tenantId, apiRequestHelper, groupAPI, UserGroup.class);
-		UserGroup committedGroup =committedGroups.get(0);
-		
-		String groupId = BaseHelper.getElementId(committedGroup.get_links().getSelfLink().getHref());
-		secondaryIdListForDeletion.add(groupId);
 	}
 
 	// MOVE this to DeleteAssetTest file
