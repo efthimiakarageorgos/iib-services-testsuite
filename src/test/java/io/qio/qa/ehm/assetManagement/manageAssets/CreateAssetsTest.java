@@ -364,7 +364,7 @@ public class CreateAssetsTest extends BaseTestSetupAndTearDown {
 		String assetId = responseAsset.getAssetId();
 		idsForAllCreatedElements.add(assetId);
 
-		CustomAssertions.assertRequestAndResponseObj(201, MAbstractAPIHelper.responseCodeForInputRequest);
+		CustomAssertions.assertRequestAndResponseObj(201, MAbstractAPIHelper.responseCodeForInputRequest, requestAsset, responseAsset );
 
 		AssetResponse committedAsset = MAbstractAPIHelper.getResponseObjForRetrieve(microservice, environment, assetId, apiRequestHelper, assetAPI, AssetResponse.class);
 		CustomAssertions.assertRequestAndResponseObj(responseAsset, committedAsset);
@@ -373,7 +373,6 @@ public class CreateAssetsTest extends BaseTestSetupAndTearDown {
 	// RREHM-660 (Asset Description contains paragraphs)
 	@Test
 	public void shouldCreateAssetWithUniqueAbbrWhenDescContainsParagraphs() {
-
 		requestAsset = assetRequestHelper.getAssetWithPredefinedAssetTypeAndTenant(assetTypeId, tenantId);
 		requestAsset.setDescription("This is paragraph 1.\n This is paragraph 2.\nThis is paragraph 3");
 
@@ -381,7 +380,7 @@ public class CreateAssetsTest extends BaseTestSetupAndTearDown {
 		String assetId = responseAsset.getAssetId();
 		idsForAllCreatedElements.add(assetId);
 
-		CustomAssertions.assertRequestAndResponseObj(201, MAbstractAPIHelper.responseCodeForInputRequest);
+		CustomAssertions.assertRequestAndResponseObj(201, MAbstractAPIHelper.responseCodeForInputRequest, requestAsset, responseAsset );
 
 		AssetResponse committedAsset = MAbstractAPIHelper.getResponseObjForRetrieve(microservice, environment, assetId, apiRequestHelper, assetAPI, AssetResponse.class);
 		CustomAssertions.assertRequestAndResponseObj(responseAsset, committedAsset);
@@ -395,23 +394,21 @@ public class CreateAssetsTest extends BaseTestSetupAndTearDown {
 		String origAbbr = requestAsset.getAbbreviation();
 
 		responseAsset = MAbstractAPIHelper.getResponseObjForCreate(requestAsset, microservice, environment, apiRequestHelper, assetAPI, AssetResponse.class);
-		String assetId = responseAsset.getAssetId();
-		idsForAllCreatedElements.add(assetId);
+		idsForAllCreatedElements.add(responseAsset.getAssetId());
 
-		// This is a trick to get a second tenant created and after that create another asset that has the same abbreviation as the previously created asset and tenant set to the tenant of this asset
-		AssetRequest requestAssetForSecondTenantWithSameAbbr = assetRequestHelper.getAssetWithCreatingAssetTypeAndTenant("WithNoAttributesAndParameters", null, null);
-		idsForAllCreatedAssetTypes.add(requestAssetForSecondTenantWithSameAbbr.getAssetType());
-		idsForAllCreatedTenants.add(requestAssetForSecondTenantWithSameAbbr.getTenant());
+		// Create another asset that has the same abbreviation as the previously created asset and different tenant
+		AssetRequest requestAssetForSecondTenantWithSameAbbr = assetRequestHelper.getAssetWithPredefinedAssetTypeAndTenant(assetTypeId, tenantMPId);
 		requestAssetForSecondTenantWithSameAbbr.setAbbreviation(origAbbr);
 
 		AssetResponse responseAssetForSecondTenantWithSameAbbr = MAbstractAPIHelper.getResponseObjForCreate(requestAssetForSecondTenantWithSameAbbr, microservice, environment, apiRequestHelper, assetAPI,
 				AssetResponse.class);
-		idsForAllCreatedElements.add(responseAssetForSecondTenantWithSameAbbr.getAssetId());
+		String assetId = responseAssetForSecondTenantWithSameAbbr.getAssetId();
+		idsForAllCreatedElements.add(assetId);
 
-		CustomAssertions.assertRequestAndResponseObj(201, MAbstractAPIHelper.responseCodeForInputRequest);
+		CustomAssertions.assertRequestAndResponseObj(201, MAbstractAPIHelper.responseCodeForInputRequest, requestAssetForSecondTenantWithSameAbbr, responseAssetForSecondTenantWithSameAbbr);
 
 		AssetResponse committedAsset = MAbstractAPIHelper.getResponseObjForRetrieve(microservice, environment, assetId, apiRequestHelper, assetAPI, AssetResponse.class);
-		CustomAssertions.assertRequestAndResponseObj(responseAsset, committedAsset);
+		CustomAssertions.assertRequestAndResponseObj(responseAssetForSecondTenantWithSameAbbr, committedAsset);
 	}
 
 	// RREHM-823
