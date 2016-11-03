@@ -6,6 +6,8 @@ package io.qio.qa.ehm.assetManagement.manageAssets;
 
 import java.util.ArrayList;
 
+import io.qio.qa.lib.ehm.common.TenantUtil;
+import junit.framework.Assert;
 import org.apache.log4j.Logger;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -16,6 +18,7 @@ import static org.junit.Assert.*;
 
 import io.qio.qa.ehm.common.BaseTestSetupAndTearDown;
 import io.qio.qa.lib.ehm.common.APITestUtil;
+
 import io.qio.qa.lib.ehm.model.asset.AssetRequest;
 import io.qio.qa.lib.ehm.model.asset.AssetResponse;
 import io.qio.qa.lib.ehm.model.asset.AssetStatus;
@@ -23,6 +26,7 @@ import io.qio.qa.lib.ehm.model.asset.helper.AssetRequestHelper;
 import io.qio.qa.lib.ehm.apiHelpers.MAssetAPIHelper;
 import io.qio.qa.lib.ehm.apiHelpers.MTenantAPIHelper;
 import io.qio.qa.lib.ehm.apiHelpers.assetType.MAssetTypeAPIHelper;
+import io.qio.qa.lib.ehm.model.assetType.AssetType;
 
 import io.qio.qa.lib.assertions.CustomAssertions;
 import io.qio.qa.lib.exception.ServerResponse;
@@ -30,12 +34,15 @@ import io.qio.qa.lib.common.MAbstractAPIHelper;
 
 
 public class CreateAssetsTest extends BaseTestSetupAndTearDown {
-
 	private static MAssetTypeAPIHelper assetTypeAPI;
 	private static String assetTypeId;
+	private static String assetTypeMPId;
+	private static String assetTypeMAId;
 
 	private static MTenantAPIHelper tenantAPI;
 	private static String tenantId;
+	private static String tenantMPId;
+	private static String tenantMAId;
 
 	private static MAssetAPIHelper assetAPI;
 	private static AssetRequestHelper assetRequestHelper;
@@ -44,7 +51,6 @@ public class CreateAssetsTest extends BaseTestSetupAndTearDown {
 
 	private ServerResponse serverResp;
 
-	private static ArrayList<String> idsForAllCreatedAssets;
 	private static ArrayList<String> idsForAllCreatedAssetTypes;
 	private static ArrayList<String> idsForAllCreatedTenants;
 
@@ -59,16 +65,29 @@ public class CreateAssetsTest extends BaseTestSetupAndTearDown {
 		assetTypeAPI = new MAssetTypeAPIHelper();
 		tenantAPI = new MTenantAPIHelper();
 
-		idsForAllCreatedAssets = new ArrayList<String>();
-		idsForAllCreatedAssetTypes = new ArrayList<String>();
-		idsForAllCreatedTenants = new ArrayList<String>();
+		idsForAllCreatedAssetTypes = new ArrayList<>();
+		idsForAllCreatedTenants = new ArrayList<>();
 
 		requestAsset = assetRequestHelper.getAssetWithCreatingAssetTypeAndTenant("WithNoAttributesAndParameters", null, null);
 		assetTypeId = requestAsset.getAssetType();
 		tenantId = requestAsset.getTenant();
 
 		idsForAllCreatedAssetTypes.add(assetTypeId);
-		idsForAllCreatedTenants.add(tenantId); 
+		idsForAllCreatedTenants.add(tenantId);
+
+		AssetRequest requestAssetManyPars = assetRequestHelper.getAssetWithCreatingAssetTypeAndTenant("WithAllParameters", null, null);
+		assetTypeMPId = requestAssetManyPars.getAssetType();
+		tenantMPId = requestAssetManyPars.getTenant();
+
+		idsForAllCreatedAssetTypes.add(assetTypeMPId);
+		idsForAllCreatedTenants.add(tenantMPId);
+
+		AssetRequest requestAssetManyAttrs = assetRequestHelper.getAssetWithCreatingAssetTypeAndTenant("WithAllAttributes", null, null);
+		assetTypeMAId = requestAssetManyAttrs.getAssetType();
+		tenantMAId = requestAssetManyAttrs.getTenant();
+
+		idsForAllCreatedAssetTypes.add(assetTypeMAId);
+		idsForAllCreatedTenants.add(tenantMAId);
 	}
 
 	@Before
@@ -87,9 +106,22 @@ public class CreateAssetsTest extends BaseTestSetupAndTearDown {
 
 	@AfterClass
 	public static void cleanUpAfterAllTests() {
-		baseCleanUpAfterAllTests(idsForAllCreatedAssets, assetAPI);
+		baseCleanUpAfterAllTests(assetAPI);
 		baseCleanUpAfterAllTests(idsForAllCreatedAssetTypes, assetTypeAPI);
 		baseCleanUpAfterAllTests(idsForAllCreatedTenants, tenantAPI);
+
+		// INFO: This delete will not be required if we move to MVP3 code
+		ArrayList<String> idsForAllCreatedGroupsForTenants;
+		idsForAllCreatedGroupsForTenants = new ArrayList<>();
+
+		for (String elementId : idsForAllCreatedTenants) {
+			TenantUtil tenantUtil;
+			tenantUtil = new TenantUtil();
+			String groupId = tenantUtil.getIDMGroupForTenant(elementId);
+			//logger.info("Adding group id to list "+ groupId);
+			idsForAllCreatedGroupsForTenants.add(groupId);
+		}
+		baseCleanUpAfterAllTests(idsForAllCreatedGroupsForTenants, groupAPI, oauthMicroserviceName);
 	}
 
 	// Matching test cases in Test Case Management (Jira/Zephyr):
@@ -277,10 +309,7 @@ public class CreateAssetsTest extends BaseTestSetupAndTearDown {
 	// Want to validate that if the asset type we link to has parameters and or attributes, then these parameters and attributes are part of the asset create response
 	// Want to validate that the href links for asset type and tenant are valid: aka if you make a GET request with them, you get 200 response -- should be used only in specific tc's (see reasoning
 	// below)
-	// System generated fields are created (CreatedDate field) --- we should have a TC that covers this and not have to check all the time to avoid failing all test cases if this has an issue
 	// Validate that some date fields are set to have value equal to the time of creation -- this could be validated as being the range of the tc timestamp as we cannot predict the exact second.
-	// All date fields should have right format including the system generated ones -- we should do it as part of specific test cases and not check every time to avoid failing all test cases if this
-	// has an issue
 	//
 	// Therefore the above should be made in to separate methods (possibly generalized) that can be called on demand based on test case
 	//
@@ -292,9 +321,10 @@ public class CreateAssetsTest extends BaseTestSetupAndTearDown {
 
 		responseAsset = MAbstractAPIHelper.getResponseObjForCreate(requestAsset, microservice, environment, apiRequestHelper, assetAPI, AssetResponse.class);
 		String assetId = responseAsset.getAssetId();
-		idsForAllCreatedAssets.add(assetId);
+		idsForAllCreatedElements.add(assetId);
 
-		CustomAssertions.assertRequestAndResponseObj(201, MAbstractAPIHelper.responseCodeForInputRequest);
+		//Assert response code and equality of request and response
+		CustomAssertions.assertRequestAndResponseObj(201, MAbstractAPIHelper.responseCodeForInputRequest, requestAsset, responseAsset);
 
 		AssetResponse committedAsset = MAbstractAPIHelper.getResponseObjForRetrieve(microservice, environment, assetId, apiRequestHelper, assetAPI, AssetResponse.class);
 		CustomAssertions.assertRequestAndResponseObj(responseAsset, committedAsset);
@@ -308,14 +338,19 @@ public class CreateAssetsTest extends BaseTestSetupAndTearDown {
 
 		responseAsset = MAbstractAPIHelper.getResponseObjForCreate(requestAsset, microservice, environment, apiRequestHelper, assetAPI, AssetResponse.class);
 		String assetId = responseAsset.getAssetId();
-		idsForAllCreatedAssets.add(assetId);
+		idsForAllCreatedElements.add(assetId);
 
-		CustomAssertions.assertRequestAndResponseObj(201, MAbstractAPIHelper.responseCodeForInputRequest);
+		//Assert response code and equality of request and response
+		CustomAssertions.assertRequestAndResponseObj(201, MAbstractAPIHelper.responseCodeForInputRequest, requestAsset, responseAsset);
 
 		AssetResponse committedAsset = MAbstractAPIHelper.getResponseObjForRetrieve(microservice, environment, assetId, apiRequestHelper, assetAPI, AssetResponse.class);
-		CustomAssertions.assertRequestAndResponseObj(responseAsset, committedAsset);
+
+		// Assert the CreatedDate has the right date format
+		Assert.assertTrue(responseAsset.validateDateFormats());
+		Assert.assertTrue(committedAsset.validateDateFormats());
+
 	    // TODO
-		// Assert the CreatedDate field exists; has correct date format and the date is equal to the time of creation
+		// Assert the CreatedDate field value is equal to the time of creation
 	}
 
 	// RREHM-628 (Asset Abbreviation contains dash, underscore, dot chars)
@@ -327,7 +362,7 @@ public class CreateAssetsTest extends BaseTestSetupAndTearDown {
 
 		responseAsset = MAbstractAPIHelper.getResponseObjForCreate(requestAsset, microservice, environment, apiRequestHelper, assetAPI, AssetResponse.class);
 		String assetId = responseAsset.getAssetId();
-		idsForAllCreatedAssets.add(assetId);
+		idsForAllCreatedElements.add(assetId);
 
 		CustomAssertions.assertRequestAndResponseObj(201, MAbstractAPIHelper.responseCodeForInputRequest);
 
@@ -344,7 +379,7 @@ public class CreateAssetsTest extends BaseTestSetupAndTearDown {
 
 		responseAsset = MAbstractAPIHelper.getResponseObjForCreate(requestAsset, microservice, environment, apiRequestHelper, assetAPI, AssetResponse.class);
 		String assetId = responseAsset.getAssetId();
-		idsForAllCreatedAssets.add(assetId);
+		idsForAllCreatedElements.add(assetId);
 
 		CustomAssertions.assertRequestAndResponseObj(201, MAbstractAPIHelper.responseCodeForInputRequest);
 
@@ -361,7 +396,7 @@ public class CreateAssetsTest extends BaseTestSetupAndTearDown {
 
 		responseAsset = MAbstractAPIHelper.getResponseObjForCreate(requestAsset, microservice, environment, apiRequestHelper, assetAPI, AssetResponse.class);
 		String assetId = responseAsset.getAssetId();
-		idsForAllCreatedAssets.add(assetId);
+		idsForAllCreatedElements.add(assetId);
 
 		// This is a trick to get a second tenant created and after that create another asset that has the same abbreviation as the previously created asset and tenant set to the tenant of this asset
 		AssetRequest requestAssetForSecondTenantWithSameAbbr = assetRequestHelper.getAssetWithCreatingAssetTypeAndTenant("WithNoAttributesAndParameters", null, null);
@@ -371,7 +406,7 @@ public class CreateAssetsTest extends BaseTestSetupAndTearDown {
 
 		AssetResponse responseAssetForSecondTenantWithSameAbbr = MAbstractAPIHelper.getResponseObjForCreate(requestAssetForSecondTenantWithSameAbbr, microservice, environment, apiRequestHelper, assetAPI,
 				AssetResponse.class);
-		idsForAllCreatedAssets.add(responseAssetForSecondTenantWithSameAbbr.getAssetId());
+		idsForAllCreatedElements.add(responseAssetForSecondTenantWithSameAbbr.getAssetId());
 
 		CustomAssertions.assertRequestAndResponseObj(201, MAbstractAPIHelper.responseCodeForInputRequest);
 
@@ -386,9 +421,13 @@ public class CreateAssetsTest extends BaseTestSetupAndTearDown {
 		for (AssetStatus eachAssetStatus : AssetStatus.values()) {
 			requestAsset = assetRequestHelper.getAssetWithPredefinedAssetTypeAndTenant(assetTypeId, tenantId);
 			requestAsset.setStatus(eachAssetStatus.toString());
+
 			responseAsset = MAbstractAPIHelper.getResponseObjForCreate(requestAsset, microservice, environment, apiRequestHelper, assetAPI, AssetResponse.class);
 			String assetId = responseAsset.getAssetId();
-			idsForAllCreatedAssets.add(assetId);
+			idsForAllCreatedElements.add(assetId);
+
+			//Assert response code and equality of request and response
+			CustomAssertions.assertRequestAndResponseObj(201, MAbstractAPIHelper.responseCodeForInputRequest, requestAsset, responseAsset);
 
 			AssetResponse committedAsset = MAbstractAPIHelper.getResponseObjForRetrieve(microservice, environment, assetId, apiRequestHelper, assetAPI, AssetResponse.class);
 			CustomAssertions.assertRequestAndResponseObj(responseAsset, committedAsset);
@@ -403,15 +442,13 @@ public class CreateAssetsTest extends BaseTestSetupAndTearDown {
 
 		responseAsset = MAbstractAPIHelper.getResponseObjForCreate(requestAsset, microservice, environment, apiRequestHelper, assetAPI, AssetResponse.class);
 		String assetId = responseAsset.getAssetId();
-		idsForAllCreatedAssets.add(assetId);
+		idsForAllCreatedElements.add(assetId);
 
-		CustomAssertions.assertRequestAndResponseObj(201, MAbstractAPIHelper.responseCodeForInputRequest);
+		//Assert response code and equality of request and response
+		CustomAssertions.assertRequestAndResponseObj(201, MAbstractAPIHelper.responseCodeForInputRequest, requestAsset, responseAsset);
 
 		AssetResponse committedAsset = MAbstractAPIHelper.getResponseObjForRetrieve(microservice, environment, assetId, apiRequestHelper, assetAPI, AssetResponse.class);
-		CustomAssertions.assertRequestAndResponseObj(responseAsset, committedAsset);
-		// TODO
-		//NEED TO add assertion for checking that asset Status value is 'AssetCreated'
-
+		CustomAssertions.assertEqualityCheckOnInputFields("AssetCreated", committedAsset.getStatus());
 	}
 	
 	// RREHM-824 ()
@@ -422,25 +459,58 @@ public class CreateAssetsTest extends BaseTestSetupAndTearDown {
 		
 		responseAsset = MAbstractAPIHelper.getResponseObjForCreate(requestAsset, microservice, environment, apiRequestHelper, assetAPI, AssetResponse.class);
 		String assetId = responseAsset.getAssetId();
-		idsForAllCreatedAssets.add(assetId);
+		idsForAllCreatedElements.add(assetId);
 
-		logger.info("CreatedDate "+responseAsset.getCreatedDate());
+		//Assert response code and equality of request and response
+		CustomAssertions.assertRequestAndResponseObj(201, MAbstractAPIHelper.responseCodeForInputRequest, requestAsset, responseAsset);
 
-		CustomAssertions.assertResponseCode(201, MAbstractAPIHelper.responseCodeForInputRequest);
-		CustomAssertions.assertRequestAndResponseObj(201, MAbstractAPIHelper.responseCodeForInputRequest);
+		AssetResponse committedAsset = MAbstractAPIHelper.getResponseObjForRetrieve(microservice, environment, assetId, apiRequestHelper, assetAPI, AssetResponse.class);
+		CustomAssertions.assertEqualityCheckOnInputFields("AssetCreated", committedAsset.getStatus());
+		//above is same as the line below, not sure if it is worth to define the method used above
+		//assertEquals("AssetCreated", committedAsset.getStatus());
+	}
+
+
+	// RREHM-612 ()
+	@Test
+	public void shouldCreateAssetWithUniqueAbbrLinkingToValidTenantAndAssetTypeWithMultiplePars() {
+		requestAsset = assetRequestHelper.getAssetWithPredefinedAssetTypeAndTenant(assetTypeMPId, tenantMPId);
+
+		responseAsset = MAbstractAPIHelper.getResponseObjForCreate(requestAsset, microservice, environment, apiRequestHelper, assetAPI, AssetResponse.class);
+		String assetId = responseAsset.getAssetId();
+		idsForAllCreatedElements.add(assetId);
+
+		//Assert response code and equality of request and response
+		CustomAssertions.assertRequestAndResponseObj(201, MAbstractAPIHelper.responseCodeForInputRequest, requestAsset, responseAsset);
 
 		AssetResponse committedAsset = MAbstractAPIHelper.getResponseObjForRetrieve(microservice, environment, assetId, apiRequestHelper, assetAPI, AssetResponse.class);
 		CustomAssertions.assertRequestAndResponseObj(responseAsset, committedAsset);
 
-		CustomAssertions.assertEqualityCheckOnInputFields("AssetCreated", committedAsset.getStatus());
-		assertEquals("AssetCreated", committedAsset.getStatus());
+		AssetType linkedAssetType = committedAsset.getAssetType();
+		assertTrue (linkedAssetType.getParameters().size() != 0);
 	}
-	
-	// RREHM-612
+
+	// RREHM-621 ()
+	@Test
+	public void shouldCreateAssetWithUniqueAbbrLinkingToValidTenantAndAssetTypeWithMultipleAttrs() {
+		requestAsset = assetRequestHelper.getAssetWithPredefinedAssetTypeAndTenant(assetTypeMAId, tenantMAId);
+
+		responseAsset = MAbstractAPIHelper.getResponseObjForCreate(requestAsset, microservice, environment, apiRequestHelper, assetAPI, AssetResponse.class);
+		String assetId = responseAsset.getAssetId();
+		idsForAllCreatedElements.add(assetId);
+
+		//Assert response code and equality of request and response
+		CustomAssertions.assertRequestAndResponseObj(201, MAbstractAPIHelper.responseCodeForInputRequest, requestAsset, responseAsset);
+
+		AssetResponse committedAsset = MAbstractAPIHelper.getResponseObjForRetrieve(microservice, environment, assetId, apiRequestHelper, assetAPI, AssetResponse.class);
+		CustomAssertions.assertRequestAndResponseObj(responseAsset, committedAsset);
+
+		AssetType linkedAssetType = committedAsset.getAssetType();
+		assertTrue (linkedAssetType.getAttributes().size() != 0);
+	}
+
 	// RREHM-610
 	// RREHM-609
-	// RREHM-621
-
 	
 	/*
 	 * POSITIVE TESTS END
