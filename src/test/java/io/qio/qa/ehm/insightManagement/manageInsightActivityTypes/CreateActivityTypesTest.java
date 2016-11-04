@@ -13,8 +13,8 @@ import org.junit.Test;
 
 import io.qio.qa.ehm.common.BaseTestSetupAndTearDown;
 import io.qio.qa.lib.ehm.apiHelpers.insights.MActivityTypeAPIHelper;
-import io.qio.qa.lib.ehm.model.insight.activityType.ActivityType;
-import io.qio.qa.lib.ehm.model.insight.activityType.helper.ActivityTypeHelper;
+import io.qio.qa.lib.ehm.model.activityType.ActivityType;
+import io.qio.qa.lib.ehm.model.activityType.helper.ActivityTypeHelper;
 import io.qio.qa.lib.ehm.common.APITestUtil;
 import io.qio.qa.lib.assertions.CustomAssertions;
 import io.qio.qa.lib.exception.ServerResponse;

@@ -14,11 +14,11 @@ import org.junit.Test;
 import io.qio.qa.ehm.common.BaseTestSetupAndTearDown;
 import io.qio.qa.lib.ehm.apiHelpers.insights.MInsightAPIHelper;
 import io.qio.qa.lib.ehm.apiHelpers.insights.MInsightTypeAPIHelper;
-import io.qio.qa.lib.ehm.apiHelpers.MTenantAPIHelper;
+import io.qio.qa.lib.ehm.apiHelpers.tenant.MTenantAPIHelper;
 import io.qio.qa.lib.ehm.model.insight.InsightRequest;
 import io.qio.qa.lib.ehm.model.insight.InsightResponse;
 import io.qio.qa.lib.ehm.model.insight.helper.InsightRequestHelper;
-import io.qio.qa.lib.ehm.common.APITestUtil;
+import io.qio.qa.lib.ehm.common.TenantUtil;
 import io.qio.qa.lib.assertions.CustomAssertions;
 import io.qio.qa.lib.exception.ServerResponse;
 import io.qio.qa.lib.common.MAbstractAPIHelper;
@@ -38,7 +38,6 @@ public class CreateInsightsTest extends BaseTestSetupAndTearDown {
 
 	private ServerResponse serverResp;
 
-	private static ArrayList<String> idsForAllCreatedInsights;
 	private static ArrayList<String> idsForAllCreatedInsightTypes;
 	private static ArrayList<String> idsForAllCreatedTenants;
 
@@ -53,9 +52,8 @@ public class CreateInsightsTest extends BaseTestSetupAndTearDown {
 		insightTypeAPI = new MInsightTypeAPIHelper();
 		tenantAPI = new MTenantAPIHelper();
 
-		idsForAllCreatedInsights = new ArrayList<String>();
-		idsForAllCreatedInsightTypes = new ArrayList<String>();
-		idsForAllCreatedTenants = new ArrayList<String>();
+		idsForAllCreatedInsightTypes = new ArrayList<>();
+		idsForAllCreatedTenants = new ArrayList<>();
 
 		requestInsight = insightRequestHelper.getInsightWithCreatingInsightTypeAndTenant("WithNoAttributes", null);
 		insightTypeId = requestInsight.getInsightTypeId();
@@ -76,9 +74,23 @@ public class CreateInsightsTest extends BaseTestSetupAndTearDown {
 
 	@AfterClass
 	public static void cleanUpAfterAllTests() {
-		baseCleanUpAfterAllTests(idsForAllCreatedInsights, insightAPI);
+        //Currently delete via REST is not supported for insight and insighttype
+		baseCleanUpAfterAllTests(insightAPI);
 		baseCleanUpAfterAllTests(idsForAllCreatedInsightTypes, insightTypeAPI);
 		baseCleanUpAfterAllTests(idsForAllCreatedTenants, tenantAPI);
+
+		// INFO: This delete will not be required if we move to MVP3 code
+		ArrayList<String> idsForAllCreatedGroupsForTenants;
+		idsForAllCreatedGroupsForTenants = new ArrayList<>();
+
+		for (String elementId : idsForAllCreatedTenants) {
+			TenantUtil tenantUtil;
+			tenantUtil = new TenantUtil();
+			String groupId = tenantUtil.getIDMGroupForTenant(elementId);
+			//logger.info("Adding group id to list "+ groupId);
+			idsForAllCreatedGroupsForTenants.add(groupId);
+		}
+		baseCleanUpAfterAllTests(idsForAllCreatedGroupsForTenants, groupAPI, oauthMicroserviceName);
 	}
 
 	// The following test cases go here:
@@ -129,18 +141,16 @@ public class CreateInsightsTest extends BaseTestSetupAndTearDown {
 	// Therefore the above should be made in to separate methods (possibly generalized) that can be called on demand based on test case
 	//
 
-	// RREHM-357 ()
+	// RREHM-156 ()
 	@Test
 	public void shouldCreateInsightWithValidPropertyValuesLinkingToValidTenantAndInsightType() {
 		requestInsight = insightRequestHelper.getInsightWithPredefinedInsightTypeAndTenant(insightTypeId, tenantId);
 
 		responseInsight = MAbstractAPIHelper.getResponseObjForCreate(requestInsight, microservice, environment, apiRequestHelper, insightAPI, InsightResponse.class);
 		String insightId = responseInsight.getInsightId();
-		idsForAllCreatedInsights.add(insightId);
+		idsForAllCreatedElements.add(insightId);
 
-		CustomAssertions.assertResponseCode(201, MAbstractAPIHelper.responseCodeForInputRequest);
-		CustomAssertions.assertRequestAndResponseObj(requestInsight, responseInsight);
-
+		CustomAssertions.assertRequestAndResponseObj(201, MAbstractAPIHelper.responseCodeForInputRequest, requestInsight, responseInsight);
 		InsightResponse committedInsight = MAbstractAPIHelper.getResponseObjForRetrieve(microservice, environment, insightId, apiRequestHelper, insightAPI, InsightResponse.class);
 
 		CustomAssertions.assertRequestAndResponseObj(responseInsight, committedInsight);

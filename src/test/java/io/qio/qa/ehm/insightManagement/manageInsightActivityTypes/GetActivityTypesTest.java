@@ -9,8 +9,8 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 
 import io.qio.qa.lib.ehm.apiHelpers.insights.MActivityTypeAPIHelper;
-import io.qio.qa.lib.ehm.model.insight.activityType.ActivityType;
-import io.qio.qa.lib.ehm.model.insight.activityType.helper.ActivityTypeHelper;
+import io.qio.qa.lib.ehm.model.activityType.ActivityType;
+import io.qio.qa.lib.ehm.model.activityType.helper.ActivityTypeHelper;
 import io.qio.qa.lib.exception.ServerResponse;
 import io.qio.qa.lib.common.MAbstractAPIHelper;
 

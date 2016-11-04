@@ -11,7 +11,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import io.qio.qa.ehm.common.BaseTestSetupAndTearDown;
-import io.qio.qa.lib.ehm.apiHelpers.MTenantAPIHelper;
+import io.qio.qa.lib.ehm.apiHelpers.tenant.MTenantAPIHelper;
 import io.qio.qa.lib.idm.apiHelpers.MUserGroupAPIHelper;
 import io.qio.qa.lib.assertions.CustomAssertions;
 import io.qio.qa.lib.exception.ServerResponse;
@@ -20,6 +20,8 @@ import io.qio.qa.lib.ehm.model.tenant.helper.TenantHelper;
 import io.qio.qa.lib.ehm.common.APITestUtil;
 import io.qio.qa.lib.ehm.common.TenantUtil;
 import io.qio.qa.lib.common.MAbstractAPIHelper;
+
+import java.util.ArrayList;
 
 public class CreateTenantsTest extends BaseTestSetupAndTearDown {
 
@@ -32,6 +34,7 @@ public class CreateTenantsTest extends BaseTestSetupAndTearDown {
     private Tenant requestTenant2;
     private ServerResponse serverResp;
 
+    private static ArrayList<String> idsForAllCreatedGroupsForTenants;
     final static Logger logger = Logger.getRootLogger();
 
     @BeforeClass
@@ -48,6 +51,7 @@ public class CreateTenantsTest extends BaseTestSetupAndTearDown {
         groupAPI = new MUserGroupAPIHelper();
 
         tenantUtil = new TenantUtil();
+        idsForAllCreatedGroupsForTenants = new ArrayList<String>();
     }
 
     @Before
@@ -67,9 +71,9 @@ public class CreateTenantsTest extends BaseTestSetupAndTearDown {
         for (String elementId : idsForAllCreatedElements) {
             String groupId = tenantUtil.getIDMGroupForTenant(elementId);
             //logger.info("Adding group id to list "+ groupId);
-            secondaryIdListForDeletion.add(groupId);
+            idsForAllCreatedGroupsForTenants.add(groupId);
         }
-        baseCleanUpAfterAllTests(secondaryIdListForDeletion, groupAPI, "idm");
+        baseCleanUpAfterAllTests(idsForAllCreatedGroupsForTenants, groupAPI, oauthMicroserviceName);
     }
 
 	// Matching test cases in Test Case Management (Jira/Zephyr):

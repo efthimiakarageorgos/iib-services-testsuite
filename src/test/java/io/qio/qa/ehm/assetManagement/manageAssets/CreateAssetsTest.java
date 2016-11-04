@@ -23,8 +23,8 @@ import io.qio.qa.lib.ehm.model.asset.AssetRequest;
 import io.qio.qa.lib.ehm.model.asset.AssetResponse;
 import io.qio.qa.lib.ehm.model.asset.AssetStatus;
 import io.qio.qa.lib.ehm.model.asset.helper.AssetRequestHelper;
-import io.qio.qa.lib.ehm.apiHelpers.MAssetAPIHelper;
-import io.qio.qa.lib.ehm.apiHelpers.MTenantAPIHelper;
+import io.qio.qa.lib.ehm.apiHelpers.asset.MAssetAPIHelper;
+import io.qio.qa.lib.ehm.apiHelpers.tenant.MTenantAPIHelper;
 import io.qio.qa.lib.ehm.apiHelpers.assetType.MAssetTypeAPIHelper;
 import io.qio.qa.lib.ehm.model.assetType.AssetType;
 
