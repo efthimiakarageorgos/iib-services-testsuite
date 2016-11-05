@@ -22,7 +22,7 @@
         <dependency>
             <groupId>io.qio.qa.lib</groupId>
             <artifactId>ehm-test-helper</artifactId>
-            <version>1.0.64</version>
+            <version>1.0.65</version>
         </dependency>
         <dependency>
             <groupId>org.hamcrest</groupId>

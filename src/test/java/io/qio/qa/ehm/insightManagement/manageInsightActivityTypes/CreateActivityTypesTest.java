@@ -45,9 +45,9 @@ public class CreateActivityTypesTest extends BaseTestSetupAndTearDown {
 		serverResp = new ServerResponse();
 	}
 
-	// Currently the deletion of activity types is not allowed; therefore we are commenting out this method.
 	@AfterClass
 	public static void cleanUpAfterAllTests() {
+		// Currently the deletion of activity types is not allowed.
 		baseCleanUpAfterAllTests(activityTypeAPI);
 	}
 
@@ -190,6 +190,7 @@ public class CreateActivityTypesTest extends BaseTestSetupAndTearDown {
 
 		String activityTypeId = responseActivityType.getActivityTypeId();
 		idsForAllCreatedElements.add(activityTypeId);
+		CustomAssertions.assertRequestAndResponseObj(201, MAbstractAPIHelper.responseCodeForInputRequest, requestActivityType, responseActivityType);
 
 		ActivityType committedActivityType = MAbstractAPIHelper.getResponseObjForRetrieve(microservice, environment, activityTypeId, apiRequestHelper, activityTypeAPI, ActivityType.class);
 		CustomAssertions.assertRequestAndResponseObj(responseActivityType, committedActivityType);
@@ -203,6 +204,7 @@ public class CreateActivityTypesTest extends BaseTestSetupAndTearDown {
 
 		String activityTypeId = responseActivityType.getActivityTypeId();
 		idsForAllCreatedElements.add(activityTypeId);
+		CustomAssertions.assertRequestAndResponseObj(201, MAbstractAPIHelper.responseCodeForInputRequest, requestActivityType, responseActivityType);
 
 		ActivityType committedActivityType = MAbstractAPIHelper.getResponseObjForRetrieve(microservice, environment, activityTypeId, apiRequestHelper, activityTypeAPI, ActivityType.class);
 		CustomAssertions.assertRequestAndResponseObj(responseActivityType, committedActivityType);
@@ -218,6 +220,8 @@ public class CreateActivityTypesTest extends BaseTestSetupAndTearDown {
 		String activityTypeId = responseActivityType.getActivityTypeId();
 		idsForAllCreatedElements.add(activityTypeId);
 
+		CustomAssertions.assertRequestAndResponseObj(201, MAbstractAPIHelper.responseCodeForInputRequest, requestActivityType, responseActivityType);
+
 		ActivityType committedActivityType = MAbstractAPIHelper.getResponseObjForRetrieve(microservice, environment, activityTypeId, apiRequestHelper, activityTypeAPI, ActivityType.class);
 		CustomAssertions.assertRequestAndResponseObj(responseActivityType, committedActivityType);
 	}
@@ -231,6 +235,8 @@ public class CreateActivityTypesTest extends BaseTestSetupAndTearDown {
 
 		String activityTypeId = responseActivityType.getActivityTypeId();
 		idsForAllCreatedElements.add(activityTypeId);
+
+		CustomAssertions.assertRequestAndResponseObj(201, MAbstractAPIHelper.responseCodeForInputRequest, requestActivityType, responseActivityType);
 
 		ActivityType committedActivityType = MAbstractAPIHelper.getResponseObjForRetrieve(microservice, environment, activityTypeId, apiRequestHelper, activityTypeAPI, ActivityType.class);
 		CustomAssertions.assertRequestAndResponseObj(responseActivityType, committedActivityType);
@@ -251,6 +257,8 @@ public class CreateActivityTypesTest extends BaseTestSetupAndTearDown {
 		String activityTypeId = responseActivityType.getActivityTypeId();
 		idsForAllCreatedElements.add(activityTypeId);
 
+		CustomAssertions.assertRequestAndResponseObj(201, MAbstractAPIHelper.responseCodeForInputRequest, requestActivityType, responseActivityType);
+
 		ActivityType committedActivityType = MAbstractAPIHelper.getResponseObjForRetrieve(microservice, environment, activityTypeId, apiRequestHelper, activityTypeAPI, ActivityType.class);
 		CustomAssertions.assertRequestAndResponseObj(responseActivityType, committedActivityType);
 	}
@@ -265,6 +273,8 @@ public class CreateActivityTypesTest extends BaseTestSetupAndTearDown {
 
 		String activityTypeId = responseActivityType.getActivityTypeId();
 		idsForAllCreatedElements.add(activityTypeId);
+
+		CustomAssertions.assertRequestAndResponseObj(201, MAbstractAPIHelper.responseCodeForInputRequest, requestActivityType, responseActivityType);
 
 		ActivityType committedActivityType = MAbstractAPIHelper.getResponseObjForRetrieve(microservice, environment, activityTypeId, apiRequestHelper, activityTypeAPI, ActivityType.class);
 		CustomAssertions.assertRequestAndResponseObj(responseActivityType, committedActivityType);
@@ -290,6 +300,8 @@ public class CreateActivityTypesTest extends BaseTestSetupAndTearDown {
 		String activityTypeNonUniqueNameId = responseActivityTypeNonUniqueName.getActivityTypeId();
 		idsForAllCreatedElements.add(activityTypeNonUniqueNameId);
 
+		CustomAssertions.assertRequestAndResponseObj(201, MAbstractAPIHelper.responseCodeForInputRequest, requestActivityTypeNonUniqueName, requestActivityTypeNonUniqueName);
+
 		ActivityType committedActivityType = MAbstractAPIHelper.getResponseObjForRetrieve(microservice, environment, activityTypeNonUniqueNameId, apiRequestHelper, activityTypeAPI, ActivityType.class);
 
 		CustomAssertions.assertRequestAndResponseObj(responseActivityTypeNonUniqueName, committedActivityType);
@@ -304,8 +316,12 @@ public class CreateActivityTypesTest extends BaseTestSetupAndTearDown {
 		String activityTypeId = responseActivityType.getActivityTypeId();
 		idsForAllCreatedElements.add(activityTypeId);
 
+		CustomAssertions.assertRequestAndResponseObj(201, MAbstractAPIHelper.responseCodeForInputRequest, requestActivityType, responseActivityType);
+
 		ActivityType committedActivityType = MAbstractAPIHelper.getResponseObjForRetrieve(microservice, environment, activityTypeId, apiRequestHelper, activityTypeAPI, ActivityType.class);
 		CustomAssertions.assertRequestAndResponseObj(responseActivityType, committedActivityType);
+
+        //logger.info(committedActivityType.getSystemDefined());
 	}
 
 	// RREHM-774

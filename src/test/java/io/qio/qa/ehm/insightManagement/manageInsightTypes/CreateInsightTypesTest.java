@@ -71,7 +71,6 @@ public class CreateInsightTypesTest extends BaseTestSetupAndTearDown {
 		String insightTypeId = BaseHelper.getElementId(responseInsightType.get_links().getSelfLink().getHref());
 		idsForAllCreatedElements.add(insightTypeId);
 
-		logger.info("AAA " + insightTypeId);
 		InsightType requestInsightTypeWithSameAbbr = insightTypeHelper.getInsightTypeWithNoAttributes();
 		requestInsightTypeWithSameAbbr.setAbbreviation(requestInsightType.getAbbreviation());
 		serverResp = MAbstractAPIHelper.getResponseObjForCreate(requestInsightTypeWithSameAbbr, microservice, environment, apiRequestHelper, insightTypeAPI, ServerResponse.class);
@@ -183,11 +182,42 @@ public class CreateInsightTypesTest extends BaseTestSetupAndTearDown {
 	 * POSITIVE TESTS START
 	 */
 
-	// RREHM-522
-	// RREHM-523
+	// RREHM-522 ()
+	@Test
+	public void shouldCreateInsightTypeWhenNameContainsSpecialChars() {
+		requestInsightType = insightTypeHelper.getInsightTypeWithNoAttributes();
+		requestInsightType.setName(requestInsightType.getName()+APITestUtil.SPECIAL_CHARS);
+
+		responseInsightType = MAbstractAPIHelper.getResponseObjForCreate(requestInsightType, microservice, environment, apiRequestHelper, insightTypeAPI, InsightType.class);
+		String insightTypeId = responseInsightType.getInsightTypeId();
+		idsForAllCreatedElements.add(insightTypeId);
+
+		CustomAssertions.assertRequestAndResponseObj(201, MAbstractAPIHelper.responseCodeForInputRequest, requestInsightType, responseInsightType);
+		InsightType committedInsightType = MAbstractAPIHelper.getResponseObjForRetrieve(microservice, environment, insightTypeId, apiRequestHelper, insightTypeAPI, InsightType.class);
+
+		CustomAssertions.assertRequestAndResponseObj(responseInsightType, committedInsightType);
+	}
+
+
 	// RREHM-524
+	@Test
+	public void shouldCreateInsightTypeWhenDescContainsSpecialCharsAndMultiParagraphs() {
+		requestInsightType = insightTypeHelper.getInsightTypeWithNoAttributes();
+		requestInsightType.setDescription(requestInsightType.getDescription()+APITestUtil.SPECIAL_CHARS+"\n"+APITestUtil.SPECIAL_CHARS);
+
+		responseInsightType = MAbstractAPIHelper.getResponseObjForCreate(requestInsightType, microservice, environment, apiRequestHelper, insightTypeAPI, InsightType.class);
+		String insightTypeId = responseInsightType.getInsightTypeId();
+		idsForAllCreatedElements.add(insightTypeId);
+
+		CustomAssertions.assertRequestAndResponseObj(201, MAbstractAPIHelper.responseCodeForInputRequest, requestInsightType, responseInsightType);
+		InsightType committedInsightType = MAbstractAPIHelper.getResponseObjForRetrieve(microservice, environment, insightTypeId, apiRequestHelper, insightTypeAPI, InsightType.class);
+
+		CustomAssertions.assertRequestAndResponseObj(responseInsightType, committedInsightType);
+	}
+
 	// RREHM-520
 	// RREHM-518
 	// RREHM-515
 	// RREHM-510
+	// RREHM-523
 }
