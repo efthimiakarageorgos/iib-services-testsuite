@@ -166,7 +166,7 @@ public class CreateInsightTypesTest extends BaseTestSetupAndTearDown {
 
 	// RREHM-521 (InsightType name is longer than 255 chars)
 	@Test
-	public void shouldNotCreateInsightTypeWhenNameIsLongerThan50Chars() {
+	public void shouldNotCreateInsightTypeWhenNameIsLongerThan255Chars() {
 		requestInsightType.setName(APITestUtil.TWOFIFTYSIX_CHARS);
 
 		serverResp = MAbstractAPIHelper.getResponseObjForCreate(requestInsightType, microservice, environment, apiRequestHelper, insightTypeAPI, ServerResponse.class);

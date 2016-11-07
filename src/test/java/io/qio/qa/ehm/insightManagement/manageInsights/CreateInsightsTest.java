@@ -10,6 +10,8 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
 
 import io.qio.qa.ehm.common.BaseTestSetupAndTearDown;
 import io.qio.qa.lib.ehm.apiHelpers.insights.MInsightAPIHelper;
@@ -154,6 +156,7 @@ public class CreateInsightsTest extends BaseTestSetupAndTearDown {
 		InsightResponse committedInsight = MAbstractAPIHelper.getResponseObjForRetrieve(microservice, environment, insightId, apiRequestHelper, insightAPI, InsightResponse.class);
 
 		CustomAssertions.assertRequestAndResponseObj(responseInsight, committedInsight);
+		assertTrue(responseInsight.getInsightType().getInsightTypeId().equals(requestInsight.getInsightTypeId()));
 	}
 
 	/*
