@@ -17,12 +17,12 @@
         <dependency>
             <groupId>io.qio.qa.lib</groupId>
             <artifactId>api-test-util</artifactId>
-            <version>1.0.66</version>
+            <version>1.0.141</version>
         </dependency>
         <dependency>
             <groupId>io.qio.qa.lib</groupId>
             <artifactId>ehm-test-helper</artifactId>
-            <version>1.0.78</version>
+            <version>1.0.85</version>
         </dependency>
         <dependency>
             <groupId>org.hamcrest</groupId>
