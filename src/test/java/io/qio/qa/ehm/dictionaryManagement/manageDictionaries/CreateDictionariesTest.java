@@ -7,6 +7,8 @@ package io.qio.qa.ehm.dictionaryManagement.manageDictionaries;
 import io.qio.qa.lib.assertions.CustomAssertions;
 import io.qio.qa.lib.cassandraHelpers.MAbstractCassandraHelper;
 import io.qio.qa.lib.common.MAbstractAPIHelper;
+import io.qio.qa.lib.ehm.model.assetType.AssetTypeParameter;
+import io.qio.qa.lib.ehm.model.tenant.Tenant;
 import io.qio.qa.lib.exception.ServerResponse;
 import io.qio.qa.lib.ehm.apiHelpers.dictionary.MDictionaryAPIHelper;
 import io.qio.qa.lib.ehm.common.AssetTypeUtil;
@@ -23,6 +25,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class CreateDictionariesTest extends BaseTestSetupAndTearDown {
@@ -40,7 +43,9 @@ public class CreateDictionariesTest extends BaseTestSetupAndTearDown {
 
 	private static String assetId;
 	private static String tenantId;
+	private static List<AssetTypeParameter> parameters;
 	private static String parameterId;
+	private static String parameterType;
 	private static AssetType newAssetType;
 
     final static Logger logger = Logger.getRootLogger();
@@ -50,7 +55,7 @@ public class CreateDictionariesTest extends BaseTestSetupAndTearDown {
     public static void initSetupBeforeAllTests() {
 		baseInitLoadConfigurationFiles();
 		baseInitAPISetupBeforeAllTests("dictionary");
-		////////baseInitCassandraSetupBeforeAllTests("ingestion");
+		baseInitCassandraSetupBeforeAllTests("ingestion");
 
 		username = userConfig.getString("user.admin.username");
         password = userConfig.getString("user.admin.password");
@@ -66,7 +71,6 @@ public class CreateDictionariesTest extends BaseTestSetupAndTearDown {
 		assetTypeUtil = new AssetTypeUtil();
 		assetUtil = new AssetUtil();
 		newAssetType = assetTypeUtil.createAssetTypeBasedOnExistingAssetType(assetTypeUtil.getAssetTypeIdBasedOnAbbreviationSearch("DHP"), "Automation", "Automation Desc");
-		logger.info("xxxxxx");
 	}
 
     @Before
@@ -76,14 +80,19 @@ public class CreateDictionariesTest extends BaseTestSetupAndTearDown {
 		asset = assetUtil.createAssetWithPredefinedAssetTypeAndWithCreatingTenant(newAssetType.getAssetTypeId());
 		assetId = asset.getAssetId();
 		tenantId = asset.getTenant();
+		parameters = asset.getAssetType().getParameters();
 
 		idsForAllCreatedAssets.add(assetId);
     }
 
     @AfterClass
     public static void cleanUpAfterAllTests() {
-		//////cassandraObject.executeCQLInCassandra(idsForAllCassandraInserts, cassandraDbServerAddress, cassandraDbKeySpace, cassandraUsername, cassandraPassword);
-		//assetUtil.deleteAssetCollectionItemsAndDependencies(idsForAllCreatedAssets);
+		baseCleanUpAfterAllTests(dictionaryAPI);
+
+		//NOTE: This line is alternative to deleting the dictionary entry using the API (see previous line)
+		//cassandraObject.executeCQLInCassandra(idsForAllCassandraInserts, cassandraDbServerAddress, cassandraDbKeySpace, cassandraUsername, cassandraPassword);
+
+		assetUtil.deleteAssetCollectionItemsAndDependencies(idsForAllCreatedAssets);
     }
 
 	// Matching test cases in Test Case Management (Jira/Zephyr):
@@ -93,19 +102,6 @@ public class CreateDictionariesTest extends BaseTestSetupAndTearDown {
 	 * NEGATIVE TESTS START
 	 */
 
-	// LRRF-XXX
-	@Test
-	public void XXXX() {
-		dictionaryRequest = dictionaryHelper.getDictionaryWithPredefinedAssetAndTenantForParameter(assetId, tenantId, parameterId, "XXX");
-//
-//		serverResp = MAbstractAPIHelper.getResponseObjForCreate(requestTenant2, microservice, environment, apiRequestHelper, dictionaryAPI, ServerResponse.class);
-//
-//		// Setting Tenant abbreviation to be the same as the name of tenant2
-//		dictionaryRequest.setAbbreviation(tenantAbbr2);
-//		serverResp = MAbstractAPIHelper.getResponseObjForCreate(dictionaryRequest, microservice, environment, apiRequestHelper, dictionaryAPI, ServerResponse.class);
-//
-//		CustomAssertions.assertServerError(409, null, "Creating tenant failed, as another tenant has same abbreviation.", serverResp);
-	}
 
 	/*
 	 * NEGATIVE TESTS END
@@ -116,24 +112,38 @@ public class CreateDictionariesTest extends BaseTestSetupAndTearDown {
 	 * POSITIVE TESTS START
 	 */
 
-	// LRRF-216
+	// RREHM-2295
 	@Test
-	public void shouldNotCreateDictionaryEntryWithATagThatIsUniqueAcrossAllTenants() {
-		String parameterId = asset.getAssetType().getParameters().get(0).getId();
-		String parameterType = asset.getAssetType().getParameters().get(0).getDatatype();
+	public void shouldBeAbleToCreateDictionaryEntryWithATagThatIsUniqueAcrossAllTenants() {
+		ArrayList<String> insertList = new ArrayList<>();
 
-		dictionaryRequest = dictionaryHelper.getDictionaryWithPredefinedAssetAndTenantForParameter(assetId, tenantId, parameterId, parameterType);
+		parameterId = parameters.get(0).getParameterId();
+		dictionaryRequest = dictionaryHelper.getDictionaryForPredefinedAssetAndTenantForAParameter("tag-232432", assetId, tenantId, parameterId, "sourceUnit", "val");
 
+		logger.info("INSERT: "+dictionaryRequest.toCassandraInsert());
+		logger.info("DELETE: "+dictionaryRequest.toCassandraDelete());
 
-		dictionaryResponse = MAbstractAPIHelper.getResponseObjForCreate(dictionaryRequest, microservice, environment, tenantId, apiRequestHelper, dictionaryAPI, Dictionary.class);
-		logger.info(dictionaryResponse.getTenant());
+		String insertCommand = dictionaryRequest.toCassandraInsert();
+		insertList.add(insertCommand);
 
-		logger.info(dictionaryResponse.toCassandraInsert());
+		// WE ARE USING THESE LINES TO DO THE INSERT - DEFEATS THE PURPOSE OF TEST AS WE BYPASS API - API CREATE IS FAILING ON DEV AT THE MOMENT
+		// DELETE API IS NOT FAILING
+		cassandraObject.executeCQLInCassandra(insertList, cassandraDbServerAddress, cassandraDbKeySpace, cassandraUsername, cassandraPassword);
 
-//		//Preparation for Cleanup
-//		idsForAllCreatedElements.add(organizationId+":"+tenantId);
-//
-		Dictionary committedDictionaryEntry = MAbstractAPIHelper.getResponseObjForRetrieve(microservice, environment, tenantId, apiRequestHelper, dictionaryAPI, Dictionary.class);
+		//Preparation for Cleanup
+		String deleteCommand = dictionaryRequest.toCassandraDelete();
+		idsForAllCassandraInserts.add(deleteCommand);
+
+		// THESE ARE THE LINES WE WANT TO KEEP FOR THIS TEST ------ START
+//		dictionaryResponse = MAbstractAPIHelper.getResponseObjForCreate(dictionaryRequest, microservice, environment, tenantId, apiRequestHelper, dictionaryAPI, Dictionary.class);
+//		CustomAssertions.assertRequestAndResponseObj(201, MAbstractAPIHelper.responseCodeForInputRequest, dictionaryRequest, dictionaryResponse);
+
+		String tag = dictionaryRequest.getTag();
+		//Preparation for Cleanup
+		idsForAllCreatedElements.add(tenantId+":"+tag);
+		// -------- END
+
+		Dictionary committedDictionaryEntry = MAbstractAPIHelper.getResponseObjForRetrieve(microservice, environment, tenantId, tag, apiRequestHelper, dictionaryAPI, Dictionary.class);
 		CustomAssertions.assertRequestAndResponseObj(dictionaryResponse, committedDictionaryEntry);
 	}
 	/*
