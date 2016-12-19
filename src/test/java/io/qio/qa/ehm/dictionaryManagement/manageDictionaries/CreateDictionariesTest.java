@@ -8,7 +8,6 @@ import io.qio.qa.lib.assertions.CustomAssertions;
 import io.qio.qa.lib.cassandraHelpers.MAbstractCassandraHelper;
 import io.qio.qa.lib.common.MAbstractAPIHelper;
 import io.qio.qa.lib.ehm.model.assetType.AssetTypeParameter;
-import io.qio.qa.lib.ehm.model.tenant.Tenant;
 import io.qio.qa.lib.exception.ServerResponse;
 import io.qio.qa.lib.ehm.apiHelpers.dictionary.MDictionaryAPIHelper;
 import io.qio.qa.lib.ehm.common.AssetTypeUtil;
@@ -26,6 +25,8 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static io.qio.qa.lib.common.BaseHelper.getCurrentTimeStamp;
 
 
 public class CreateDictionariesTest extends BaseTestSetupAndTearDown {
@@ -118,7 +119,7 @@ public class CreateDictionariesTest extends BaseTestSetupAndTearDown {
 		ArrayList<String> insertList = new ArrayList<>();
 
 		parameterId = parameters.get(0).getParameterId();
-		dictionaryRequest = dictionaryHelper.getDictionaryForPredefinedAssetAndTenantForAParameter("tag-232432", assetId, tenantId, parameterId, "sourceUnit", "val");
+        dictionaryRequest = dictionaryHelper.getDictionaryForPredefinedAssetAndTenantForAParameter("tag"+getCurrentTimeStamp(), assetId, tenantId, parameterId, "sourceUnit", "val");
 
 		logger.info("INSERT: "+dictionaryRequest.toCassandraInsert());
 		logger.info("DELETE: "+dictionaryRequest.toCassandraDelete());
