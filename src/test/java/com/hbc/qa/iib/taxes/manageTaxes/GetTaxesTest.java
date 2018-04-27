@@ -47,7 +47,7 @@ public class GetTaxesTest extends BaseTestSetupAndTearDown {
 		taxServiceHelper = new TaxServiceHelper();
 		/////line_item = null;
 		//line_item = new ArrayList<TaxServiceLineItem>();
-		logger.info("AAAAAAAAAAAABBB");
+		logger.info("ZZZZZZZZZZZZZZZZZ");
 		responseTaxService = new TaxServiceResponse();
 		serverResp = new ServerResponse();
 	}
