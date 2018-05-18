@@ -11,14 +11,14 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.hbc.qa.iib.common.BaseTestSetupAndTearDown;
-import com.hbc.qa.lib.ehm.apiHelpers.tenant.MTenantAPIHelper;
+import com.hbc.qa.lib.iib.apiHelpers.tenant.MTenantAPIHelper;
 import com.hbc.qa.lib.idm.apiHelpers.MUserGroupAPIHelper;
 import com.hbc.qa.lib.assertions.CustomAssertions;
 import com.hbc.qa.lib.exception.ServerResponse;
-import com.hbc.qa.lib.ehm.model.tenant.Tenant;
-import com.hbc.qa.lib.ehm.model.tenant.helper.TenantHelper;
-import com.hbc.qa.lib.ehm.common.APITestUtil;
-import com.hbc.qa.lib.ehm.common.TenantUtil;
+import com.hbc.qa.lib.iib.model.tenant.Tenant;
+import com.hbc.qa.lib.iib.model.tenant.helper.TenantHelper;
+import com.hbc.qa.lib.iib.common.APITestUtil;
+import com.hbc.qa.lib.iib.common.TenantUtil;
 import com.hbc.qa.lib.common.MAbstractAPIHelper;
 
 import java.util.ArrayList;

@@ -13,11 +13,11 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.hbc.qa.iib.common.BaseTestSetupAndTearDown;
-import com.hbc.qa.lib.ehm.apiHelpers.assetType.MAssetTypeAPIHelper;
-import com.hbc.qa.lib.ehm.apiHelpers.assetType.MAssetTypeParameterAPIHelper;
-import com.hbc.qa.lib.ehm.model.assetType.AssetType;
-import com.hbc.qa.lib.ehm.model.assetType.AssetTypeParameter;
-import com.hbc.qa.lib.ehm.model.assetType.helper.AssetTypeHelper;
+import com.hbc.qa.lib.iib.apiHelpers.assetType.MAssetTypeAPIHelper;
+import com.hbc.qa.lib.iib.apiHelpers.assetType.MAssetTypeParameterAPIHelper;
+import com.hbc.qa.lib.iib.model.assetType.AssetType;
+import com.hbc.qa.lib.iib.model.assetType.AssetTypeParameter;
+import com.hbc.qa.lib.iib.model.assetType.helper.AssetTypeHelper;
 //import com.hbc.qa.lib.iib.common.APITestUtil;
 import com.hbc.qa.lib.assertions.CustomAssertions;
 import com.hbc.qa.lib.exception.ServerResponse;

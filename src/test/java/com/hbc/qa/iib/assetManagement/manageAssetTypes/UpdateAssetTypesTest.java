@@ -9,9 +9,9 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 
 import com.hbc.qa.iib.common.BaseTestSetupAndTearDown;
-import com.hbc.qa.lib.ehm.apiHelpers.assetType.MAssetTypeAPIHelper;
-import com.hbc.qa.lib.ehm.model.assetType.AssetType;
-import com.hbc.qa.lib.ehm.model.assetType.helper.AssetTypeHelper;
+import com.hbc.qa.lib.iib.apiHelpers.assetType.MAssetTypeAPIHelper;
+import com.hbc.qa.lib.iib.model.assetType.AssetType;
+import com.hbc.qa.lib.iib.model.assetType.helper.AssetTypeHelper;
 import com.hbc.qa.lib.exception.ServerResponse;
 
 public class UpdateAssetTypesTest extends BaseTestSetupAndTearDown {

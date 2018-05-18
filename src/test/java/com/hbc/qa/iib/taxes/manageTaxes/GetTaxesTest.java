@@ -1,6 +1,6 @@
 /**
- * © Qio Technologies Ltd. 2016. All rights reserved.
- * CONFIDENTIAL AND PROPRIETARY INFORMATION OF QIO TECHNOLOGIES LTD.
+ * © HBC Shared Services QA 2018. All rights reserved.
+ * CONFIDENTIAL AND PROPRIETARY INFORMATION OF HBC.
  */
 package com.hbc.qa.iib.taxes.manageTaxes;
 
@@ -90,13 +90,16 @@ public class GetTaxesTest extends BaseTestSetupAndTearDown {
 		line_item.add(taxServiceLineItem);
 
 		logger.info("bbbbbbbb");
-		requestTaxService = taxServiceHelper.prepareTaxServiceRequestForGivenLineItems("1234", "banner_code", "CA", "1456", "m4Y 1g1", "ON", "Toronto", "N", line_item);
+		requestTaxService = taxServiceHelper.prepareTaxServiceRequestForGivenLineItems("1234", "SAKS", "US", "624", "33431", "FL", "BOCA RATON", "N", line_item);
 		logger.info(requestTaxService.getRequest().getBanner_code());
+		logger.info(requestTaxService.getRequest().getCity());
 		responseTaxService = MAbstractAPIHelper.getResponseObjForCreate(requestTaxService, microservice, environment, apiRequestHelper, taxServiceAPI, TaxServiceResponse.class);
 
 		//TODO
 		//If the message does not match it fails instead of giving the a nicer message (same as when the code does not match - not a bid deal though)
-		CustomAssertions.assertServerError(400, "com.hbc.application.exceptions.InvalidInputException", "No Attributes are Associated with a given Asset Type", serverResp);
+		CustomAssertions.assertRequestAndResponseObj(200, MAbstractAPIHelper.responseCodeForInputRequest, requestTaxService.getRequest(), responseTaxService.getResponse());
+		//CustomAssertions.assertRequestAndResponseObj(responseTaxService, requestTaxService);
+		//CustomAssertions.assertServerError(400, "com.hbc.application.exceptions.InvalidInputException", "No Attributes are Associated with a given Asset Type", serverResp);
 	}
 
 	/*

@@ -6,7 +6,7 @@ package com.hbc.qa.iib.assetManagement.manageAssets;
 
 import java.util.ArrayList;
 
-import com.hbc.qa.lib.ehm.common.TenantUtil;
+import com.hbc.qa.lib.iib.common.TenantUtil;
 import junit.framework.Assert;
 import org.apache.log4j.Logger;
 import org.junit.AfterClass;
@@ -17,16 +17,16 @@ import org.junit.Ignore;
 import static org.junit.Assert.*;
 
 import com.hbc.qa.iib.common.BaseTestSetupAndTearDown;
-import com.hbc.qa.lib.ehm.common.APITestUtil;
+import com.hbc.qa.lib.iib.common.APITestUtil;
 
-import com.hbc.qa.lib.ehm.model.asset.AssetRequest;
-import com.hbc.qa.lib.ehm.model.asset.AssetResponse;
-import com.hbc.qa.lib.ehm.model.asset.AssetStatus;
-import com.hbc.qa.lib.ehm.model.asset.helper.AssetRequestHelper;
-import com.hbc.qa.lib.ehm.apiHelpers.asset.MAssetAPIHelper;
-import com.hbc.qa.lib.ehm.apiHelpers.tenant.MTenantAPIHelper;
-import com.hbc.qa.lib.ehm.apiHelpers.assetType.MAssetTypeAPIHelper;
-import com.hbc.qa.lib.ehm.model.assetType.AssetType;
+import com.hbc.qa.lib.iib.model.asset.AssetRequest;
+import com.hbc.qa.lib.iib.model.asset.AssetResponse;
+import com.hbc.qa.lib.iib.model.asset.AssetStatus;
+import com.hbc.qa.lib.iib.model.asset.helper.AssetRequestHelper;
+import com.hbc.qa.lib.iib.apiHelpers.asset.MAssetAPIHelper;
+import com.hbc.qa.lib.iib.apiHelpers.tenant.MTenantAPIHelper;
+import com.hbc.qa.lib.iib.apiHelpers.assetType.MAssetTypeAPIHelper;
+import com.hbc.qa.lib.iib.model.assetType.AssetType;
 
 import com.hbc.qa.lib.assertions.CustomAssertions;
 import com.hbc.qa.lib.exception.ServerResponse;
