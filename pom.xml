@@ -37,7 +37,7 @@
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.4</version>
+            <version>4.10</version>
         </dependency>
         <dependency>
             <groupId>com.jcraft</groupId>
@@ -89,11 +89,11 @@
                 <artifactId>license-maven-plugin</artifactId>
                 <version>2.3</version>
                 <configuration>
-                    <header>QIO_License.txt</header>
+                    <header>HBC_License.txt</header>
                     <aggregate>true</aggregate>
                     <properties>
-                        <owner>QIO Techonologies</owner>
-                        <email>admin@qio.io</email>
+                        <owner>HBC Shared Services</owner>
+                        <email>admin@hbc.com</email>
                         <project.inceptionYear>2016</project.inceptionYear>
                     </properties>
                     <includes>

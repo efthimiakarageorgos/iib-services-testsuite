@@ -10,6 +10,9 @@ import com.hbc.qa.lib.apiHelpers.APIRequestHelper;
 import com.hbc.qa.lib.common.BaseHelper;
 import com.hbc.qa.lib.idm.apiHelpers.MUserGroupAPIHelper;
 import org.apache.log4j.Logger;
+import org.junit.Rule;
+import org.junit.rules.TestWatcher;
+import org.junit.runner.Description;
 
 import java.util.ArrayList;
 
@@ -58,6 +61,21 @@ public class BaseTestSetupAndTearDown {
 
 	protected static ArrayList<String> idsForAllCreatedElements;
 	final static Logger logger = Logger.getRootLogger();
+
+	private Description description=Description.createSuiteDescription(this.getClass());
+
+	@Rule
+	public TestWatcher watchman= new TestWatcher() {
+		@Override
+		protected void failed(Throwable e, Description description) {
+			logger.info("Failure: " + description.getMethodName());
+		}
+
+		@Override
+		protected void succeeded(Description description) {
+			logger.info("Success: " + description.getMethodName());
+		}
+	};
 
 	// REMOVE THIS ONE AFTER YOU REPLACE IT with the next two in the dependent files
 	public static void baseInitSetupBeforeAllTests(String microserviceName) {
