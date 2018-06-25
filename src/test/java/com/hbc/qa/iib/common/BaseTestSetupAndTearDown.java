@@ -84,8 +84,11 @@ public class BaseTestSetupAndTearDown {
 		envRuntimeConfig = ConfigFactory.load("environment_runtime.conf");
 		microserviceConfig = ConfigFactory.load("microservices.conf");
 
-		username = userConfig.getString("user.superuser.username");
-		password = userConfig.getString("user.superuser.password");
+		username = userConfig.getString("user."+microserviceName+".gen.username");
+		password = userConfig.getString("user."+microserviceName+".gen.password");
+		password=password.replace('%', '#');
+
+		logger.info("    AFTER "+password);
 
 		///environment = envConfig.getString("env.name");
 		envRuntime = envRuntimeConfig.getString("env.runtime");

@@ -25,6 +25,7 @@ import com.hbc.qa.lib.common.MAbstractAPIHelper;
 import com.hbc.qa.lib.common.BaseHelper;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 public class CreateTokenTest extends BaseTestSetupAndTearDown {
@@ -42,6 +43,7 @@ public class CreateTokenTest extends BaseTestSetupAndTearDown {
 	@BeforeClass
 	public static void initSetupBeforeAllTests() {
 		baseInitSetupBeforeAllTests("tokenization");
+        logger.info("    CHRISTOS");
 		tokenRequestAPIHelper = new MTokenRequestAPIHelper();
 	}
 
@@ -65,14 +67,6 @@ public class CreateTokenTest extends BaseTestSetupAndTearDown {
 		logger.info("    AFTER");
 	}
 
-	public static void assertBodyResponseCodeAndMessage(String expectedRespCode, String expectedRespMsg, Object responseObj) {
-		logger.info("In assertBodyResponseCodeAndMessage");
-		try {
-			assertEquals(expectedRespCode, responseObj.getClass().getField("responseCode"));
-		} catch (NoSuchFieldException e) {
-			e.printStackTrace();
-		}
-	}
 	// The following test cases go here:
 	// issuetype=Test and issue in (linkedIssues("RREHM-1235")) and issue in linkedIssues("RREHM-XXX")
 
@@ -83,19 +77,18 @@ public class CreateTokenTest extends BaseTestSetupAndTearDown {
 	// RREHM-516 (InsightType has non unique abbreviation)
 	@Test
 	public void shouldNotCreateTokenWhenXXX() {
-		tokenRequest.setBanner("LTS");
+		tokenRequest.setBanner("LT");
 
 		tokenResponse = MAbstractAPIHelper.getResponseObjForCreate(tokenRequest, microservice, environment, apiRequestHelper, tokenRequestAPIHelper, TokenResponse.class);
+
 		tokenResponseForComparison=tokenResponse;
-		tokenResponseForComparison.setBanner("LT");
-		tokenResponseForComparison.setCardNumber(tokenRequest.getCardNumber());
+		tokenResponseForComparison.setToken("1236512929");
+        tokenResponseForComparison.setResponseCode("0");
+        tokenResponseForComparison.setResponseMessage("success");
 
-		CustomAssertions.assertResponseCode(400, MAbstractAPIHelper.responseCodeForInputRequest);
-		assertTrue(tokenResponse.equals(tokenResponseForComparison));
-		CustomAssertions.assertEqualityCheckOnInputFields(null, tokenResponse.getToken());
+        CustomAssertions.assertRequestAndResponseObj(200, MAbstractAPIHelper.responseCodeForInputRequest, tokenResponse, tokenResponseForComparison);
 
-		CustomAssertions.assertEqualityCheckOnInputFields("Invalid Banner", tokenResponse.getResponseMessage());
-		CustomAssertions.assertEqualityCheckOnInputFields("1", tokenResponse.getResponseCode());
+		assertTrue(tokenResponseForComparison.equals(tokenResponse));
 	}
 
 	/*
