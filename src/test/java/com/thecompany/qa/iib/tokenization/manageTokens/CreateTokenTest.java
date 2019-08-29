@@ -1,9 +1,9 @@
 /**
- * © HBC Shared Services QA 2018. All rights reserved.
- * CONFIDENTIAL AND PROPRIETARY INFORMATION OF HBC.
+ * © TheCompany QA 2019. All rights reserved.
+ * CONFIDENTIAL AND PROPRIETARY INFORMATION OF TheCompany.
  */
 
-package com.hbc.qa.iib.tokenization.manageTokens;
+package com.thecompany.qa.iib.tokenization.manageTokens;
 
 import org.apache.log4j.Logger;
 import org.junit.AfterClass;
@@ -13,16 +13,16 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.rules.TestWatcher;
 
-import com.hbc.qa.iib.common.BaseTestSetupAndTearDown;
-import com.hbc.qa.lib.iib.apiHelpers.token.MTokenRequestAPIHelper;
-import com.hbc.qa.lib.iib.model.token.TokenRequest;
-import com.hbc.qa.lib.iib.model.token.TokenResponse;
-import com.hbc.qa.lib.iib.model.token.helper.TokenHelper;
-import com.hbc.qa.lib.iib.common.APITestUtil;
-import com.hbc.qa.lib.assertions.CustomAssertions;
-import com.hbc.qa.lib.exception.ServerResponse;
-import com.hbc.qa.lib.common.MAbstractAPIHelper;
-import com.hbc.qa.lib.common.BaseHelper;
+import com.thecompany.qa.iib.common.BaseTestSetupAndTearDown;
+import com.thecompany.qa.lib.iib.apiHelpers.token.MTokenRequestAPIHelper;
+import com.thecompany.qa.lib.iib.model.token.TokenRequest;
+import com.thecompany.qa.lib.iib.model.token.TokenResponse;
+import com.thecompany.qa.lib.iib.model.token.helper.TokenHelper;
+import com.thecompany.qa.lib.iib.common.APITestUtil;
+import com.thecompany.qa.lib.assertions.CustomAssertions;
+import com.thecompany.qa.lib.exception.ServerResponse;
+import com.thecompany.qa.lib.common.MAbstractAPIHelper;
+import com.thecompany.qa.lib.common.BaseHelper;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;

@@ -1,25 +1,25 @@
 /**
- * © Qio Technologies Ltd. 2016. All rights reserved.
- * CONFIDENTIAL AND PROPRIETARY INFORMATION OF QIO TECHNOLOGIES LTD.
+ * © TheCompany QA 2019. All rights reserved.
+ * CONFIDENTIAL AND PROPRIETARY INFORMATION OF TheCompany.
  */
-package com.hbc.qa.iib.tenantManagement.manageTenants;
+package com.thecompany.qa.iib.tenantManagement.manageTenants;
 
+import com.thecompany.qa.iib.common.BaseTestSetupAndTearDown;
 import org.apache.log4j.Logger;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.hbc.qa.iib.common.BaseTestSetupAndTearDown;
-import com.hbc.qa.lib.iib.apiHelpers.tenant.MTenantAPIHelper;
-import com.hbc.qa.lib.idm.apiHelpers.MUserGroupAPIHelper;
-import com.hbc.qa.lib.assertions.CustomAssertions;
-import com.hbc.qa.lib.exception.ServerResponse;
-import com.hbc.qa.lib.iib.model.tenant.Tenant;
-import com.hbc.qa.lib.iib.model.tenant.helper.TenantHelper;
-import com.hbc.qa.lib.iib.common.APITestUtil;
-import com.hbc.qa.lib.iib.common.TenantUtil;
-import com.hbc.qa.lib.common.MAbstractAPIHelper;
+import com.thecompany.qa.lib.iib.apiHelpers.tenant.MTenantAPIHelper;
+import com.thecompany.qa.lib.idm.apiHelpers.MUserGroupAPIHelper;
+import com.thecompany.qa.lib.assertions.CustomAssertions;
+import com.thecompany.qa.lib.exception.ServerResponse;
+import com.thecompany.qa.lib.iib.model.tenant.Tenant;
+import com.thecompany.qa.lib.iib.model.tenant.helper.TenantHelper;
+import com.thecompany.qa.lib.iib.common.APITestUtil;
+import com.thecompany.qa.lib.iib.common.TenantUtil;
+import com.thecompany.qa.lib.common.MAbstractAPIHelper;
 
 import java.util.ArrayList;
 

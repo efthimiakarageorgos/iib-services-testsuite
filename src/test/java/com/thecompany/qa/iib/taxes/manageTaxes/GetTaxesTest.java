@@ -1,18 +1,18 @@
 /**
- * © HBC Shared Services QA 2018. All rights reserved.
- * CONFIDENTIAL AND PROPRIETARY INFORMATION OF HBC.
+ * © TheCompany QA 2019. All rights reserved.
+ * CONFIDENTIAL AND PROPRIETARY INFORMATION OF TheCompany.
  */
-package com.hbc.qa.iib.taxes.manageTaxes;
+package com.thecompany.qa.iib.taxes.manageTaxes;
 
-import com.hbc.qa.iib.common.BaseTestSetupAndTearDown;
-import com.hbc.qa.lib.assertions.CustomAssertions;
+import com.thecompany.qa.iib.common.BaseTestSetupAndTearDown;
+import com.thecompany.qa.lib.assertions.CustomAssertions;
 import com.hbc.qa.lib.common.MAbstractAPIHelper;
-import com.hbc.qa.lib.iib.apiHelpers.taxService.MTaxServiceAPIHelper;
-import com.hbc.qa.lib.iib.model.taxService.TaxServiceRequest;
-import com.hbc.qa.lib.iib.model.taxService.TaxServiceLineItem;
-import com.hbc.qa.lib.iib.model.taxService.TaxServiceResponse;
-import com.hbc.qa.lib.iib.model.taxService.helper.TaxServiceHelper;
-import com.hbc.qa.lib.exception.ServerResponse;
+import com.thecompany.qa.lib.iib.apiHelpers.taxService.MTaxServiceAPIHelper;
+import com.thecompany.qa.lib.iib.model.taxService.TaxServiceRequest;
+import com.thecompany.qa.lib.iib.model.taxService.TaxServiceLineItem;
+import com.thecompany.qa.lib.iib.model.taxService.TaxServiceResponse;
+import com.thecompany.qa.lib.iib.model.taxService.helper.TaxServiceHelper;
+import com.thecompany.qa.lib.exception.ServerResponse;
 import org.apache.log4j.Logger;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -64,6 +64,7 @@ public class GetTaxesTest extends BaseTestSetupAndTearDown {
 	 * NEGATIVE TESTS START
 	 */
 
+	/*
 	// RREHM-1268 ()
 	@Test
 	public void shouldGetAnErrorMsgWhenTryingToGetAttributesForANonExistingAssetType() {
@@ -72,6 +73,7 @@ public class GetTaxesTest extends BaseTestSetupAndTearDown {
 		serverResp = MAbstractAPIHelper.getResponseObjForRetrieve(microservice, environment, invalidAssetTypeId, apiRequestHelper, taxServiceAPI, ServerResponse.class);
 		CustomAssertions.assertServerError(404, "com.qiotec.application.exceptions.InvalidParameterException", "Wrong Asset Type id in the URL", serverResp);
 	}
+
 
 	// RREHM-1253 ()
 	@Test
@@ -101,6 +103,7 @@ public class GetTaxesTest extends BaseTestSetupAndTearDown {
 		//CustomAssertions.assertRequestAndResponseObj(responseTaxService, requestTaxService);
 		//CustomAssertions.assertServerError(400, "com.hbc.application.exceptions.InvalidInputException", "No Attributes are Associated with a given Asset Type", serverResp);
 	}
+	*/
 
 	/*
 	 * NEGATIVE TESTS END

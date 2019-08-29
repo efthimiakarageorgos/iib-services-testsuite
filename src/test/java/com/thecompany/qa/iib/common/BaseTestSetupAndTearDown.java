@@ -1,14 +1,15 @@
 /**
- * © Qio Technologies Ltd. 2016. All rights reserved.
- * CONFIDENTIAL AND PROPRIETARY INFORMATION OF QIO TECHNOLOGIES LTD.
+ * © TheCompany QA 2019. All rights reserved.
+ * CONFIDENTIAL AND PROPRIETARY INFORMATION OF TheCompany.
  */
-package com.hbc.qa.iib.common;
+package com.thecompany.qa.iib.common;
 
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
-import com.hbc.qa.lib.apiHelpers.APIRequestHelper;
-import com.hbc.qa.lib.common.BaseHelper;
-import com.hbc.qa.lib.idm.apiHelpers.MUserGroupAPIHelper;
+import com.thecompany.qa.lib.apiHelpers.APIRequestHelper;
+import com.thecompany.qa.lib.common.BaseHelper;
+import com.thecompany.qa.lib.idm.apiHelpers.MUserGroupAPIHelper;
+
 import org.apache.log4j.Logger;
 import org.junit.Rule;
 import org.junit.rules.TestWatcher;
