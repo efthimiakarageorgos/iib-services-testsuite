@@ -16,12 +16,12 @@
     <dependencies>
         <dependency>
             <groupId>com.thecompany.qa.lib</groupId>
-            <artifactId>api-test-util</artifactId>
+            <artifactId>services-utilities</artifactId>
             <version>1.0.174</version>
         </dependency>
         <dependency>
             <groupId>com.thecompany.qa.lib</groupId>
-            <artifactId>iib-services-helper</artifactId>
+            <artifactId>services-helper</artifactId>
             <version>2.0.1</version>
         </dependency>
         <dependency>

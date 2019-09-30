@@ -6,7 +6,7 @@ package com.thecompany.qa.iib.taxes.manageTaxes;
 
 import com.thecompany.qa.iib.common.BaseTestSetupAndTearDown;
 import com.thecompany.qa.lib.assertions.CustomAssertions;
-import com.hbc.qa.lib.common.MAbstractAPIHelper;
+import com.thecompany.qa.lib.common.MAbstractAPIHelper;
 import com.thecompany.qa.lib.iib.apiHelpers.taxService.MTaxServiceAPIHelper;
 import com.thecompany.qa.lib.iib.model.taxService.TaxServiceRequest;
 import com.thecompany.qa.lib.iib.model.taxService.TaxServiceLineItem;
@@ -101,7 +101,7 @@ public class GetTaxesTest extends BaseTestSetupAndTearDown {
 		//If the message does not match it fails instead of giving the a nicer message (same as when the code does not match - not a bid deal though)
 		CustomAssertions.assertRequestAndResponseObj(200, MAbstractAPIHelper.responseCodeForInputRequest, requestTaxService.getRequest(), responseTaxService.getResponse());
 		//CustomAssertions.assertRequestAndResponseObj(responseTaxService, requestTaxService);
-		//CustomAssertions.assertServerError(400, "com.hbc.application.exceptions.InvalidInputException", "No Attributes are Associated with a given Asset Type", serverResp);
+		//CustomAssertions.assertServerError(400, "com.thecompany.application.exceptions.InvalidInputException", "No Attributes are Associated with a given Asset Type", serverResp);
 	}
 	*/
 
