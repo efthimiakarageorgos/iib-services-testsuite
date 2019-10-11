@@ -71,7 +71,7 @@ public class GetTaxesTest extends BaseTestSetupAndTearDown {
 
 		String invalidAssetTypeId = "ThisAssetTypeDoesNotExist";
 		serverResp = MAbstractAPIHelper.getResponseObjForRetrieve(microservice, environment, invalidAssetTypeId, apiRequestHelper, taxServiceAPI, ServerResponse.class);
-		CustomAssertions.assertServerError(404, "com.qiotec.application.exceptions.InvalidParameterException", "Wrong Asset Type id in the URL", serverResp);
+		CustomAssertions.assertServerError(404, "com.thecompany.application.exceptions.InvalidParameterException", "Wrong Asset Type id in the URL", serverResp);
 	}
 
 	@Test
@@ -79,7 +79,7 @@ public class GetTaxesTest extends BaseTestSetupAndTearDown {
 
 		String invalidAssetTypeId = "ThisAssetTypeDoesNotExist";
 		String TRYME = MAbstractAPIHelper.getJSONResponseForRetrieve(microservice, environment, invalidAssetTypeId, apiRequestHelper, taxServiceAPI);
-		CustomAssertions.assertServerError(404, "com.qiotec.application.exceptions.InvalidParameterException", "Wrong Asset Type id in the URL", serverResp);
+		CustomAssertions.assertServerError(404, "com.thecompany.application.exceptions.InvalidParameterException", "Wrong Asset Type id in the URL", serverResp);
 	}
 /*
 	// RREHM-1253 ()

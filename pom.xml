@@ -125,7 +125,7 @@
             <url>http://server1.thecompany.internal:8081/artifactory/libs-release-local</url>
         </repository>
         <snapshotRepository>
-            <id>theqio-main</id>
+            <id>thecompany-main</id>
             <name>server1.thecompany.internal-snapshots</name>
             <url>http://server1.thecompany.internal:8081/artifactory/libs-snapshot-local</url>
         </snapshotRepository>
