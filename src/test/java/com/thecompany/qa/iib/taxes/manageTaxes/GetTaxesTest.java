@@ -64,7 +64,7 @@ public class GetTaxesTest extends BaseTestSetupAndTearDown {
 	 * NEGATIVE TESTS START
 	 */
 
-	/*
+
 	// RREHM-1268 ()
 	@Test
 	public void shouldGetAnErrorMsgWhenTryingToGetAttributesForANonExistingAssetType() {
@@ -74,7 +74,14 @@ public class GetTaxesTest extends BaseTestSetupAndTearDown {
 		CustomAssertions.assertServerError(404, "com.qiotec.application.exceptions.InvalidParameterException", "Wrong Asset Type id in the URL", serverResp);
 	}
 
+	@Test
+	public void TRYTHIS() {
 
+		String invalidAssetTypeId = "ThisAssetTypeDoesNotExist";
+		String TRYME = MAbstractAPIHelper.getJSONResponseForRetrieve(microservice, environment, invalidAssetTypeId, apiRequestHelper, taxServiceAPI);
+		CustomAssertions.assertServerError(404, "com.qiotec.application.exceptions.InvalidParameterException", "Wrong Asset Type id in the URL", serverResp);
+	}
+/*
 	// RREHM-1253 ()
 	@Test
 	public void shouldGetAnErrorMsgWhenTryingToGetAttributesForAnExistingAssetTypeThatHasNoAttributesConfigured() {
@@ -104,17 +111,4 @@ public class GetTaxesTest extends BaseTestSetupAndTearDown {
 		//CustomAssertions.assertServerError(400, "com.thecompany.application.exceptions.InvalidInputException", "No Attributes are Associated with a given Asset Type", serverResp);
 	}
 	*/
-
-	/*
-	 * NEGATIVE TESTS END
-	 */
-
-	/*
-	 * POSITIVE TESTS START
-	 */
-
-
-	/*
-	 * POSITIVE TESTS END
-	 */
 }

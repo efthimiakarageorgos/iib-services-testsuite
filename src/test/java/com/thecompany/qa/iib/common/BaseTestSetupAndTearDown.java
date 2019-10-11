@@ -8,7 +8,6 @@ import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
 import com.thecompany.qa.lib.apiHelpers.APIRequestHelper;
 import com.thecompany.qa.lib.common.BaseHelper;
-import com.thecompany.qa.lib.idm.apiHelpers.MUserGroupAPIHelper;
 
 import org.apache.log4j.Logger;
 import org.junit.Rule;
@@ -26,7 +25,6 @@ public class BaseTestSetupAndTearDown {
 	protected static String envRuntime;
 	protected static String oauthMicroserviceName = "idm";
 	protected static APIRequestHelper apiRequestHelper;
-	protected static MUserGroupAPIHelper groupAPI;
 	protected static Config userConfig;
 	protected static Config envConfig;
 	protected static Config envRuntimeConfig;

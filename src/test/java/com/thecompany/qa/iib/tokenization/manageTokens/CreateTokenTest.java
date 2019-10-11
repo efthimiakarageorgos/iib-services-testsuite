@@ -104,7 +104,6 @@ public class CreateTokenTest extends BaseTestSetupAndTearDown {
 	public void shouldCreateInsightTypeWhenNameContainsSpecialChars() {
 		tokenRequest = tokenHelper.getTokenRequest();
 		tokenResponse = MAbstractAPIHelper.getResponseObjForCreate(tokenRequest, microservice, environment, apiRequestHelper, tokenRequestAPIHelper, TokenResponse.class);
-
 		CustomAssertions.assertRequestAndResponseObj(201, MAbstractAPIHelper.responseCodeForInputRequest, tokenResponse, tokenResponse);
 	}
 }

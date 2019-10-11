@@ -17,12 +17,12 @@
         <dependency>
             <groupId>com.thecompany.qa.lib</groupId>
             <artifactId>services-utilities</artifactId>
-            <version>1.0.174</version>
+            <version>1.0.0</version>
         </dependency>
         <dependency>
             <groupId>com.thecompany.qa.lib</groupId>
             <artifactId>services-helper</artifactId>
-            <version>2.0.1</version>
+            <version>1.0.0</version>
         </dependency>
         <dependency>
             <groupId>org.hamcrest</groupId>
@@ -120,15 +120,14 @@
     </repositories>
     <distributionManagement>
         <repository>
-            <id>qiotec-main</id>
-            <name>usnc1a-dcis01.qiotec.internal-releases</name>
-            <url>http://usnc1a-dcis01.qiotec.internal:8081/artifactory/libs-release-local</url>
+            <id>thecompany-main</id>
+            <name>server1.thecompany.internal-releases</name>
+            <url>http://server1.thecompany.internal:8081/artifactory/libs-release-local</url>
         </repository>
         <snapshotRepository>
-            <id>qiotec-main</id>
-            <name>usnc1a-dcis01.qiotec.internal-snapshots</name>
-            <url>http://usnc1a-dcis01.qiotec.internal:8081/artifactory/libs-snapshot-local</url>
+            <id>theqio-main</id>
+            <name>server1.thecompany.internal-snapshots</name>
+            <url>http://server1.thecompany.internal:8081/artifactory/libs-snapshot-local</url>
         </snapshotRepository>
     </distributionManagement>
-
 </project>
