@@ -8,9 +8,9 @@ import com.thecompany.qa.iib.common.BaseTestSetupAndTearDown;
 import com.thecompany.qa.lib.assertions.CustomAssertions;
 import com.thecompany.qa.lib.common.MAbstractAPIHelper;
 import com.thecompany.qa.lib.exception.ServerResponse;
-import com.thecompany.qa.lib.iib.apiHelpers.taxService.MTaxServiceAPIHelper;
-import com.thecompany.qa.lib.iib.model.taxService.TaxServiceLineItem;
-import com.thecompany.qa.lib.iib.model.taxService.TaxServiceRequest;
+import com.thecompany.qa.lib.iib.apiHelpers.carsaccounts.MAccountExtensionAPIHelper;
+//import com.thecompany.qa.lib.iib.model.accountService.AccountExtension;
+//import com.thecompany.qa.lib.iib.model.accountService.AccountList;
 import com.thecompany.qa.lib.iib.model.taxService.TaxServiceResponse;
 import com.thecompany.qa.lib.iib.model.taxService.helper.TaxServiceHelper;
 import org.apache.log4j.Logger;
@@ -23,11 +23,8 @@ import org.junit.Test;
 
 public class TryMe extends BaseTestSetupAndTearDown {
 
-    private static MTaxServiceAPIHelper taxServiceAPI;
+    private static MAccountExtensionAPIHelper accountExtensionAPIRequest;
     private TaxServiceHelper taxServiceHelper;
-    private TaxServiceRequest requestTaxService;
-    private TaxServiceLineItem taxServiceLineItem;
-    private ArrayList<TaxServiceLineItem> line_item;
     private TaxServiceResponse responseTaxService;
 
     private ServerResponse serverResp;
@@ -36,8 +33,8 @@ public class TryMe extends BaseTestSetupAndTearDown {
 
     @BeforeClass
     public static void initSetupBeforeAllTests() {
-        baseInitSetupBeforeAllTests("amicroservice");
-        taxServiceAPI = new MTaxServiceAPIHelper();
+        baseInitSetupBeforeAllTests("primeservicescars");
+        accountExtensionAPIRequest = new MAccountExtensionAPIHelper();
     }
 
     @Before
@@ -51,7 +48,7 @@ public class TryMe extends BaseTestSetupAndTearDown {
 
     @AfterClass
     public static void cleanUpAfterAllTests() {
-        baseCleanUpAfterAllTests(taxServiceAPI);
+        baseCleanUpAfterAllTests(accountExtensionAPIRequest);
     }
 
     // Matching test cases in Test Case Management (Jira/Zephyr):
@@ -60,29 +57,21 @@ public class TryMe extends BaseTestSetupAndTearDown {
 
     // JIRA-1268 ()
     @Test
-    public void shouldGetAnErrorMsgWhenTryingToGetAttributesForANonExistingAssetType() {
+    public void shouldImportLegalEntityAccount() {
 
-        String invalidAssetTypeId = "ThisAssetTypeDoesNotExist";
-        serverResp = MAbstractAPIHelper.getResponseObjForRetrieve(microservice, environment, invalidAssetTypeId, apiRequestHelper, taxServiceAPI, ServerResponse.class);
+        //getAccountList
+        //searchBasedOnName and type and locate Id
+
+        String accountId = "1234";
+        serverResp = MAbstractAPIHelper.getResponseObjForRetrieve(microservice, environment, accountId, apiRequestHelper, accountExtensionAPIRequest, ServerResponse.class);
         CustomAssertions.assertServerError(404, "com.thecompany.application.exceptions.InvalidParameterException", "Wrong Asset Type id in the URL", serverResp);
     }
 
     @Test
     public void TRYTHIS() {
 
-        String invalidAssetTypeId = "ThisAssetTypeDoesNotExist";
-        String TRYME = MAbstractAPIHelper.getJSONResponseForRetrieve(microservice, environment, invalidAssetTypeId, apiRequestHelper, taxServiceAPI);
-        CustomAssertions.assertServerError(404, "com.thecompany.application.exceptions.InvalidParameterException", "Wrong Asset Type id in the URL", serverResp);
+        String accountId = "ThisAssetTypeDoesNotExist";
+        String TRYME = MAbstractAPIHelper.getJSONResponseForRetrieve(microservice, environment, accountId, apiRequestHelper, accountExtensionAPIRequest);
+        CustomAssertions.assertServerError(404, "com.thecompany.application.exceptions.InvalidParameterException", "Wrong Account id in the URL", serverResp);
     }
-/*
-	@Test
-	public void shouldGetAnErrorMsgWhenTryingToGetAttributesForAnExistingAssetTypeThatHasNoAttributesConfigured() {
-
-		//TODO
-		//If the message does not match it fails instead of giving the a nicer message (same as when the code does not match - not a bid deal though)
-		CustomAssertions.assertRequestAndResponseObj(200, MAbstractAPIHelper.responseCodeForInputRequest, requestTaxService.getRequest(), responseTaxService.getResponse());
-		//CustomAssertions.assertRequestAndResponseObj(responseTaxService, requestTaxService);
-		//CustomAssertions.assertServerError(400, "com.thecompany.application.exceptions.InvalidInputException", "No Attributes are Associated with a given Asset Type", serverResp);
-	}
-	*/
 }
