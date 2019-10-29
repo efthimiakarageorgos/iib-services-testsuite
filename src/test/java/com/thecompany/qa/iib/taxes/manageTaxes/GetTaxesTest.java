@@ -70,7 +70,7 @@ public class GetTaxesTest extends BaseTestSetupAndTearDown {
 	public void shouldGetAnErrorMsgWhenTryingToGetAttributesForANonExistingAssetType() {
 
 		String invalidAssetTypeId = "ThisAssetTypeDoesNotExist";
-		serverResp = MAbstractAPIHelper.getResponseObjForRetrieve(microservice, environment, invalidAssetTypeId, apiRequestHelper, taxServiceAPI, ServerResponse.class);
+		serverResp = MAbstractAPIHelper.getResponseObjForRetrieve(microservice, environment, invalidAssetTypeId, apiHeaderRequestHelper, taxServiceAPI, ServerResponse.class);
 		CustomAssertions.assertServerError(404, "com.thecompany.application.exceptions.InvalidParameterException", "Wrong Asset Type id in the URL", serverResp);
 	}
 
@@ -78,7 +78,7 @@ public class GetTaxesTest extends BaseTestSetupAndTearDown {
 	public void TRYTHIS() {
 
 		String invalidAssetTypeId = "ThisAssetTypeDoesNotExist";
-		String TRYME = MAbstractAPIHelper.getJSONResponseForRetrieve(microservice, environment, invalidAssetTypeId, apiRequestHelper, taxServiceAPI);
+		String TRYME = MAbstractAPIHelper.getJSONResponseForRetrieve(microservice, environment, invalidAssetTypeId, apiHeaderRequestHelper, taxServiceAPI);
 		CustomAssertions.assertServerError(404, "com.thecompany.application.exceptions.InvalidParameterException", "Wrong Asset Type id in the URL", serverResp);
 	}
 /*

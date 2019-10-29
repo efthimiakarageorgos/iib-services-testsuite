@@ -62,8 +62,8 @@ public class CreateDictionariesTest extends BaseTestSetupAndTearDown {
 
 		username = userConfig.getString("user.admin.username");
         password = userConfig.getString("user.admin.password");
-        apiRequestHelper.setUserName(username);
-        apiRequestHelper.setPassword(password);
+        apiHeaderRequestHelper.setUserName(username);
+        apiHeaderRequestHelper.setPassword(password);
 
         dictionaryAPI = new MDictionaryAPIHelper();
 		dictionaryHelper = new DictionaryHelper();
@@ -143,7 +143,7 @@ public class CreateDictionariesTest extends BaseTestSetupAndTearDown {
 		idsForAllCassandraInserts.add(deleteCommand);
 
 		// THESE ARE THE LINES WE WANT TO KEEP FOR THIS TEST ------ START
-//		dictionaryResponse = MAbstractAPIHelper.getResponseObjForCreate(dictionaryRequest, microservice, environment, tenantId, apiRequestHelper, dictionaryAPI, Dictionary.class);
+//		dictionaryResponse = MAbstractAPIHelper.getResponseObjForCreate(dictionaryRequest, microservice, environment, tenantId, apiHeaderRequestHelper, dictionaryAPI, Dictionary.class);
 //		CustomAssertions.assertRequestAndResponseObj(201, MAbstractAPIHelper.responseCodeForInputRequest, dictionaryRequest, dictionaryResponse);
 
 		String tag = dictionaryRequest.getTag();
@@ -151,7 +151,7 @@ public class CreateDictionariesTest extends BaseTestSetupAndTearDown {
 		idsForAllCreatedElements.add(tenantId+":"+tag);
 		// -------- END
 
-		Dictionary committedDictionaryEntry = MAbstractAPIHelper.getResponseObjForRetrieve(microservice, environment, tenantId, tag, apiRequestHelper, dictionaryAPI, Dictionary.class);
+		Dictionary committedDictionaryEntry = MAbstractAPIHelper.getResponseObjForRetrieve(microservice, environment, tenantId, tag, apiHeaderRequestHelper, dictionaryAPI, Dictionary.class);
 		CustomAssertions.assertRequestAndResponseObj(dictionaryResponse, committedDictionaryEntry);
 	}
 } */

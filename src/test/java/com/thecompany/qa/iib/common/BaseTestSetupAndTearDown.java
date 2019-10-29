@@ -6,7 +6,7 @@ package com.thecompany.qa.iib.common;
 
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
-import com.thecompany.qa.lib.apiHelpers.APIRequestHelper;
+import com.thecompany.qa.lib.apiHelpers.APIHeaderRequestHelper;
 import com.thecompany.qa.lib.common.BaseHelper;
 
 import org.apache.log4j.Logger;
@@ -24,7 +24,7 @@ public class BaseTestSetupAndTearDown {
 	protected static String environment;
 	protected static String envRuntime;
 	protected static String oauthMicroserviceName = "idm";
-	protected static APIRequestHelper apiRequestHelper;
+	protected static APIHeaderRequestHelper apiHeaderRequestHelper;
 	protected static Config userConfig;
 	protected static Config envConfig;
 	protected static Config envRuntimeConfig;
@@ -95,8 +95,8 @@ public class BaseTestSetupAndTearDown {
 		
 		microservice = microserviceConfig.getString(microserviceName + "." + envRuntime);
 		//oauthMicroservice = microserviceConfig.getString(oauthMicroserviceName + "." + envRuntime);
-		
-		apiRequestHelper = new APIRequestHelper(username, password, oauthMicroservice);
+
+		apiHeaderRequestHelper = new APIHeaderRequestHelper(username, password, oauthMicroservice);
 		//groupAPI = new MUserGroupAPIHelper();
 
 		idsForAllCreatedElements = new ArrayList<String>();
@@ -121,7 +121,7 @@ public class BaseTestSetupAndTearDown {
 		username = userConfig.getString("user.admin.username");
 		password = userConfig.getString("user.admin.password");
 		oauthMicroservice = microserviceConfig.getString(oauthMicroserviceName + "." + envRuntime);
-		apiRequestHelper = new APIRequestHelper(username, password, oauthMicroservice);
+		apiHeaderRequestHelper = new APIHeaderRequestHelper(username, password, oauthMicroservice);
 
 		microservice = microserviceConfig.getString(microserviceName + "." + envRuntime);
 
@@ -159,17 +159,17 @@ public class BaseTestSetupAndTearDown {
 
 	public static void baseCleanUpAfterAllTests(Object apiHelperObj) {
 		logger.info("1 AAAAAAAA argument");
-		BaseHelper.deleteListOfCollectionItems(microservice, environment, apiRequestHelper, apiHelperObj, idsForAllCreatedElements);
+		BaseHelper.deleteListOfCollectionItems(microservice, environment, apiHeaderRequestHelper, apiHelperObj, idsForAllCreatedElements);
 	}
 
 	public static void baseCleanUpAfterAllTests(ArrayList<String> idListForDeletion, Object apiHelperObj) {
 		logger.info("2 arguments");
-		BaseHelper.deleteListOfCollectionItems(microservice, environment, apiRequestHelper, apiHelperObj, idListForDeletion);
+		BaseHelper.deleteListOfCollectionItems(microservice, environment, apiHeaderRequestHelper, apiHelperObj, idListForDeletion);
 	}
 
 	public static void baseCleanUpAfterAllTests(ArrayList<String> idListForDeletion, Object apiHelperObj, String microserviceName) {
 		logger.info("3 arguments");
 		microservice = microserviceConfig.getString(microserviceName + "." + envRuntime);
-		BaseHelper.deleteListOfCollectionItems(microservice, environment, apiRequestHelper, apiHelperObj, idListForDeletion);
+		BaseHelper.deleteListOfCollectionItems(microservice, environment, apiHeaderRequestHelper, apiHelperObj, idListForDeletion);
 	}
 }

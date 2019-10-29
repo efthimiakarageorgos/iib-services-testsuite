@@ -79,7 +79,7 @@ public class CreateTokenTest extends BaseTestSetupAndTearDown {
 	public void shouldNotCreateTokenWhenXXX() {
 		tokenRequest.setBanner("LT");
 
-		tokenResponse = MAbstractAPIHelper.getResponseObjForCreate(tokenRequest, microservice, environment, apiRequestHelper, tokenRequestAPIHelper, TokenResponse.class);
+		tokenResponse = MAbstractAPIHelper.getResponseObjForCreate(tokenRequest, microservice, environment, apiHeaderRequestHelper, tokenRequestAPIHelper, TokenResponse.class);
 
 		tokenResponseForComparison=tokenResponse;
 		tokenResponseForComparison.setToken("1236512929");
@@ -103,7 +103,7 @@ public class CreateTokenTest extends BaseTestSetupAndTearDown {
 	@Test
 	public void shouldCreateInsightTypeWhenNameContainsSpecialChars() {
 		tokenRequest = tokenHelper.getTokenRequest();
-		tokenResponse = MAbstractAPIHelper.getResponseObjForCreate(tokenRequest, microservice, environment, apiRequestHelper, tokenRequestAPIHelper, TokenResponse.class);
+		tokenResponse = MAbstractAPIHelper.getResponseObjForCreate(tokenRequest, microservice, environment, apiHeaderRequestHelper, tokenRequestAPIHelper, TokenResponse.class);
 		CustomAssertions.assertRequestAndResponseObj(201, MAbstractAPIHelper.responseCodeForInputRequest, tokenResponse, tokenResponse);
 	}
 }
